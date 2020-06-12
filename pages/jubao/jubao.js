@@ -19,7 +19,7 @@ Page({
     longitude: 116.397452,
     latitude: 39.909042,
     // key: 'W4WBZ-TUD65-IDAIR-QPM36-HMFQ5-CGBZP',
-    key:'HLKBZ-4DQLK-W2CJS-AUXAC-Y4433-JLF64',
+    key:'MYQBZ-CZ2W3-N5Z3H-YM2RD-BNDGZ-HHB2O',
     //框架属性
     CustomBar: app.globalData.CustomBar,
     //分类显示判断标志
