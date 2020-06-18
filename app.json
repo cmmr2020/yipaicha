@@ -12,7 +12,8 @@
     "pages/ceshi/ceshi",
     "pages/about/about",
     "pages/menuBack/menuBack",
-    "pages/tip/tip"
+    "pages/tip/tip",
+    "pages/xuexi/xuexi"
   ],
   "window": {
     "backgroundTextStyle": "light",

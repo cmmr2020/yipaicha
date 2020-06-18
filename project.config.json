@@ -118,13 +118,20 @@
 					"id": 8,
 					"name": "pages/menuBack/menuBack",
 					"pathName": "pages/menuBack/menuBack",
-					"query": "code=SDHZ",
+					"query": "code=TJBS",
 					"scene": null
 				},
 				{
 					"id": -1,
 					"name": "提示页",
 					"pathName": "pages/tip/tip",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "学习",
+					"pathName": "pages/xuexi/xuexi",
 					"query": "",
 					"scene": null
 				}

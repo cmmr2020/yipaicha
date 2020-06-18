@@ -1,0 +1,7 @@
+
+<view wx:if="{{condition===1}}"> 
+  <view> {{ message }} </view>
+</view>
+<view wx:else>
+  hahahah
+</view>
