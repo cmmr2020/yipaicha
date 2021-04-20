@@ -1,0 +1,17 @@
+
+<view class="cu-list menu-avatar comment solids-top">
+<form>
+	<view class="cu-form-group">
+		<view class="title">姓名：</view>
+		<input placeholder="请输入您的姓名~" bindinput="textareaAInput" value="{{uname}}"></input>
+	</view>
+	<view class="cu-form-group">
+		<view class="title">小组名称：</view>
+		<input placeholder="请输入工作组名称，没有可为空~" bindinput="textareaBInput" value="{{gname}}"></input>
+	</view>
+</form>
+<view class="padding flex flex-direction">
+  <button class="cu-btn bg-white lg" bindtap="back">返回</button>
+  <button class="cu-btn bg-blue margin-tb-sm lg" bindtap="save">确认</button>
+	</view>
+</view>
