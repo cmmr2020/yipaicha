@@ -22,6 +22,8 @@ Page({
     isNull: '',
     loadShow:'true',
     contentShow:'false',
+    canIUseGetUserProfile:false,
+    modalName:''
   },
 //分享小程序
   onShareAppMessage: function (res) {
@@ -36,16 +38,17 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad(options) {
-    this.loadModal(); //加载动画
+    let that = this;
+    that.loadModal(); //加载动画
     var requestUrl = app.globalData.requestUrl;
-    this.setData({
+    that.setData({
       requestUrl:requestUrl
     })
     // console.log("这是啥",requestUrl)
     var govCode = wx.getStorageSync('code')
     console.log("code转过来了吗", govCode)
-    this.login(govCode);
-     wx.clearStorage()
+    that.login(govCode);
+    wx.clearStorage()
   },
 
 
@@ -75,9 +78,14 @@ Page({
                code: res.code
             },
             success(res) {
-              //  console.log("请求用户：",res)
+              //console.log("请求用户：",res)
               that.closeModal();
               if (res.data.status == 'success') {
+                if(res.data.retObj.isInBlackList=='true'){
+                  wx.redirectTo({
+                    url: '../error_tip/error_tip?msgCode=m_10001'
+                  })
+                }
                 var app = getApp();
                 app.openid = res.data.retObj.openid;
                 app.projectId = res.data.retObj.projectId;
@@ -85,6 +93,8 @@ Page({
                 app.nickname = res.data.retObj.nickname;
                 app.projectLat = res.data.retObj.projectLat;
                 app.projectLog = res.data.retObj.projectLog;
+                app.govName = res.data.retObj.govName;
+                app.projectExeCity = res.data.retObj.projectExeCity;
                 // app.judge = res.data.retObj.openid;
                 wx.setStorageSync('projectId', app.projectId)
                 wx.setStorageSync('nickname', app.nickname)
@@ -93,7 +103,12 @@ Page({
                 // console.log("这是初始化nickname：", app.nickname)
                 // console.log("这是初始化openid：", app.openid)
                 // console.log("项目id", res.data.retObj.projectId);
-               
+               if(res.data.retObj.updateInfo == 'true'){
+                that.setData({
+                  canIUseGetUserProfile: true,
+                  modalName:'bottomModal'
+                })
+               }
                 //用户没有绑定政府
                 if(res.data.retObj.isGodCode==="false"){
                   wx.showToast({
@@ -132,7 +147,25 @@ Page({
       }
     })
 },
+ /*用户下拉页面时间 */
+onPullDownRefresh:function(){
+  var that = this;
+  console.log('下拉刷新')
+  that.onLoad()
+        //加载轮播图
+      //   that.getSwiperList();
+      // //加载问题栏
+      // that.getProblemType();
+      // //默认第一次加载任务列表（全部）
+      // that.getTaskListAll();
+  wx.stopPullDownRefresh();
 
+  // wx.startPullDownRefresh({
+  //   success:function(){
+
+  //   }
+  // })
+},
 
   bindchange(e) {
     this.setData({
@@ -303,8 +336,16 @@ var requestUrl = that.data.requestUrl;
   getTaskListAll: function() {
     var projectId = wx.getStorageSync('projectId')
     var that = this;
-
-var requestUrl = that.data.requestUrl;
+    var requestUrl = that.data.requestUrl;
+    that.setData({
+      //1、that.data.taskList  获取当前页面存的taskList数组
+      //2、res.data.retObj   获取当前请求得到的taskList数组
+      //3、xxx.concat  把新加载的数组追加到当前页面之后
+      taskList:[],
+      //从当前请求得到总页数给maxPageNum赋值
+      maxPageNum: 1,
+      isNull: '',
+    })
     wx.request({
       url: requestUrl+"/home/manage/searchTaskListIndex",
       // url: "http://192.168.15.146:8080/home/manage/searchTaskList",
@@ -383,5 +424,45 @@ var requestUrl = that.data.requestUrl;
     this.setData({
       loadModal: false
     })
-  }
+  },
+  getUserProfile(e) {
+    // 推荐使用wx.getUserProfile获取用户信息，开发者每次通过该接口获取用户个人信息均需用户确认
+    // 开发者妥善保管用户快速填写的头像昵称，避免重复弹窗
+    wx.getUserProfile({
+      desc: '用于完善会员资料', // 声明获取用户个人信息后的用途，后续会展示在弹窗中，请谨慎填写
+      success: (res) => {
+        //console.log(res)
+        var userInfo = res.userInfo
+        this.setData({
+          modalName : ''
+        })
+        var requestUrl = this.data.requestUrl;
+        var openId = getApp().openid;
+        console.log(openId);
+        console.log(userInfo);
+        wx.request({
+          url: requestUrl+"/member/manage/updateUserForWx",
+          data: {
+            "openId":openId,
+            "nickName":userInfo.nickName,
+            "sex":userInfo.gender,
+            "city":userInfo.city,
+            "country":userInfo.country,
+            "province":userInfo.province,
+            "language":userInfo.language
+          },
+          method: "POST",
+          header: {
+            "Content-Type": "application/x-www-form-urlencoded"
+          },
+          success(res) {
+            // console.log(res)
+          }
+        })
+      },
+      fail:(res) =>{
+
+      }
+    })
+  },
 })

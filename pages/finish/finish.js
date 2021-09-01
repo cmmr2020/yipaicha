@@ -97,7 +97,17 @@ that.detail(id);
       },
       success(res) {
         if (res.data.status === "success") {
-          
+          var taskRecordData = res.data.retObj.taskRecord;
+          var taskRecordList = new Array();
+          for(let i=0; i<taskRecordData.length; i++){
+            if(i>0){
+              if(taskRecordData[i].isOk==1){
+                taskRecordList.push(taskRecordData[i])
+              }
+            }else{
+              taskRecordList.push(taskRecordData[i])
+            }
+          }
           that.setData({
 
             retObj: res.data.retObj,
@@ -111,8 +121,8 @@ that.detail(id);
             addstImgSrc: res.data.retObj.addstImgSrc,
             //地址视频
             addsVideoSrc: res.data.retObj.addsVideoSrc,
-            taskRecord: res.data.retObj.taskRecord,
-            length: res.data.retObj.taskRecord.length
+            taskRecord: taskRecordList,
+            length: taskRecordList.length
           })
         }
 

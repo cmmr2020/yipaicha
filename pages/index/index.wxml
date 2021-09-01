@@ -62,3 +62,16 @@
     <image src='/images/null.png' mode='scaleToFill' style='height:100%;width:100%'></image>
     </view>
 </view>
+<view class="cu-modal bottom-modal {{modalName=='bottomModal'?'show':''}}">
+  <view class="cu-dialog">
+    <view class="padding-xl">
+      <view class="padding flex flex-direction">
+        <button class="cu-btn bg-blue margin-tb-sm lg"  bindtap="getUserProfile">获取头像昵称</button>
+      </view>
+    </view>
+  </view>
+</view>
+<view class="container">
+    <block wx:if="{{canIUseGetUserProfile}}">
+    </block>
+</view>

@@ -1,0 +1,26 @@
+
+<view class="container">
+<view class="tui-news-content">
+  <view class="tui-article">
+      　{{msg}}
+    </view>
+  <image src="../../images/toast/img_nodata.png"  mode="aspectFit"></image>
+  </view>
+  <view class="copyright">
+  <text class="text-grey">{{govName}}</text>
+  </view>
+</view>
+
+
+<!--<view class="container" >
+  <view class="tui-news-title">
+    {{ArticleList.title}}
+  </view>
+  <view class="tui-news-content">
+  <image class="tui-article-pic" src="{{ArticleList.imgUrl}}" ></image>
+    <view class="tui-article">
+     <text> 　{{list}}</text>
+    </view>
+  </view>
+  <view class="tui-news-source">消息参考来源：美兰德</view>
+</view>-->

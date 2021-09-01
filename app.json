@@ -13,7 +13,8 @@
     "pages/about/about",
     "pages/editInfo/editInfo",
     "pages/menuBack/menuBack",
-    "pages/tip/tip"
+    "pages/tip/tip",
+    "pages/error_tip/error_tip"
   ],
   "window": {
     "backgroundTextStyle": "light",

@@ -45,8 +45,22 @@
   <view class="text-cut padding bg-white radius" style="width:100%">
     <view class="flex flex-wrap">
       <view class="padding-xs" wx:for="{{showProblemType}}" wx:key="index" wx:if="{{item.name!='gray'}}">
-        <view class="cu-tag bg-blue {{item.checked==true?'show':'hide'}}">{{item.name}}</view>
+        <view class="cu-tag bg-blue {{item.checked==true?'show':'hide'}}" bindtap="alertTip" data-tips="{{item.tips}}" data-sortname="{{item.name}}">{{item.name}}<view class="cu-tag badge {{item.tips==''?'hide':'show'}}" style="margin-right:1%">?</view></view>      
       </view>
+    </view>
+  </view>
+</view>
+<!-- 类型提示模态框-->
+<view class="cu-modal {{sortTipIsShow==false?'hide':'show'}}">
+  <view class="cu-dialog">
+    <view class="cu-bar bg-white justify-end">
+      <view class="content">{{sortNameBymodal}}</view>
+      <view class="action" bindtap="hideSortModal">
+        <text class="cuIcon-close text-red"></text>
+      </view>
+    </view>
+    <view class="padding-xl">
+      {{sortTipBymodal}}
     </view>
   </view>
 </view>

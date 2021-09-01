@@ -13,7 +13,8 @@ Page({
       hidden: false,
      hidden1: true,
      //openid
-      openid:''
+      openid:'',
+      userInfo: {},
   },
   /**
    * 生命周期函数--监听页面加载
@@ -26,7 +27,6 @@ Page({
     that.setData({
       openid: openid
     })
-
     // this.wxLogin();
     //查看是否授权
     // wx.getSetting({
@@ -46,8 +46,8 @@ bindGetUserInfo: function (res) {
       //用户按了允许授权按钮
       var that = this;
       // 获取到用户的信息了，打印到控制台上看下
-      // console.log("信息如下：",res);
-      // console.log(res.detail.userInfo);
+      //  console.log("信息如下：",res);
+      //  console.log(res.detail.userInfo);
       //授权成功后,通过改变 hidden 的值，让实现页面显示出来，把授权页面隐藏起来
       that.setData({
         hidden: true,

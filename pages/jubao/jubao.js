@@ -73,6 +73,9 @@ Page({
     addIsShowB:true,
     addIsShowA:false,
     i:0,
+    sortTipIsShow:false,
+    sortNameBymodal:'',
+    sortTipBymodal:'',
   },
 
   /**
@@ -107,6 +110,40 @@ Page({
     this.currentLocation();
     this.getProblemType();
   },
+  onShow : function(){
+    let that = this;
+    wx.getSetting({
+      success (res) {
+        //没有的话  引导用户开启后台定位权限
+        if(!res.authSetting['scope.userLocation']){
+          wx.showModal({
+            title: '提示',
+            content: '上报问题需要获取您的位置信息,请根据引导开启权限 ！若拒绝授权,您将无法上报问题 ！',
+            success (res) {
+              if (res.confirm) {
+                that.goSetting()
+              } else if (res.cancel) {
+                wx.redirectTo({
+                  url: '../error_tip/error_tip?msgCode=m_10003'
+                })
+              }
+            }
+          })
+        }
+      }
+    })
+  },
+  goSetting:function(){
+    let that = this;
+    wx.openSetting({
+      success (res) {
+       //console.log(res.authSetting)
+        if(res.authSetting['scope.userLocation']){
+          that.currentLocation();
+        }
+      }
+    })
+},
   //地址拍摄的控制
   addressGoA:function(){
     this.setData({
@@ -326,7 +363,7 @@ Page({
       },
       success(res) {
         if (res.data.httpStatusCode === 200) {
-          // console.log("进来了")
+           //console.log(res.data.retObj)
           for (let i = 0; i < res.data.retObj.length; i++) {
             i.checked == false;
           }
@@ -369,8 +406,9 @@ Page({
         longitude: lng
       },
       success: (res) => {
-        // console.log(res)
+         //console.log(res)
         // console.log(res.result.formatted_addresses.recommend)
+        this.checkExeProjectCity(res.result.address_component);
         this.setData({
           address: res.result.formatted_addresses.recommend //res.result.address
         })
@@ -382,12 +420,54 @@ Page({
       }
     })
   },
+  //验证项目执行城市
+  checkExeProjectCity:function(UserAddrData){
+    let app = getApp();
+    //console.log(app.projectExeCity)
+    //console.log(UserAddrData)
+    var flag = true;
+    if(app.projectExeCity.length>0&&UserAddrData){
+    flag = false
+      var projectExeCityList = app.projectExeCity
+      for(let i=0;i<projectExeCityList.length;i++){
+        var level = 1;
+        let ExeCity = projectExeCityList[i];
+        if(ExeCity.exeCity){
+          level = 2;
+        }
+        if(ExeCity.exeCounty){
+          level = 3;
+        }
+        if(level == 1){
+            if(UserAddrData.province == ExeCity.exeProvice){
+              flag = true;
+              return;
+            }
+        }else if(level == 2){
+            if(UserAddrData.province == ExeCity.exeProvice&& UserAddrData.city == ExeCity.exeCity){
+              flag = true;
+              return;
+            }
+          }else if(level==3){
+            if(UserAddrData.province == ExeCity.exeProvice&&UserAddrData.city == ExeCity.exeCity&&UserAddrData.district == ExeCity.exeCounty){
+              flag = true;
+              return;
+            }
+          }
+        }
+      }
+      if(!flag){
+        console.log('d')
+         wx.redirectTo({
+           url: '../error_tip/error_tip?msgCode=m_10002'
+         })
+      }
+  },
   getDps:function(){
         wx.getSystemInfo({
         success(res) {
         var isopendingwei = res.locationEnabled;
         if(isopendingwei==false){
-            
             wx.showModal({
               title: '提示',
               content: '请先开启手机GPS定位,然后点击刷新按钮重试',
@@ -1182,6 +1262,21 @@ Page({
     })
     })
   },
+  alertTip:function(e){
+    if(!e.currentTarget.dataset.tips){
+      return
+    }
+    this.setData({
+      sortNameBymodal:e.currentTarget.dataset.sortname,
+      sortTipBymodal:e.currentTarget.dataset.tips,
+      sortTipIsShow:true
+    })
+  },
+  hideSortModal:function(){
+    this.setData({
+      sortTipIsShow:false
+    })
+  }
 
 
 })
