@@ -1,0 +1,100 @@
+{
+  "setting": {},
+  "condition": {
+    "plugin": {
+      "list": []
+    },
+    "game": {
+      "list": []
+    },
+    "gamePlugin": {
+      "list": []
+    },
+    "miniprogram": {
+      "list": [
+        {
+          "id": 0,
+          "name": "测试",
+          "pathName": "pages/ceshi/ceshi",
+          "query": "",
+          "scene": null
+        },
+        {
+          "id": -1,
+          "name": "举报",
+          "pathName": "pages/jubao/jubao",
+          "query": "",
+          "scene": null
+        },
+        {
+          "id": -1,
+          "name": "个人中心",
+          "pathName": "pages/user/user",
+          "query": "",
+          "scene": null
+        },
+        {
+          "id": -1,
+          "name": "成功",
+          "pathName": "pages/success/success",
+          "query": "",
+          "scene": null
+        },
+        {
+          "id": -1,
+          "name": "任务详情",
+          "pathName": "pages/detailPage/detailPage",
+          "query": "",
+          "scene": null
+        },
+        {
+          "id": 5,
+          "name": "轮播详情",
+          "pathName": "pages/swiper/swiper",
+          "query": "?viewId='40288f126cb7f93f016cb7fd129e000d'",
+          "scene": null
+        },
+        {
+          "id": -1,
+          "name": "举报详情",
+          "pathName": "pages/jubaodetail/jubaodetail",
+          "query": "",
+          "scene": null
+        },
+        {
+          "id": 7,
+          "name": "测试页面",
+          "pathName": "pages/ceshi/ceshi",
+          "query": "url=https://wmccpu.diaochaonline.com/B/^SDHZ",
+          "scene": null
+        },
+        {
+          "id": 8,
+          "name": "pages/menuBack/menuBack",
+          "pathName": "pages/menuBack/menuBack",
+          "query": "code=SDHZ",
+          "scene": null
+        },
+        {
+          "id": -1,
+          "name": "提示页",
+          "pathName": "pages/tip/tip",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "pages/tip/tip",
+          "pathName": "pages/tip/tip",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "pages/error_tip/error_tip",
+          "pathName": "pages/error_tip/error_tip",
+          "query": "",
+          "scene": null
+        }
+      ]
+    }
+  }
+}
