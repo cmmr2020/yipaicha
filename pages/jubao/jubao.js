@@ -186,10 +186,11 @@ Page({
       var province = res.detail.userInfo.province;
       var openid = that.data.openid;
 
-      wx.request({
-        // 必需
-        url: requestUrl+'/member/manage/saveUser',
-        data: {
+      //调用全局 请求方法
+    app.wxRequest(
+      'POST',
+      requestUrl+'/member/manage/saveUser',
+      {
           city:city,
           country:country,
           gender:gender,
@@ -197,24 +198,44 @@ Page({
           nickName:nickName,
           province:province,
           openid:openid
-        },
-        method:"POST",
-        header: {
-          'Content-Type': 'application/x-www-form-urlencoded'
-        },
-        success: (res) => {
-          // console.log(res)
-          if (res.data.status==="success") {
-            // console.log("保存成功")
-          }
-        },
-        fail: (res) => {
+      },
+      app.seesionId,
+      (res) =>{
+
+      },
+      (err) =>{
+
+      }
+    )
+      // wx.request({
+      //   // 必需
+      //   url: requestUrl+'/member/manage/saveUser',
+      //   data: {
+      //     city:city,
+      //     country:country,
+      //     gender:gender,
+      //     language:language,
+      //     nickName:nickName,
+      //     province:province,
+      //     openid:openid
+      //   },
+      //   method:"POST",
+      //   header: {
+      //     'Content-Type': 'application/x-www-form-urlencoded'
+      //   },
+      //   success: (res) => {
+      //     // console.log(res)
+      //     if (res.data.status==="success") {
+      //       // console.log("保存成功")
+      //     }
+      //   },
+      //   fail: (res) => {
           
-        },
-        complete: (res) => {
+      //   },
+      //   complete: (res) => {
           
-        }
-      })
+      //   }
+      // })
 
 
     } else {
@@ -355,24 +376,60 @@ Page({
     var projectId = wx.getStorageSync('projectId');
     let that = this;
     var requestUrl = that.data.requestUrl;
-    wx.request({
-      url: requestUrl+"/home/manage/searchQuestionSorts",
-      // url: "http://221.216.95.200:8285/home/manage/searchQuestionSorts",
-      data: {
+    //调用全局 请求方法
+    app.wxRequest(
+      'GET',
+      requestUrl+"/home/manage/searchQuestionSorts",
+      {
         "projectId": projectId
       },
-      success(res) {
+      app.seesionId,
+      (res) =>{
         if (res.data.httpStatusCode === 200) {
-           //console.log(res.data.retObj)
-          for (let i = 0; i < res.data.retObj.length; i++) {
-            i.checked == false;
-          }
-          that.setData({
-            problemType: res.data.retObj
-          })
-        }
+          //console.log(res.data.retObj)
+         if(res.data.retObj == undefined){
+           wx.redirectTo({
+             url: '../error_tip/error_tip?msgCode=m_10004'
+           })
+           return
+         } 
+         for (let i = 0; i < res.data.retObj.length; i++) {
+           i.checked == false;
+         }
+         that.setData({
+           problemType: res.data.retObj
+         })
+       }
+
+      },
+      (err) =>{
+
       }
-    })
+    )
+    // wx.request({
+    //   url: requestUrl+"/home/manage/searchQuestionSorts",
+    //   // url: "http://221.216.95.200:8285/home/manage/searchQuestionSorts",
+    //   data: {
+    //     "projectId": projectId
+    //   },
+    //   success(res) {
+    //     if (res.data.httpStatusCode === 200) {
+    //        console.log(res.data.retObj)
+    //       if(res.data.retObj == undefined){
+    //         wx.redirectTo({
+    //           url: '../error_tip/error_tip?msgCode=m_10004'
+    //         })
+    //         return
+    //       } 
+    //       for (let i = 0; i < res.data.retObj.length; i++) {
+    //         i.checked == false;
+    //       }
+    //       that.setData({
+    //         problemType: res.data.retObj
+    //       })
+    //     }
+    //   }
+    // })
   },
 
 
@@ -426,6 +483,9 @@ Page({
     //console.log(app.projectExeCity)
     //console.log(UserAddrData)
     var flag = true;
+    if(app.projectExeCity == undefined){
+      return 
+    }
     if(app.projectExeCity.length>0&&UserAddrData){
     flag = false
       var projectExeCityList = app.projectExeCity
@@ -457,7 +517,7 @@ Page({
         }
       }
       if(!flag){
-        console.log('d')
+        //console.log('d')
          wx.redirectTo({
            url: '../error_tip/error_tip?msgCode=m_10002'
          })
@@ -1022,10 +1082,11 @@ Page({
     var resourceList = that.data.resourceList;
 
     //发送请求到后台，存储：经纬度、地址、描述、问题ID 
-    wx.request({
-      // url: "http://192.168.15.146:8080/home/manage/createAnswer",
-      url: requestUrl+"/home/manage/createAnswer_syn",
-      data: {
+    //调用全局 请求方法
+    app.wxRequest(
+      'POST',
+      requestUrl+"/home/manage/createAnswer_syn",
+      {
         "longitude": longitude,
         "latitude": latitude,
         "address": address,
@@ -1035,32 +1096,66 @@ Page({
         "projectId": projectId,
         "resourceListStr":JSON.stringify(resourceList)
       },
-      header: {
-        'content-type': 'application/x-www-form-urlencoded'
+      app.seesionId,
+      (res) =>{
+        // console.log("上传答案结束,",res)
+        if (res.data.status==='success') {
+          wx.reLaunch({
+            url: "../success/success"
+          })
+      }else{
+        wx.showToast({
+          title: res.data.message,
+          icon: 'none',
+          duration: 1000,
+          mask: true
+        })
+      }
+
       },
-      method: 'POST',
-      dataType: 'json',
-      success(res) {
-          // console.log("上传答案结束,",res)
-          if (res.data.status==='success') {
-              wx.reLaunch({
-                url: "../success/success"
-              })
-          }else{
-            wx.showToast({
-              title: res.data.message,
-              icon: 'none',
-              duration: 1000,
-              mask: true
-            })
-          }
-      },
-      //请求失败
-      fail: function(err) {
-        // console.log("请求失败：", err)
-      },
-      complete: function() {} //请求完成后执行的函数
-    })
+      (err) =>{
+
+      }
+    )
+    // wx.request({
+    //   // url: "http://192.168.15.146:8080/home/manage/createAnswer",
+    //   url: requestUrl+"/home/manage/createAnswer_syn",
+    //   data: {
+    //     "longitude": longitude,
+    //     "latitude": latitude,
+    //     "address": address,
+    //     "desc": desc,
+    //     "qustionSort": sortIds,
+    //     "openid": openid,
+    //     "projectId": projectId,
+    //     "resourceListStr":JSON.stringify(resourceList)
+    //   },
+    //   header: {
+    //     'content-type': 'application/x-www-form-urlencoded'
+    //   },
+    //   method: 'POST',
+    //   dataType: 'json',
+    //   success(res) {
+    //       // console.log("上传答案结束,",res)
+    //       if (res.data.status==='success') {
+    //           wx.reLaunch({
+    //             url: "../success/success"
+    //           })
+    //       }else{
+    //         wx.showToast({
+    //           title: res.data.message,
+    //           icon: 'none',
+    //           duration: 1000,
+    //           mask: true
+    //         })
+    //       }
+    //   },
+    //   //请求失败
+    //   fail: function(err) {
+    //     // console.log("请求失败：", err)
+    //   },
+    //   complete: function() {} //请求完成后执行的函数
+    // })
   },
 
  //举报图片集合

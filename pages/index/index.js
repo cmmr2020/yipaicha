@@ -73,7 +73,7 @@ Page({
             },
             data: {
              //govCode: govCode,
-               //govCode: 'TJBS',//'JCS2020',
+               //govCode: 'TJBH01CS',//'JCS2020',
                govCode: 'BJSHRQ',//线上              
                code: res.code
             },
@@ -85,6 +85,13 @@ Page({
                   wx.redirectTo({
                     url: '../error_tip/error_tip?msgCode=m_10001'
                   })
+                  return;
+                }
+                if(res.data.retObj.projectId=='0'){
+                  wx.redirectTo({
+                    url: '../error_tip/error_tip?msgCode=m_10004'
+                  })
+                  return;
                 }
                 var app = getApp();
                 app.openid = res.data.retObj.openid;
@@ -94,7 +101,8 @@ Page({
                 app.projectLat = res.data.retObj.projectLat;
                 app.projectLog = res.data.retObj.projectLog;
                 app.govName = res.data.retObj.govName;
-                app.projectExeCity = res.data.retObj.projectExeCity;
+                app.projectExeCity = res.data.retObj.projectExeCity=="0"?[]:res.data.retObj.projectExeCity;
+                app.seesionId =res.header["Set-Cookie"]; 
                 // app.judge = res.data.retObj.openid;
                 wx.setStorageSync('projectId', app.projectId)
                 wx.setStorageSync('nickname', app.nickname)
@@ -208,25 +216,46 @@ onPullDownRefresh:function(){
     // console.log(projectId)
     let that = this;
     var requestUrl = that.data.requestUrl;
-    wx.request({
-      url: requestUrl+"/home/manage/searchViewPages",
-      // url: "http://192.168.15.146:8080/home/manage/searchViewPages",
-      data: {
+    
+    //调用全局 请求方法
+    app.wxRequest(
+      'GET',
+      requestUrl + "/home/manage/searchViewPages",
+      {
         "projectId": projectId
       },
-      method: "GET",
-      header: {
-        "Content-Type": "application/json"
-      },
-      success(res) {
-        // console.log(res);
+      app.seesionId,
+      (res) =>{
         if (res.data.status === "success") {
           that.setData({
             swiperList: res.data.retObj
           })
         }
+      },
+      (err) =>{
+
       }
-    })
+    )
+
+    // wx.request({
+    //   url: requestUrl+"/home/manage/searchViewPages",
+    //   // url: "http://192.168.15.146:8080/home/manage/searchViewPages",
+    //   data: {
+    //     "projectId": projectId
+    //   },
+    //   method: "GET",
+    //   header: {
+    //     "Content-Type": "application/json"
+    //   },
+    //   success(res) {
+    //     // console.log(res);
+    //     if (res.data.status === "success") {
+    //       that.setData({
+    //         swiperList: res.data.retObj
+    //       })
+    //     }
+    //   }
+    // })
   },
 
   /**
@@ -236,25 +265,46 @@ onPullDownRefresh:function(){
     var projectId = wx.getStorageSync('projectId')
     let that = this;
     var requestUrl = that.data.requestUrl;
-    wx.request({
-      url: requestUrl+"/home/manage/searchQuestionSorts",
-      // url: 'http://192.168.15.146:8080/home/manage/searchQuestionSorts',
-      data: {
+    
+    //调用全局 请求方法
+    app.wxRequest(
+      'GET',
+      requestUrl + '/home/manage/searchQuestionSorts',
+      {
         "projectId": projectId
       },
-      method: "GET",
-      header: {
-        "Content-Type": "application/json"
-      },
-      success(res) {
+      app.seesionId,
+      (res) =>{
         // console.log(res);
         if (res.data.status === "success") {
           that.setData({
             problemType: res.data.retObj
           })
         }
+      },
+      (err) =>{
+
       }
-    })
+    )
+    // wx.request({
+    //   url: requestUrl+"/home/manage/searchQuestionSorts",
+    //   // url: 'http://192.168.15.146:8080/home/manage/searchQuestionSorts',
+    //   data: {
+    //     "projectId": projectId
+    //   },
+    //   method: "GET",
+    //   header: {
+    //     "Content-Type": "application/json"
+    //   },
+    //   success(res) {
+    //     // console.log(res);
+    //     if (res.data.status === "success") {
+    //       that.setData({
+    //         problemType: res.data.retObj
+    //       })
+    //     }
+    //   }
+    // })
   },
   /**
    * 动态改变问题类型的ID，传参加载ID下的任务列表
@@ -300,20 +350,17 @@ onPullDownRefresh:function(){
 
 var requestUrl = that.data.requestUrl;
     //console.log(e);
-    wx.request({
-
-      url: requestUrl+"/home/manage/searchTaskListIndex",
-      // url: "http://192.168.15.146:8080/home/manage/searchTaskList",
-      data: {
+    //调用全局 请求方法
+    app.wxRequest(
+      'GET',
+      requestUrl + '/home/manage/searchTaskListIndex',
+      {
         "sortId": e,
         "page": that.data.pagenum,
         "projectId": projectId
       },
-      method: "GET",
-      header: {
-        "Content-Type": "application/json"
-      },
-      success(res) {
+      app.seesionId,
+      (res) =>{
         //console.log(res);
         if (res.data.status === "success") {
           that.setData({
@@ -328,9 +375,41 @@ var requestUrl = that.data.requestUrl;
           })
         }
       },
-      fail: function(err) {}, //请求失败
-      complete: function() {} //请求完成后执行的函数
-    })
+      (err) =>{
+
+      }
+    )
+    // wx.request({
+
+    //   url: requestUrl+"/home/manage/searchTaskListIndex",
+    //   // url: "http://192.168.15.146:8080/home/manage/searchTaskList",
+    //   data: {
+    //     "sortId": e,
+    //     "page": that.data.pagenum,
+    //     "projectId": projectId
+    //   },
+    //   method: "GET",
+    //   header: {
+    //     "Content-Type": "application/json"
+    //   },
+    //   success(res) {
+    //     //console.log(res);
+    //     if (res.data.status === "success") {
+    //       that.setData({
+    //         taskList: that.data.taskList.concat(res.data.retObj),
+    //         maxPageNum: res.data.retObj[0].maxPageNum,
+    //         isNull: ''
+    //       })
+    //     } else {
+    //       that.setData({
+    //         isNull: 'true',
+    //         maxPageNum: 1
+    //       })
+    //     }
+    //   },
+    //   fail: function(err) {}, //请求失败
+    //   complete: function() {} //请求完成后执行的函数
+    // })
   },
   //获取全部任务列表（页面加载）
   getTaskListAll: function() {
@@ -346,18 +425,17 @@ var requestUrl = that.data.requestUrl;
       maxPageNum: 1,
       isNull: '',
     })
-    wx.request({
-      url: requestUrl+"/home/manage/searchTaskListIndex",
-      // url: "http://192.168.15.146:8080/home/manage/searchTaskList",
-      data: {
+    
+    //调用全局 请求方法
+    app.wxRequest(
+      'GET',
+      requestUrl + '/home/manage/searchTaskListIndex',
+      {
         "page": that.data.pagenum,
         "projectId": projectId
       },
-      method: "GET",
-      header: {
-        "Content-Type": "application/json"
-      },
-      success(res) {
+      app.seesionId,
+      (res) =>{
         if (res.data.status === "success") {
           // console.log("任务列表",res)
           that.setData({
@@ -372,14 +450,46 @@ var requestUrl = that.data.requestUrl;
         } else {
           isNull: 'true'
         }
-        // 隐藏加载框
-        wx.hideLoading();
+
       },
-      fail: function(err) {
-        // console.log('gg')
-      }, //请求失败
-      complete: function() {} //请求完成后执行的函数
-    })
+      (err) =>{
+
+      }
+    )
+    // wx.request({
+    //   url: requestUrl+"/home/manage/searchTaskListIndex",
+    //   // url: "http://192.168.15.146:8080/home/manage/searchTaskList",
+    //   data: {
+    //     "page": that.data.pagenum,
+    //     "projectId": projectId
+    //   },
+    //   method: "GET",
+    //   header: {
+    //     "Content-Type": "application/json"
+    //   },
+    //   success(res) {
+    //     if (res.data.status === "success") {
+    //       // console.log("任务列表",res)
+    //       that.setData({
+    //         //1、that.data.taskList  获取当前页面存的taskList数组
+    //         //2、res.data.retObj   获取当前请求得到的taskList数组
+    //         //3、xxx.concat  把新加载的数组追加到当前页面之后
+    //         taskList: that.data.taskList.concat(res.data.retObj),
+    //         //从当前请求得到总页数给maxPageNum赋值
+    //         maxPageNum: res.data.retObj[0].maxPageNum,
+    //         isNull: '',
+    //       })
+    //     } else {
+    //       isNull: 'true'
+    //     }
+    //     // 隐藏加载框
+    //     wx.hideLoading();
+    //   },
+    //   fail: function(err) {
+    //     // console.log('gg')
+    //   }, //请求失败
+    //   complete: function() {} //请求完成后执行的函数
+    // })
 
   },
   //上拉函数
@@ -438,11 +548,11 @@ var requestUrl = that.data.requestUrl;
         })
         var requestUrl = this.data.requestUrl;
         var openId = getApp().openid;
-        console.log(openId);
-        console.log(userInfo);
-        wx.request({
-          url: requestUrl+"/member/manage/updateUserForWx",
-          data: {
+        //调用全局 请求方法
+      app.wxRequest(
+        'POST',
+        requestUrl + '/member/manage/updateUserForWx',
+        {
             "openId":openId,
             "nickName":userInfo.nickName,
             "sex":userInfo.gender,
@@ -450,15 +560,34 @@ var requestUrl = that.data.requestUrl;
             "country":userInfo.country,
             "province":userInfo.province,
             "language":userInfo.language
-          },
-          method: "POST",
-          header: {
-            "Content-Type": "application/x-www-form-urlencoded"
-          },
-          success(res) {
-            // console.log(res)
-          }
-        })
+        },
+        app.seesionId,
+        (res) =>{
+
+        },
+        (err) =>{
+
+        }
+      )
+        // wx.request({
+        //   url: requestUrl+"/member/manage/updateUserForWx",
+        //   data: {
+        //     "openId":openId,
+        //     "nickName":userInfo.nickName,
+        //     "sex":userInfo.gender,
+        //     "city":userInfo.city,
+        //     "country":userInfo.country,
+        //     "province":userInfo.province,
+        //     "language":userInfo.language
+        //   },
+        //   method: "POST",
+        //   header: {
+        //     "Content-Type": "application/x-www-form-urlencoded"
+        //   },
+        //   success(res) {
+        //     // console.log(res)
+        //   }
+        // })
       },
       fail:(res) =>{
 

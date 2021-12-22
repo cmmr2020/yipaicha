@@ -83,44 +83,75 @@ Page({
     var taskRecord = that.data.taskRecord;
 
 var requestUrl = that.data.requestUrl;
-    wx.request({
-      // url: "http://192.168.15.146:8080/home/manage/searchAnswerInfo",
-      url: requestUrl+"/home/manage/searchAnswerInfo",
-      data: {
-        answerId: id
-      },
-      success(res) {
-        // console.log("这是失败返回的数据：",res);
-        if (res.data.status === "success") {
+  //调用全局 请求方法
+  app.wxRequest(
+    'GET',
+    requestUrl + '/home/manage/searchAnswerInfo',
+    {
+      answerId: id
+    },
+    app.seesionId,
+    (res) =>{
+      // console.log("这是失败返回的数据：",res);
+      if (res.data.status === "success") {
+        that.setData({
+          retObj: res.data.retObj,
+          //问题分类
+          sort: res.data.retObj.questionSorts,
+          //举报图片
+          reportImgSrc: res.data.retObj.reportImgSrc,
+          //举报视频
+          reportVideoSrc: res.data.retObj.reportVideoSrc,
+          //地址图片
+          addstImgSrc: res.data.retObj.addstImgSrc,
+          //地址视频
+          addsVideoSrc: res.data.retObj.addsVideoSrc,
+        })
+      }
+    },
+    (err) =>{
 
-          that.setData({
+    }
+  )
 
-            retObj: res.data.retObj,
-            //问题分类
-            sort: res.data.retObj.questionSorts,
-            //举报图片
-            reportImgSrc: res.data.retObj.reportImgSrc,
-            //举报视频
-            reportVideoSrc: res.data.retObj.reportVideoSrc,
-            //地址图片
-            addstImgSrc: res.data.retObj.addstImgSrc,
-            //地址视频
-            addsVideoSrc: res.data.retObj.addsVideoSrc,
+    // wx.request({
+    //   // url: "http://192.168.15.146:8080/home/manage/searchAnswerInfo",
+    //   url: requestUrl+"/home/manage/searchAnswerInfo",
+    //   data: {
+    //     answerId: id
+    //   },
+    //   success(res) {
+    //     // console.log("这是失败返回的数据：",res);
+    //     if (res.data.status === "success") {
+
+    //       that.setData({
+
+    //         retObj: res.data.retObj,
+    //         //问题分类
+    //         sort: res.data.retObj.questionSorts,
+    //         //举报图片
+    //         reportImgSrc: res.data.retObj.reportImgSrc,
+    //         //举报视频
+    //         reportVideoSrc: res.data.retObj.reportVideoSrc,
+    //         //地址图片
+    //         addstImgSrc: res.data.retObj.addstImgSrc,
+    //         //地址视频
+    //         addsVideoSrc: res.data.retObj.addsVideoSrc,
 
 
-          })
+    //       })
 
-        }
-
-
-      },
-      //请求失败
-      fail: function(err) {},
-      //请求完成后执行的函数
-      complete: function() {}
+    //     }
 
 
-    })
+    //   },
+    //   //请求失败
+    //   fail: function(err) {},
+    //   //请求完成后执行的函数
+    //   complete: function() {}
+
+
+    // })
 
 
   }

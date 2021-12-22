@@ -28,16 +28,15 @@ Page({
       this.setData({
         openId: options.openid,
     })
-    wx.request({
-      url: app.globalData.requestUrl+'/member/manage/getUser',
-      method: "GET",
-      data:{
+    //调用全局 请求方法
+    app.wxRequest(
+      'GET',
+      app.globalData.requestUrl+'/member/manage/getUser',
+      {
         openId:options.openid,
       },
-      header: {
-        'Content-Type': 'application/x-www-form-urlencoded'
-      },
-      success:(res)=>{
+      app.seesionId,
+      (res) =>{
         if (res.data.status == 'success') {
           //console.log(res)
           var obj = res.data.retObj;
@@ -60,16 +59,60 @@ Page({
             mask: true
           })
         }
+
       },
-      fail:()=>{
+      (err) =>{
         wx.showToast({
           title: '系统错误!',
           icon: 'none',
           duration: 1500,
           mask: true
         })
+
       }
-    })
+    )
+    // wx.request({
+    //   url: app.globalData.requestUrl+'/member/manage/getUser',
+    //   method: "GET",
+    //   data:{
+    //     openId:options.openid,
+    //   },
+    //   header: {
+    //     'Content-Type': 'application/x-www-form-urlencoded'
+    //   },
+    //   success:(res)=>{
+    //     if (res.data.status == 'success') {
+    //       //console.log(res)
+    //       var obj = res.data.retObj;
+    //       if(!obj.uname){
+    //         return
+    //       }
+    //       var gname = '';
+    //       if(obj.groupNname){
+    //         gname = obj.groupNname;
+    //       }
+    //       this.setData({
+    //         uname:obj.uname,
+    //         gname:gname
+    //       })
+    //     }else{
+    //       wx.showToast({
+    //         title: '系统错误!',
+    //         icon: 'none',
+    //         duration: 1500,
+    //         mask: true
+    //       })
+    //     }
+    //   },
+    //   fail:()=>{
+    //     wx.showToast({
+    //       title: '系统错误!',
+    //       icon: 'none',
+    //       duration: 1500,
+    //       mask: true
+    //     })
+    //   }
+    // })
     }
   },
 
@@ -100,38 +143,43 @@ Page({
         mask: true
       })
     }else{
-      wx.request({
-        url: app.globalData.requestUrl+'/member/manage/updateUserForInfo',
-        method: "POST",
-        data:{
+      //调用全局 请求方法
+    app.wxRequest(
+      'GET',
+      requestUrl + '/wechat/api/distributeLocation/findGroupLocationList',
+      {
+        terminalUserId: terminalUserId
+      },
+      app.seesionId,
+      (res) =>{
+
+      },
+      (err) =>{
+
+      }
+    )
+    //调用全局 请求方法
+    app.wxRequest(
+      'POST',
+      app.globalData.requestUrl+'/member/manage/updateUserForInfo',
+      {
           openId:that.data.openId,
           uname:uname,
           gname:gname,
-        },
-        header: {
-          'Content-Type': 'application/x-www-form-urlencoded'
-        },
-        success:(res)=>{
-          if (res.data.status == 'success') {
-            wx.showToast({
-              title: '成功',
-              icon: 'none',
-              duration: 1500,
-              mask: true,
-              success:()=>{
-                that.back();
-              }
-            })
-          }else{
-            wx.showToast({
-              title: '系统错误!',
-              icon: 'none',
-              duration: 1500,
-              mask: true
-            })
-          }
-        },
-        fail:()=>{
+      },
+      app.seesionId,
+      (res) =>{
+        if (res.data.status == 'success') {
+          wx.showToast({
+            title: '成功',
+            icon: 'none',
+            duration: 1500,
+            mask: true,
+            success:()=>{
+              that.back();
+            }
+          })
+        }else{
           wx.showToast({
             title: '系统错误!',
             icon: 'none',
@@ -139,7 +187,58 @@ Page({
             mask: true
           })
         }
-      })
+
+      },
+      (err) =>{
+        wx.showToast({
+          title: '系统错误!',
+          icon: 'none',
+          duration: 1500,
+          mask: true
+        })
+
+      }
+    )
+      // wx.request({
+      //   url: app.globalData.requestUrl+'/member/manage/updateUserForInfo',
+      //   method: "POST",
+      //   data:{
+      //     openId:that.data.openId,
+      //     uname:uname,
+      //     gname:gname,
+      //   },
+      //   header: {
+      //     'Content-Type': 'application/x-www-form-urlencoded'
+      //   },
+      //   success:(res)=>{
+      //     if (res.data.status == 'success') {
+      //       wx.showToast({
+      //         title: '成功',
+      //         icon: 'none',
+      //         duration: 1500,
+      //         mask: true,
+      //         success:()=>{
+      //           that.back();
+      //         }
+      //       })
+      //     }else{
+      //       wx.showToast({
+      //         title: '系统错误!',
+      //         icon: 'none',
+      //         duration: 1500,
+      //         mask: true
+      //       })
+      //     }
+      //   },
+      //   fail:()=>{
+      //     wx.showToast({
+      //       title: '系统错误!',
+      //       icon: 'none',
+      //       duration: 1500,
+      //       mask: true
+      //     })
+      //   }
+      // })
     }
   }
 })

@@ -30,13 +30,15 @@ var requestUrl = app.globalData.requestUrl;
   getViewArticle(id) {
     let that = this;
     var requestUrl = that.data.requestUrl;//服务器路径
-    wx.request({
-      url: requestUrl+"/home/manage/findViewArticle",
-      // url: "http://192.168.15.146:8080/home/manage/findViewArticle",
-      data: {
+    //调用全局 请求方法
+    app.wxRequest(
+      'GET',
+      requestUrl+"/home/manage/findViewArticle",
+      {
         "viewId": id
       },
-      success(res) {
+      app.seesionId,
+      (res) =>{
         if (res.data.status === "success") {
           that.setData({
             ArticleList: res.data.retObj,
@@ -44,8 +46,29 @@ var requestUrl = app.globalData.requestUrl;
           })
 
         }
+
+      },
+      (err) =>{
+
       }
-    })
+    )
+
+    // wx.request({
+    //   url: requestUrl+"/home/manage/findViewArticle",
+    //   // url: "http://192.168.15.146:8080/home/manage/findViewArticle",
+    //   data: {
+    //     "viewId": id
+    //   },
+    //   success(res) {
+    //     if (res.data.status === "success") {
+    //       that.setData({
+    //         ArticleList: res.data.retObj,
+    //         list: res.data.retObj.content.replace(/\\n/g, "\n")
+    //       })
+
+    //     }
+    //   }
+    // })
   },
 
 })

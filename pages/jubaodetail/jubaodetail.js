@@ -100,16 +100,18 @@ Page({
     var that = this;
 
 var requestUrl = that.data.requestUrl;//服务器路径
-    wx.request({
-      url: requestUrl+"/home/manage/searchTaskList",
-      // url: "http://192.168.15.146:8080/home/manage/searchTaskList",
-      data: {
+    //调用全局 请求方法
+    app.wxRequest(
+      'GET',
+      requestUrl+"/home/manage/searchTaskList",
+      {
         "status": e,
          "page": that.data.pagenum,
          "openid":openid,
          "projectId":projectId
       },
-      success(res) {
+      app.seesionId,
+      (res) =>{
         // console.log("退回：",res);
         if (res.data.status === "success") {
           that.setData({
@@ -123,10 +125,39 @@ var requestUrl = that.data.requestUrl;//服务器路径
             isNull: 'true'
           })
         }
+
       },
-      fail: function(err) {}, //请求失败
-      complete: function() {} //请求完成后执行的函数
-    })
+      (err) =>{
+
+      }
+    )
+    // wx.request({
+    //   url: requestUrl+"/home/manage/searchTaskList",
+    //   // url: "http://192.168.15.146:8080/home/manage/searchTaskList",
+    //   data: {
+    //     "status": e,
+    //      "page": that.data.pagenum,
+    //      "openid":openid,
+    //      "projectId":projectId
+    //   },
+    //   success(res) {
+    //     // console.log("退回：",res);
+    //     if (res.data.status === "success") {
+    //       that.setData({
+    //         backList: that.data.backList.concat(res.data.retObj),
+    //         //从当前请求得到总页数给maxPageNum赋值
+    //         maxPageNum: res.data.retObj[0].maxPageNum,
+    //         isNull: ''
+    //       })
+    //     }else{
+    //       that.setData({
+    //         isNull: 'true'
+    //       })
+    //     }
+    //   },
+    //   fail: function(err) {}, //请求失败
+    //   complete: function() {} //请求完成后执行的函数
+    // })
   },
 
   finish:function(e,openid){
@@ -136,16 +167,18 @@ var requestUrl = that.data.requestUrl;//服务器路径
     var that = this;
 
 var requestUrl = that.data.requestUrl;//服务器路径
-    wx.request({
-      //  url: "http://192.168.15.146:8080/home/manage/searchTaskList",
-      url: requestUrl+"/home/manage/searchTaskList",
-      data: {
+    //调用全局 请求方法
+    app.wxRequest(
+      'GET',
+      requestUrl+"/home/manage/searchTaskList",
+      {
         "status": e,
         "page": that.data.pagenum,
          "openid":openid,
          "projectId":projectId
       },
-      success(res) {
+      app.seesionId,
+      (res) =>{
         // console.log("成功：",res);
         if (res.data.status === "success") {
           that.setData({
@@ -161,10 +194,41 @@ var requestUrl = that.data.requestUrl;//服务器路径
             isNull: 'true'
           })
         }
+
       },
-      fail: function(err) {}, //请求失败
-      complete: function() {} //请求完成后执行的函数
-    })
+      (err) =>{
+
+      }
+    )
+    // wx.request({
+    //   //  url: "http://192.168.15.146:8080/home/manage/searchTaskList",
+    //   url: requestUrl+"/home/manage/searchTaskList",
+    //   data: {
+    //     "status": e,
+    //     "page": that.data.pagenum,
+    //      "openid":openid,
+    //      "projectId":projectId
+    //   },
+    //   success(res) {
+    //     // console.log("成功：",res);
+    //     if (res.data.status === "success") {
+    //       that.setData({
+    //          finishList: that.data.finishList.concat(res.data.retObj),
+    //         //finishList: res.data.retObj,
+    //          //从当前请求得到总页数给maxPageNum赋值
+    //         maxPageNum: res.data.retObj[0].maxPageNum,
+    //         isNull:''
+    //       })
+    //       // console.log("finishList集合：",that.data.finishList)
+    //     }else{
+    //       that.setData({
+    //         isNull: 'true'
+    //       })
+    //     }
+    //   },
+    //   fail: function(err) {}, //请求失败
+    //   complete: function() {} //请求完成后执行的函数
+    // })
   },
     //上拉函数
   onReachBottom: function() { //触底开始下一页

@@ -89,13 +89,15 @@ that.detail(id);
     var imgSrc = '';
     var taskRecord = that.data.taskRecord;
     var requestUrl = that.data.requestUrl;
-    wx.request({
-      url: requestUrl+"/home/manage/searchTaskInfo",
-      // url: "http://192.168.15.146:8080/home/manage/searchTaskInfo",
-      data: {
+    //调用全局 请求方法
+    app.wxRequest(
+      'GET',
+      requestUrl+"/home/manage/searchTaskInfo",
+      {
         taskId: id
       },
-      success(res) {
+      app.seesionId,
+      (res) =>{
         if (res.data.status === "success") {
           var taskRecordData = res.data.retObj.taskRecord;
           var taskRecordList = new Array();
@@ -127,14 +129,56 @@ that.detail(id);
         }
 
       },
-      //请求失败
-      fail: function(err) {},
-      //请求完成后执行的函数
-      complete: function() {
-        // console.log("这是进度资源：", that.data.taskRecord)
-        // console.log("这是进度资源长度：", that.data.taskRecord.length)
+      (err) =>{
 
       }
-    })
+    )
+    // wx.request({
+    //   url: requestUrl+"/home/manage/searchTaskInfo",
+    //   // url: "http://192.168.15.146:8080/home/manage/searchTaskInfo",
+    //   data: {
+    //     taskId: id
+    //   },
+    //   success(res) {
+    //     if (res.data.status === "success") {
+    //       var taskRecordData = res.data.retObj.taskRecord;
+    //       var taskRecordList = new Array();
+    //       for(let i=0; i<taskRecordData.length; i++){
+    //         if(i>0){
+    //           if(taskRecordData[i].isOk==1){
+    //             taskRecordList.push(taskRecordData[i])
+    //           }
+    //         }else{
+    //           taskRecordList.push(taskRecordData[i])
+    //         }
+    //       }
+    //       that.setData({
+
+    //         retObj: res.data.retObj,
+    //         //问题分类
+    //         sort: res.data.retObj.questionSorts,
+    //         //举报图片
+    //         reportImgSrc: res.data.retObj.reportImgSrc,
+    //         //举报视频
+    //         reportVideoSrc: res.data.retObj.reportVideoSrc,
+    //         //地址图片
+    //         addstImgSrc: res.data.retObj.addstImgSrc,
+    //         //地址视频
+    //         addsVideoSrc: res.data.retObj.addsVideoSrc,
+    //         taskRecord: taskRecordList,
+    //         length: taskRecordList.length
+    //       })
+    //     }
+
+    //   },
+    //   //请求失败
+    //   fail: function(err) {},
+    //   //请求完成后执行的函数
+    //   complete: function() {
+    //     // console.log("这是进度资源：", that.data.taskRecord)
+    //     // console.log("这是进度资源长度：", that.data.taskRecord.length)
+
+    //   }
+    // })
   }
 })

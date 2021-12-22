@@ -1,5 +1,76 @@
-
 App({
+  seesionId : '',
+  openid:'',
+     /**
+ * 封装wx.request请求
+ * method： 请求方式
+ * url: 请求地址
+ * data： 要传递的参数
+ * callback： 请求成功回调函数
+ * errFun： 请求失败回调函数
+ **/
+ wxRequest(method, url, data,seesionid, callback, errFun) {
+  wx.showLoading();
+  wx.request({
+   url: url,
+   method: method,
+   data: data,
+   header: {
+    'content-type': method == 'GET'?'application/json':'application/x-www-form-urlencoded',
+    'Accept': 'application/json',
+    "cookie":seesionid
+   },
+   dataType: 'json',
+   success: function (res) { 
+     //console.log(res)
+     //超时  重新登录
+    if(res.header["sessionstatus"] == "timeout"){
+      const app = getApp()
+      //console.log(app)
+      wx.request({
+        url : app.globalData.requestUrl+'/member/manage/silenceuserLogin',
+        method : "POST",
+        data: {
+          openid:app.openid,
+          projectId:app.projectId
+        },
+        header: {
+          'content-type': 'application/x-www-form-urlencoded',
+         },
+         dataType: 'json',
+         success: function (res) {
+           //console.log(res)
+          if (res.data.status == 'success'){
+            var seesionId =res.header["Set-Cookie"]; 
+            app.seesionId = seesionId
+            console.log(app.seesionId)
+            app.wxRequest(method, url, data,seesionId, callback, errFun)
+          }else{
+            if(res.data.path == "isInBlackList"){
+              wx.redirectTo({
+                url: '../error_tip/error_tip?msgCode=m_10001'
+              })
+            }
+          }
+        },
+          fail: function () {
+            
+          }
+
+      })
+    }else{
+      callback(res);
+    }
+   },
+   fail: function (err) {
+    console.log(err)
+    errFun(err);
+   },
+   complete:(res) => {
+    wx.hideLoading()
+  }
+  })
+ },
   onLaunch: function() {
     // 展示本地存储能力
     var logs = wx.getStorageSync('logs') || []
@@ -11,8 +82,6 @@ App({
   getRecordAuth: function () {
     wx.getSetting({
       success(res) {
-        console.log("succ")
-        console.log(res)
         if (!res.authSetting['scope.record']) {
           wx.authorize({
             scope: 'scope.record',
@@ -35,15 +104,17 @@ App({
     globalData: {
     userInfo: null,
       // requestUrl:'http://47.92.38.70:8285'//线上
-     //requestUrl: 'http://192.168.20.78:8182'//本地
-     // requestUrl:'http://221.216.95.200:8285'//35
-     requestUrl:'https://wxpu.diaochaonline.com'//35域名
-     //requestUrl: 'https://wmccpu.diaochaonline.com'//线上
+     
+      //requestUrl: 'http://192.168.20.78:8182'//本地
+      //requestUrl:'http://221.216.95.200:8285'//35
+      requestUrl:'https://wxpu.diaochaonline.com'//35域名
+      //requestUrl: 'https://wmccpu.diaochaonline.com'//线上
   },
   msgData:{
     m_10001:'抱歉，因为您之前的不规范操作，现已将您拉入黑名单，因此无法继续使用 “文明创城随手拍”小程序，进行不文明现象上报！',
     m_10002:'抱歉，您所在城市不在当前项目的执行城市范围之内，无法继续使用 “文明创城随手拍”小程序，进行不文明现象上报！',
     m_10003:'抱歉，您未授权获取您的地理位置，因此无法继续使用 “文明创城随手拍”小程序，进行不文明现象上报！请根据引导开启获取位置权限再试~',
+    m_10004:'抱歉，您所在行政区域暂未开启“文明创城随手拍”相关活动,无法进行不文明现象上报！',
   }
    
 })

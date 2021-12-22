@@ -103,13 +103,15 @@ var requestUrl = app.globalData.requestUrl;
     var requestUrl = that.data.requestUrl;
     // console.log("这是咋回事：", id)
     // console.log("这是咋回事：", requestUrl)
-    wx.request({
-      url: requestUrl+"/home/manage/searchTaskInfo",
-      data:{
+    //调用全局 请求方法
+    app.wxRequest(
+      'GET',
+      requestUrl + '/home/manage/searchTaskInfo',
+      {
         taskId:id
       },
-      // url: "http://192.168.15.146:8080/home/manage/searchTaskInfo?taskId=" + id,
-      success(res) {
+      app.seesionId,
+      (res) =>{
         if (res.data.status === "success") {
           // console.log("任务详情：",res.data.retObj)
           //console.log("任务详情：",res.data.retObj.taskRecord)
@@ -148,15 +150,65 @@ var requestUrl = app.globalData.requestUrl;
 
         }
 
-
       },
-      //请求失败
-      fail: function(err) {},
-      //请求完成后执行的函数
-      complete: function() {
-        // console.log("这是进度资源：", that.data.taskRecord)
-        // console.log("这是进度资源长度：", that.data.taskRecord.length)
+      (err) =>{
+
       }
-    })
+    )
+    // wx.request({
+    //   url: requestUrl+"/home/manage/searchTaskInfo",
+    //   data:{
+    //     taskId:id
+    //   },
+    //   // url: "http://192.168.15.146:8080/home/manage/searchTaskInfo?taskId=" + id,
+    //   success(res) {
+    //     if (res.data.status === "success") {
+    //       // console.log("任务详情：",res.data.retObj)
+    //       //console.log("任务详情：",res.data.retObj.taskRecord)
+    //       var taskRecordData = res.data.retObj.taskRecord;
+    //       var taskRecordList = new Array();
+    //       for(let i=0; i<taskRecordData.length; i++){
+    //         if(i>0){
+    //           if(taskRecordData[i].isOk==1){
+    //             taskRecordList.push(taskRecordData[i])
+    //           }
+    //         }else{
+    //           taskRecordList.push(taskRecordData[i])
+    //         }
+    //       }
+    //       that.setData({
+ 
+    //         retObj: res.data.retObj,
+    //         //问题分类
+    //         sort: res.data.retObj.questionSorts,
+    //         //举报图片
+    //         reportImgSrc: res.data.retObj.reportImgSrc,
+    //         //举报视频
+    //         reportVideoSrc: res.data.retObj.reportVideoSrc,
+    //         //地址图片
+    //         addstImgSrc: res.data.retObj.addstImgSrc,
+    //         //地址视频
+    //         addsVideoSrc: res.data.retObj.addsVideoSrc,
+    //         taskRecord: taskRecordList,
+    //         length: taskRecordList.length
+
+    //         //imgSrc: res.data.retObj.taskRecord.imgSrc
+    //       })
+
+    //       // console.log("reportImgSrc:", that.data.reportImgSrc)
+
+
+    //     }
+
+
+    //   },
+    //   //请求失败
+    //   fail: function(err) {},
+    //   //请求完成后执行的函数
+    //   complete: function() {
+    //     // console.log("这是进度资源：", that.data.taskRecord)
+    //     // console.log("这是进度资源长度：", that.data.taskRecord.length)
+    //   }
+    // })
   }
 })
