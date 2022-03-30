@@ -26,7 +26,6 @@ Page({
         wx.setStorageSync('code', code)
         // console.log("二维码跳转code：",code)
     }
-
     wx.switchTab({
       url: '../index/index'
     })

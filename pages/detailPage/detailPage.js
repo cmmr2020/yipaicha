@@ -25,7 +25,8 @@ Page({
     //任务进度视频
     videoSrc: [],
     //判断任务进度颜色
-    length: ''
+    length: '',
+    locationName:'',
 
 
   },
@@ -113,7 +114,7 @@ var requestUrl = app.globalData.requestUrl;
       app.seesionId,
       (res) =>{
         if (res.data.status === "success") {
-          // console.log("任务详情：",res.data.retObj)
+           //console.log("任务详情：",res.data.retObj)
           //console.log("任务详情：",res.data.retObj.taskRecord)
           var taskRecordData = res.data.retObj.taskRecord;
           var taskRecordList = new Array();
@@ -140,7 +141,8 @@ var requestUrl = app.globalData.requestUrl;
             //地址视频
             addsVideoSrc: res.data.retObj.addsVideoSrc,
             taskRecord: taskRecordList,
-            length: taskRecordList.length
+            length: taskRecordList.length,
+            locationName:res.data.retObj.locationName==null?'无':res.data.retObj.locationName
 
             //imgSrc: res.data.retObj.taskRecord.imgSrc
           })

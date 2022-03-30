@@ -14,7 +14,8 @@
         <image src="{{item.imageUrl=='' ? '/images/null.png' : item.imageUrl}}" mode="aspectFill"></image>
         <view class="desc">
           <view class="text-bold text-content1 box">{{item.describe}}</view>
-          <view class='text-content text-cut box'>{{item.addr}}</view>
+          <view class='text-content text-cut box'>点位名称：{{item.locationName ==null?"无":item.locationName}}</view>
+          <view class='text-content text-cut box'>位置信息：{{item.addr == null?"无":item.addr}}</view>
           <view>
             <view class='cu-tag bg-grey light sm round'>{{item.findTime}}
             </view>
@@ -33,7 +34,8 @@
         <image src="{{item.imageUrl=='' ? '/images/null.png' : item.imageUrl}}" mode="aspectFill"></image>
         <view class="desc">
           <view class="text-bold text-content1 box">{{item.describe}}</view>
-          <view class='text-content text-cut box'>{{item.addr}}</view>
+          <view class='text-content text-cut box'>点位名称：{{item.locationName ==null?"无":item.locationName}}</view>
+          <view class='text-content text-cut box'>位置信息：{{item.addr == null?"无":item.addr}}</view>
           <view>
             <view class='cu-tag bg-grey light sm round'>{{item.findTime}}
             </view>

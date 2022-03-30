@@ -46,7 +46,7 @@ Page({
     })
     // console.log("这是啥",requestUrl)
     var govCode = wx.getStorageSync('code')
-    console.log("code转过来了吗", govCode)
+    //console.log("code转过来了吗", govCode)
     that.login(govCode);
     wx.clearStorage()
   },
@@ -72,9 +72,9 @@ Page({
               "Content-Type": "application/json"
             },
             data: {
-             //govCode: govCode,
-               //govCode: 'TJBH01CS',//'JCS2020',
-               govCode: 'BJSHRQ',//线上              
+               //govCode: govCode,
+               govCode: 'TJBH01CS',//'测试机',
+               //govCode: 'BJSHRQ',//线上              
                code: res.code
             },
             success(res) {
@@ -108,6 +108,7 @@ Page({
                 wx.setStorageSync('nickname', app.nickname)
                 wx.setStorageSync('projectLat', app.projectLat)
                 wx.setStorageSync('projectLog', app.projectLog)
+                wx.setStorageSync('code', govCode)
                 // console.log("这是初始化nickname：", app.nickname)
                 // console.log("这是初始化openid：", app.openid)
                 // console.log("项目id", res.data.retObj.projectId);
@@ -158,7 +159,7 @@ Page({
  /*用户下拉页面时间 */
 onPullDownRefresh:function(){
   var that = this;
-  console.log('下拉刷新')
+  //console.log('下拉刷新')
   that.onLoad()
         //加载轮播图
       //   that.getSwiperList();

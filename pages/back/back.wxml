@@ -10,6 +10,18 @@
   </view>
 </view>
 
+<!-- 举报分类 -->
+<view class="cu-bar  solid-bottom">
+  <view class="action">
+    <text class="cuIcon-title text-blue"></text>点位名称
+  </view>
+</view>
+<view class="cu-bar-neirong bg-white padding-neirong">
+  <view class="action text-black text-left padding">
+    {{locationName}}
+  </view>
+</view>
+
 <!-- 举报图片/视频 -->
 <view class="cu-bar  solid-bottom">
   <view class="action">

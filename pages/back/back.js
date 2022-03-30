@@ -25,6 +25,7 @@ Page({
     //任务进度视频
     videoSrc: [],
     //判断任务进度颜色
+    locationName:''
   },
 
 
@@ -106,6 +107,7 @@ var requestUrl = that.data.requestUrl;
           addstImgSrc: res.data.retObj.addstImgSrc,
           //地址视频
           addsVideoSrc: res.data.retObj.addsVideoSrc,
+          locationName:res.data.retObj.locationName==null?"无":res.data.retObj.locationName,
         })
       }
     },

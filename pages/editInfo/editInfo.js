@@ -143,21 +143,6 @@ Page({
         mask: true
       })
     }else{
-      //调用全局 请求方法
-    app.wxRequest(
-      'GET',
-      requestUrl + '/wechat/api/distributeLocation/findGroupLocationList',
-      {
-        terminalUserId: terminalUserId
-      },
-      app.seesionId,
-      (res) =>{
-
-      },
-      (err) =>{
-
-      }
-    )
     //调用全局 请求方法
     app.wxRequest(
       'POST',
@@ -187,7 +172,6 @@ Page({
             mask: true
           })
         }
-
       },
       (err) =>{
         wx.showToast({

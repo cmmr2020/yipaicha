@@ -76,6 +76,7 @@ Page({
     sortTipIsShow:false,
     sortNameBymodal:'',
     sortTipBymodal:'',
+    locationName:'',
   },
 
   /**
@@ -1072,6 +1073,8 @@ Page({
     var latitude = that.data.latitude;
     //举报地址
     var address = that.data.address;
+    //自定义点位名称
+    var locationName = that.data.locationName
      //问题分类
     var qustionSort = that.data.showProblemType;
     var sortIds = '';
@@ -1090,6 +1093,7 @@ Page({
         "longitude": longitude,
         "latitude": latitude,
         "address": address,
+        "locationName":locationName,
         "desc": desc,
         "qustionSort": sortIds,
         "openid": openid,
@@ -1370,6 +1374,13 @@ Page({
   hideSortModal:function(){
     this.setData({
       sortTipIsShow:false
+    })
+  },
+
+  saveLocationName(e){
+    let that = this
+    that.setData({
+      locationName : e.detail.value
     })
   }
 

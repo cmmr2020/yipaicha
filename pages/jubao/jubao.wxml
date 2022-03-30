@@ -24,8 +24,18 @@
 
 
 <view class="cu-form-group  bg-white">
-  <input class="weui-input" value="{{address}}" />
+  <input class="weui-input" value="{{address}}" disabled="true"/>
 </view>
+
+<view class="cu-bar  solid-bottom">
+  <view class="action">
+    <text class="cuIcon-title text-blue"></text>点位名称
+  </view>
+</view>
+<view class="cu-form-group  bg-white">
+  <input class="weui-input" type="text" placeholder="请输入，您当前所处的点位名称。"  	bindinput="saveLocationName"	confirm-type="done"/>
+</view>
+
 
 
 <!-- 提示 -->
