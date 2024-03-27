@@ -105,7 +105,7 @@ App({
     userInfo: null,
       // requestUrl:'http://47.92.38.70:8285'//线上
      
-      //requestUrl: 'http://192.168.20.78:8182'//本地
+      //requestUrl: 'http://192.168.20.59:8182'//本地
       //requestUrl:'http://221.216.95.200:8285'//35
       requestUrl:'https://wxpu.diaochaonline.com'//35域名
       //requestUrl: 'https://wmccpu.diaochaonline.com'//线上

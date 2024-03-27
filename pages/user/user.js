@@ -1,11 +1,15 @@
+
 //个人中心页面
+var app = getApp()
+const defaultAvatarUrl = 'https://mmbiz.qpic.cn/mmbiz/icTdbqWNOwNRna42FI242Lcia07jQodd2FJGIYQfG0LAJGFxM4FbnQP6yfMxBgJ0F3YRqJCJ1aPAK2dQagdusBZg/0'
 Page({
 
   /**
    * 页面的初始数据
    */
   data: {
-     icon: ['locationfill'],
+    requestUrl: '',//服务器路径
+    icon: ['locationfill'],
     nick:'',
     avataUrl:'',
     icon: ['right'],
@@ -15,17 +19,24 @@ Page({
      //openid
       openid:'',
       userInfo: {},
+      headeSrcPath: '../../images/ic_me.png',
+      userNickName: "微信用户",
+      avatarUrl: defaultAvatarUrl,
+      theme: wx.getSystemInfoSync().theme,
+      modalName:'',
+      temp_userNickName:''
   },
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad() {
-
     var that = this;
     var app = getApp();
     var openid = app.openid;
+    var requestUrl = app.globalData.requestUrl;
     that.setData({
-      openid: openid
+      openid: openid,
+      requestUrl:requestUrl
     })
     // this.wxLogin();
     //查看是否授权
@@ -96,55 +107,53 @@ bindGetUserInfo: function (res) {
       url: "../editInfo/editInfo?openid="+openid
     })
   },
-  //  wxLogin: function(e) {
-  //   var that = this;
-  //   wx.login({
-  //     success: function(res) {
-  //       var code = res.code; //发送给服务器的code 
-  //       wx.getUserInfo({
-  //         success: function(res) {
-  //           console.log("这是用户信息：",res)
-  //           var userNick = res.userInfo.nickName; //用户昵称 
-  //           var avataUrl = res.userInfo.avatarUrl; //用户头像地址 
-  //           var gender = res.userInfo.gender; //用户性别 0，未知，1男，2女
-  //            console.log("userNick:",userNick);
-  //             console.log("avataUrl:",avataUrl);
-  //              console.log("gender:",gender);
-  //             that.setData({
-  //               nick: userNick,
-  //               avataUrl: avataUrl
-  //             })
-  //           if (code !== null) {
-  //             wx.request({
-  //               //url: 'http://你的域名/wxLogin.php',
-  //               //服务器的地址，现在微信小程序只支持https请求，所以调试的时候请勾选不校监安全域名
-  //               data: {
-  //                 code: code,
-  //                 nick: userNick,
-  //                 avaurl: avataUrl,
-  //                 sex: gender,
-  //               },
-  //               header: {
-  //                 'content-type': 'application/json'
-  //               },
-  //               success: function(res) {
-  //                 console.log("这啥？？？",res);
-  //                 console.log("这是啥？？？",res.data);
-  //                 wx.setStorageSync('nick', res.data.nick); //将获取信息写入本地缓存 
-  //                 wx.setStorageSync('openid', res.data.openid);
-  //                 wx.setStorageSync('imgUrl', res.data.imgUrl);
-  //                 wx.setStorageSync('sex', res.data.sex);
-  //               }
-  //             })
-  //           } else {
-  //             console.log("获取用户登录态失败！");
-  //           }
-  //         }
-  //       })
-  //     },
-  //     fail: function(error) {
-  //       console.log('login failed ' + error);
-  //     }
-  //   })
-  // }
+  onChooseAvatar(e) {
+    const { avatarUrl } = e.detail 
+    this.setData({
+      avatarUrl,
+    })
+  },
+  show_edit:function(){
+    this.setData({
+      modalName:'bottomModal'
+    })
+  },
+  hideModal:function(){
+    this.setData({
+      modalName:''
+    })
+  },
+  getNickName(e){
+    console.log(e.detail.value)
+    this.setData({
+      temp_userNickName:e.detail.value
+    })
+  },
+  updateUserInfoByWX(){
+    var requestUrl = this.data.requestUrl;
+    var openId = this.data.openid;
+    var n_name = this.data.temp_userNickName
+        //调用全局 请求方法
+      app.wxRequest(
+        'POST',
+        requestUrl + '/member/manage/updateUserForWx',
+        {
+            "openId":openId,
+            "nickName":n_name,
+        },
+        app.seesionId,
+        (res) =>{
+          console.log(res)
+          this.setData({
+            headeSrcPath:this.data.avatarUrl,
+            userNickName:n_name
+          })
+          this.hideModal()
+        },
+        (err) =>{
+
+        }
+      )
+
+  }
 })

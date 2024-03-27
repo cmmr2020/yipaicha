@@ -1,7 +1,7 @@
 //举报上传页面
 const QQMapWX = require('../../libs/qqmap-wx-jssdk.min.js');
 //同步js
-import regeneratorRuntime from '../../libs/regenerator-runtime/runtime.js';
+//import regeneratorRuntime from '../../libs/regenerator-runtime/runtime.js';
 let qqmapsdk;
 //获取应用实例
 const app = getApp()
@@ -122,7 +122,9 @@ Page({
             content: '上报问题需要获取您的位置信息,请根据引导开启权限 ！若拒绝授权,您将无法上报问题 ！',
             success (res) {
               if (res.confirm) {
-                that.goSetting()
+                that.setData({
+                  modalName:'bottomModal'
+                })
               } else if (res.cancel) {
                 wx.redirectTo({
                   url: '../error_tip/error_tip?msgCode=m_10003'
@@ -136,6 +138,9 @@ Page({
   },
   goSetting:function(){
     let that = this;
+    that.setData({
+      modalName:''
+    })
     wx.openSetting({
       success (res) {
        //console.log(res.authSetting)
@@ -464,7 +469,7 @@ Page({
         longitude: lng
       },
       success: (res) => {
-         //console.log(res)
+         console.log(res)
         // console.log(res.result.formatted_addresses.recommend)
         this.checkExeProjectCity(res.result.address_component);
         this.setData({
@@ -472,6 +477,7 @@ Page({
         })
       },
       fail: (res) => {
+        console.log(res)
         this.setData({
           address: "获取位置信息失败"
         })
@@ -559,6 +565,10 @@ Page({
         })
         that.getAddress(res.longitude, res.latitude);
         that.getLocationByUsert(res.longitude, res.latitude);
+      },
+      fail(res){
+        console.log('获取定位失败')
+        console.log(res)
       }
     })
     var log = wx.getStorageSync('projectLog')

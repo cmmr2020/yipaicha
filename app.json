@@ -16,12 +16,16 @@
     "pages/tip/tip",
     "pages/error_tip/error_tip"
   ],
+  "requiredPrivateInfos" : [ "getLocation" ],
   "window": {
     "backgroundTextStyle": "light",
     "navigationBarBackgroundColor": "#fff",
     "navigationBarTitleText": "WeChat",
     "navigationBarTextStyle": "black",
     "onReachBottomDistance": 50
+  },
+  "useExtendedLib": {
+    "weui": true
   },
   "tabBar": {
     "selectedColor": "#0081ff",
@@ -49,6 +53,7 @@
   "usingComponents": {
     "cu-custom": "/colorui/components/cu-custom"
   },
+  "pageOrientation": "auto",
   "sitemapLocation": "sitemap.json",
   "permission": {
     "scope.userLocation": {

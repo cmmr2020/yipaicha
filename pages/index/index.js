@@ -72,9 +72,9 @@ Page({
               "Content-Type": "application/json"
             },
             data: {
-               //govCode: govCode,
-               govCode: 'TJBH01CS',//'测试机',
-               //govCode: 'BJSHRQ',//线上              
+               govCode: govCode,
+               //govCode: 'TJBH01CS',//'测试机',
+               //govCode: 'BJSCYQ',//线上
                code: res.code
             },
             success(res) {
@@ -112,12 +112,12 @@ Page({
                 // console.log("这是初始化nickname：", app.nickname)
                 // console.log("这是初始化openid：", app.openid)
                 // console.log("项目id", res.data.retObj.projectId);
-               if(res.data.retObj.updateInfo == 'true'){
-                that.setData({
-                  canIUseGetUserProfile: true,
-                  modalName:'bottomModal'
-                })
-               }
+              //  if(res.data.retObj.updateInfo == 'true'){
+              //   that.setData({
+              //     canIUseGetUserProfile: true,
+              //     modalName:'bottomModal'
+              //   })
+              //  }
                 //用户没有绑定政府
                 if(res.data.retObj.isGodCode==="false"){
                   wx.showToast({
@@ -151,8 +151,12 @@ Page({
           })
         } else {
           that.closeModal();
-          // console.log('登录失败！' + res.errMsg)
+          console.log('登录失败！' + res.errMsg)
         }
+      },
+      fail(res){
+        console.log('请求失败!')
+        console.log(res)
       }
     })
 },
@@ -196,6 +200,7 @@ onPullDownRefresh:function(){
         "Content-Type": "application/json"
       },
       success(res) {
+        console.log(res)
         if (res.data.status === "success" && res.data.retObj != null) {
           that.setData({
             ArticleList: res.data.retObj,
@@ -542,7 +547,7 @@ var requestUrl = that.data.requestUrl;
     wx.getUserProfile({
       desc: '用于完善会员资料', // 声明获取用户个人信息后的用途，后续会展示在弹窗中，请谨慎填写
       success: (res) => {
-        //console.log(res)
+        console.log(res)
         var userInfo = res.userInfo
         this.setData({
           modalName : ''
@@ -556,10 +561,10 @@ var requestUrl = that.data.requestUrl;
         {
             "openId":openId,
             "nickName":userInfo.nickName,
-            "sex":userInfo.gender,
-            "city":userInfo.city,
-            "country":userInfo.country,
-            "province":userInfo.province,
+            //"sex":userInfo.gender,
+            //"city":userInfo.city,
+            //"country":userInfo.country,
+            //"province":userInfo.province,
             "language":userInfo.language
         },
         app.seesionId,

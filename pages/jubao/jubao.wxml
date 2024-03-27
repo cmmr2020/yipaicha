@@ -217,4 +217,13 @@
     <!-- </view> -->
   </view>
 </view>
+<view class="cu-modal bottom-modal {{modalName=='bottomModal'?'show':''}}">
+  <view class="cu-dialog">
+    <view class="padding-xl">
+      <view class="padding flex flex-direction">
+        <button class="cu-btn bg-blue margin-tb-sm lg"  bindtap="goSetting">打开授权设置</button>
+      </view>
+    </view>
+  </view>
+</view>
 

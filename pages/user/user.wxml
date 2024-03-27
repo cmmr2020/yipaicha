@@ -1,26 +1,22 @@
 <!--index.wxml hidden中变量为false，进行渲染，true进行隐藏-->
-<!-- <view wx:if="{{canIUse}}" hidden="{{hidden}}" >
-  <view class='headView'>
-    <button class='authBtn'  type='primary' open-type='getUserInfo' bindgetuserinfo='bindGetUserInfo'>授权登录</button>
-  </view>
+<view class="userinfo bg-white" > <!--bind:tap="show_edit"-->
+  <view class="top">
+  <view>
+      <image class="head_img" src="{{headeSrcPath}}" />
+    </view>
+    <view class="user_name">
+      <text>{{userNickName}}</text>
+    </view>
+    </view>
 </view>
-<view wx:else>请升级微信版本</view>	
- -->
-<!-- 
-<view hidden="{{hidden}}"> -->
-
-<!-- <view class="container bg-white">
-    <image class="userinfo-avatar" src="{{avataUrl}}" background-size="cover"></image>
-    <text class="userinfo-nickname">{{nick}}</text>
-  </view> -->
- 
-<view class="userinfo bg-white">
-<open-data type="userAvatarUrl"  class="userinfo-avatar icon" style="border-radius: 5000rpx"></open-data>
-<open-data type="userNickName" class="userinfo-nickname"></open-data>
-
+<view class="cu-list menu sm-border card-menu margin-top">
+     <view class="cu-item arrow"  bindtap="goToedit">
+      <view class="content">
+      <text class="cuIcon-profile lg text-blue"></text>
+        <text class="text-grey">绑定账号</text>
+      </view>
+    </view>
 </view>
-
- 
 <view class="cu-list menu sm-border card-menu margin-top">
     <view class="cu-item arrow" bindtap="goTojubaodetail">
       <view class="content">
@@ -44,7 +40,6 @@
       </view>
     </view>
 </view>
-
 <view class="cu-list menu sm-border card-menu margin-top">
      <view class="cu-item arrow"  bindtap="goToabout">
       <view class="content">
@@ -56,3 +51,47 @@
 <view class="copyright">
   <text class="text-grey text-xs">© 北京美兰德信息咨询有限公司 技术支持</text>
 </view>
+
+<view class="cu-modal bottom-modal {{modalName=='bottomModal'?'show':''}}">
+  <view class="cu-dialog">
+    <view class="cu-bar bg-white">
+      <view class="action text-green" bind:tap="updateUserInfoByWX">确定</view>
+      <view class="action text-blue" bindtap="hideModal">取消</view>
+    </view>
+    <view class="padding-xl">
+      <view data-weui-theme="{{theme}}">
+          <button class="avatar-wrapper" open-type="chooseAvatar" bind:chooseavatar="onChooseAvatar">
+            <image class="avatar" src="{{avatarUrl}}"></image>
+          </button>
+          <mp-form>
+            <mp-cells>
+              <mp-cell>
+                <input type="nickname" class="weui-input" placeholder="请输入昵称" bindblur="getNickName" />
+              </mp-cell>
+            </mp-cells>
+          </mp-form>
+        </view>
+    </view>
+  </view>
+</view>
+
+<!-- <view class="cu-modal bottom-modal {{modalName=='bottomModal'?'show':''}}">
+  <view class="cu-dialog">
+    <view class="padding-xl">
+      <view class="padding flex flex-direction">
+        <view data-weui-theme="{{theme}}">
+          <button class="avatar-wrapper" open-type="chooseAvatar" bind:chooseavatar="onChooseAvatar">
+            <image class="avatar" src="{{avatarUrl}}"></image>
+          </button>
+          <mp-form>
+            <mp-cells>
+              <mp-cell>
+                <input type="nickname" class="weui-input" placeholder="请输入昵称" />
+              </mp-cell>
+            </mp-cells>
+          </mp-form>
+        </view>
+      </view>
+    </view>
+  </view>
+</view> -->
