@@ -14,6 +14,7 @@ const manager = plugin.getRecordRecognitionManager()
 
 Page({
   data: {
+    rightId:wx.getStorageSync('rightId') || 0,
     requestUrl: '',//服务器路径
     address: "正在获取地址...",
     longitude: 116.397452,
@@ -113,6 +114,19 @@ Page({
   },
   onShow : function(){
     let that = this;
+    if (typeof this.getTabBar === 'function' &&
+      this.getTabBar()) {
+      this.getTabBar().setData({
+        selected: 1
+      })
+    }
+    // app.eventBus.on('rightChange', data =>{
+    //   if(data !== this.data.rightId){
+    //     this.setData({
+    //       rightId: data
+    //     })
+    //   }
+    // })
     wx.getSetting({
       success (res) {
         //没有的话  引导用户开启后台定位权限

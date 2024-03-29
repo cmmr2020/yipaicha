@@ -13,7 +13,7 @@ Page({
   onLoad: function (options) {
     var that = this;
     // var code = options.code;
-    // console.log("看看这个：", options)
+     console.log("看看这个：", options)
     if(options.code){
       var code = options.code;
       wx.setStorageSync('code', code)

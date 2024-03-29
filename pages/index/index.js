@@ -3,6 +3,7 @@
 var app = getApp()
 Page({
   data: {
+    rightId:wx.getStorageSync('rightId') || 0,
     requestUrl: '',//服务器路径
     swiperIndex: 0, //初始化swiper索引
     swiperHeight: 350,
@@ -50,8 +51,21 @@ Page({
     that.login(govCode);
     wx.clearStorage()
   },
-
-
+  onShow() {
+    if (typeof this.getTabBar === 'function' &&
+      this.getTabBar()) {
+      this.getTabBar().setData({
+        selected: 0
+      })
+    }
+    // app.eventBus.on('rightChange', data =>{
+    //   if(data !== this.data.rightId){
+    //     this.setData({
+    //       rightId: data
+    //     })
+    //   }
+    // })
+  },
   login(govCode){
   // 获取用户信息
     let that = this;
@@ -78,7 +92,7 @@ Page({
                code: res.code
             },
             success(res) {
-              //console.log("请求用户：",res)
+              console.log("请求用户：",res)
               that.closeModal();
               if (res.data.status == 'success') {
                 if(res.data.retObj.isInBlackList=='true'){
@@ -109,6 +123,26 @@ Page({
                 wx.setStorageSync('projectLat', app.projectLat)
                 wx.setStorageSync('projectLog', app.projectLog)
                 wx.setStorageSync('code', govCode)
+                let menuType = 0;
+                if(res.data.retObj2){
+                  var list = res.data.retObj2.qxMenus;
+                  var terminalUserName = res.data.retObj2.terminalUserName;
+                  var departmentName = res.data.retObj2.departmentName
+                  app.terminalUserId = res.data.retObj2.terminalUserId;
+                  app.terminalName = res.data.retObj2.terminalUserName.split('#')[1];
+                  app.departmentId = res.data.retObj2.departmentId;
+                  app.departmentName = departmentName;
+                //此角色只可设置一个  tab-bar最多可配置五个  最少两个
+                for(let i=0; i<list.length; i++){
+                  let menu = list[i]
+                  if(menu.code == 'TC-0014'){//整改上报
+                    menuType = 1
+                  }else if(menu.code == 'TC-0015'){//整改上传
+                    menuType = 2
+                  }
+                }
+                }
+                that.changeRole(menuType)
                 // console.log("这是初始化nickname：", app.nickname)
                 // console.log("这是初始化openid：", app.openid)
                 // console.log("项目id", res.data.retObj.projectId);
@@ -160,6 +194,11 @@ Page({
       }
     })
 },
+  //改变tabbar
+  changeRole(roleType){
+    wx.setStorageSync('rightId', roleType)
+    app.changeUserRight()
+  },
  /*用户下拉页面时间 */
 onPullDownRefresh:function(){
   var that = this;

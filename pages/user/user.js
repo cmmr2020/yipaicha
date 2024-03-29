@@ -29,15 +29,8 @@ Page({
   /**
    * 生命周期函数--监听页面加载
    */
-  onLoad() {
-    var that = this;
-    var app = getApp();
-    var openid = app.openid;
-    var requestUrl = app.globalData.requestUrl;
-    that.setData({
-      openid: openid,
-      requestUrl:requestUrl
-    })
+  onLoad(option) {
+    //console.log(option)
     // this.wxLogin();
     //查看是否授权
     // wx.getSetting({
@@ -51,6 +44,44 @@ Page({
     //   }
     // })
  
+  },
+  onShow() {
+    var that = this;
+    var openid = app.openid;
+    var requestUrl = app.globalData.requestUrl;
+    if(app.departmentName && app.terminalName){
+      that.setData({
+        openid: openid,
+        requestUrl:requestUrl,
+        userNickName: app.terminalName
+      })
+    }else{
+      that.setData({
+        openid: openid,
+        requestUrl:requestUrl
+      })
+    }
+
+    let rightId = wx.getStorageSync('rightId') || 0
+    //菜单类型0时  个人中心index为2  其他为3
+    let num = rightId === 0 ? 2 : 3
+    if (typeof this.getTabBar === 'function' &&
+      this.getTabBar()) {
+      this.getTabBar().setData({
+        selected: num
+      })
+    }
+    app.eventBus.on('rightChange', data =>{
+      if(data !== rightId){
+        num = rightId === 0 ? 2 : 3
+        if (typeof this.getTabBar === 'function' &&
+          this.getTabBar()) {
+          this.getTabBar().setData({
+            selected: num
+          })
+        }
+      }
+    })
   },
 bindGetUserInfo: function (res) {
     if (res.detail.userInfo) {
@@ -93,6 +124,11 @@ bindGetUserInfo: function (res) {
     var openid = that.data.openid;
     wx.navigateTo({
       url:"../jubaodetail/jubaodetail?openid="+openid
+    })
+  },
+  goToLogin:function(){
+    wx.navigateTo({
+      url: "../login/login"
     })
   },
   goToabout:function(){

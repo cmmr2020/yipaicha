@@ -1,6 +1,19 @@
+const eventBus = require('./utils/eventBus')
 App({
+  eventBus: eventBus,
+  changeUserRight() {
+    const id = wx.getStorageSync('rightId') || 0
+    //const id = i === 0 ? 1 : 0
+    //console.log('菜单类型:'+id)
+    wx.setStorageSync('rightId', id)
+    getApp().eventBus.emit('rightChange', id)
+  },
   seesionId : '',
   openid:'',
+  departmentId:'',//当前账号所属部门id
+  departmentName:'',//当前账号所属部门名称
+  terminalUserId:'',//登录用户id
+  terminalName:'',//登录用户名称
      /**
  * 封装wx.request请求
  * method： 请求方式
@@ -75,7 +88,10 @@ App({
     // 展示本地存储能力
     var logs = wx.getStorageSync('logs') || []
     logs.unshift(Date.now())
-    wx.setStorageSync('logs', logs)   
+    wx.setStorageSync('logs', logs)
+    //初始tabl-bar type为0
+    wx.setStorageSync('rightId', 0)
+    //this.changeUserRight()
   },
 
   // 权限询问
@@ -105,9 +121,9 @@ App({
     userInfo: null,
       // requestUrl:'http://47.92.38.70:8285'//线上
      
-      //requestUrl: 'http://192.168.20.59:8182'//本地
+      requestUrl: 'http://192.168.20.59:8082'//本地
       //requestUrl:'http://221.216.95.200:8285'//35
-      requestUrl:'https://wxpu.diaochaonline.com'//35域名
+     // requestUrl:'https://wxpu.diaochaonline.com'//35域名
       //requestUrl: 'https://wmccpu.diaochaonline.com'//线上
   },
   msgData:{

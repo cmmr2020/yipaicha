@@ -14,7 +14,8 @@
     "pages/editInfo/editInfo",
     "pages/menuBack/menuBack",
     "pages/tip/tip",
-    "pages/error_tip/error_tip"
+    "pages/error_tip/error_tip",
+    "pages/login/login"
   ],
   "requiredPrivateInfos" : [ "getLocation" ],
   "window": {
@@ -28,25 +29,38 @@
     "weui": true
   },
   "tabBar": {
+    "custom": true,
     "selectedColor": "#0081ff",
     "list": [
       {
         "pagePath": "pages/index/index",
         "text": "首页",
-        "iconPath": "images/shouye-off.png",
-        "selectedIconPath": "images/shouye-on.png"
+        "iconPath": "images/home.png",
+        "selectedIconPath": "images/home1.png"
       },
       {
         "pagePath": "pages/jubao/jubao",
         "text": "上报",
-        "iconPath": "images/jubao-off.png",
-        "selectedIconPath": "images/jubao-on.png"
+        "iconPath": "images/camera.png",
+        "selectedIconPath": "images/camera1.png"
+      },
+      {
+        "pagePath": "pages/ceshi/ceshi",
+        "text": "整改上报",
+        "iconPath": "images/work.png",
+        "selectedIconPath": "images/work1.png"
+      },
+      {
+        "pagePath": "pages/back/back",
+        "text": "整改审核",
+        "iconPath": "images/check.png",
+        "selectedIconPath": "images/check1.png"
       },
       {
         "pagePath": "pages/user/user",
         "text": "个人中心",
-        "iconPath": "images/user-off.png",
-        "selectedIconPath": "images/user-on.png"
+        "iconPath": "images/user.png",
+        "selectedIconPath": "images/user1.png"
       }
     ]
   },
