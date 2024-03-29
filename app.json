@@ -15,7 +15,9 @@
     "pages/menuBack/menuBack",
     "pages/tip/tip",
     "pages/error_tip/error_tip",
-    "pages/login/login"
+    "pages/login/login",
+    "pages/dept_type_task_index/dept_type_task_index",
+    "pages/dept_task_detail/dept_task_detail"
   ],
   "requiredPrivateInfos" : [ "getLocation" ],
   "window": {
@@ -45,7 +47,7 @@
         "selectedIconPath": "images/camera1.png"
       },
       {
-        "pagePath": "pages/ceshi/ceshi",
+        "pagePath": "pages/dept_type_task_index/dept_type_task_index",
         "text": "整改上报",
         "iconPath": "images/work.png",
         "selectedIconPath": "images/work1.png"
@@ -79,5 +81,6 @@
       "version": "0.3.4",
       "provider": "wx069ba97219f66d99"
     }
-  }
+  },
+  "debug": true
 }

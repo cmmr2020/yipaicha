@@ -35,7 +35,7 @@ Component({
       "selectedIconPath": "../images/camera1.png"
     },
     {
-      "pagePath": "/pages/ceshi/ceshi",
+      "pagePath": "/pages/dept_type_task_index/dept_type_task_index",
       "text": "整改上报",
       "iconPath": "../images/work.png",
       "selectedIconPath": "../images/work1.png"
