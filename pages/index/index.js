@@ -123,6 +123,8 @@ Page({
                 wx.setStorageSync('projectLat', app.projectLat)
                 wx.setStorageSync('projectLog', app.projectLog)
                 wx.setStorageSync('code', govCode)
+                wx.setStorageSync('fontSize',34);
+                wx.setStorageSync('bgColor','purple');
                 let menuType = 0;
                 if(res.data.retObj2){
                   var list = res.data.retObj2.qxMenus;

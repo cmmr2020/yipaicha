@@ -17,7 +17,9 @@
     "pages/error_tip/error_tip",
     "pages/login/login",
     "pages/dept_type_task_index/dept_type_task_index",
-    "pages/dept_task_detail/dept_task_detail"
+    "pages/dept_task_detail/dept_task_detail",
+    "pages/check_new_index/check_new_index",
+    "pages/check_new_detail/check_new_detail"
   ],
   "requiredPrivateInfos" : [ "getLocation" ],
   "window": {
@@ -53,7 +55,7 @@
         "selectedIconPath": "images/work1.png"
       },
       {
-        "pagePath": "pages/back/back",
+        "pagePath": "pages/check_new_index/check_new_index",
         "text": "整改审核",
         "iconPath": "images/check.png",
         "selectedIconPath": "images/check1.png"

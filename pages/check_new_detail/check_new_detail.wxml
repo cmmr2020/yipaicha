@@ -1,0 +1,345 @@
+<view class="cu-bar bg-white-user  solid-bottom  ">
+  <view class="text-sm1 text-bold">
+    <!--  <text class="cuIcon-title text-blue "></text>{{pointName}} -->
+    <text class="cuIcon-favor text-{{bgColor}} " style="font-size:{{fontSize}}rpx"></text><text style="font-size:{{fontSize35}}rpx">任务详情</text>
+  </view>
+
+</view>
+<view class="cu-form-group ">
+  <view class="title text-bold" style="font-size:{{fontSize}}rpx">具体点位:</view>
+  <text class="item-left" style="font-size:{{fontSize28}}rpx">{{locationName}}</text>
+</view>
+<view class="cu-form-group ">
+  <view class="title text-bold" style="font-size:{{fontSize}}rpx">具体问题:</view>
+  <text class="item-left" style="font-size:{{fontSize28}}rpx">{{questionContent}}</text>
+</view>
+<!-- <view class="cu-form-group ">
+  <view class="title text-bold" style="font-size:{{fontSize}}rpx">问题:</view>
+  <text class="item-left" style="font-size:{{fontSize28}}rpx">{{questionContent}}</text>
+</view> -->
+<view class="cu-form-group ">
+  <view class="title text-bold" style="font-size:{{fontSize}}rpx">发现时间:</view>
+  <text class="item-left" style="font-size:{{fontSize28}}rpx">{{findTime}}</text>
+</view>
+<view class="cu-form-group ">
+  <view class="title text-bold" style="font-size:{{fontSize}}rpx">负责单位:</view>
+  <text class="item-left" style="font-size:{{fontSize28}}rpx">{{departmentName}}</text>
+</view>
+<view class="cu-form-group ">
+  <view class="title text-bold" style="font-size:{{fontSize}}rpx">整改期限:</view>
+  <text class="item-left" style="font-size:{{fontSize28}}rpx">{{finishTime == null?'暂无':finishTime}}</text>
+</view>
+<!-- 门头照图片 -->
+<!-- <view class="cu-bar  solid-bottom bg-white-user">
+  <view class="action">
+    <text class="cuIcon-title text-{{bgColor}}"></text><text style="font-size:{{fontSize}}rpx">点位门头照图片</text>
+  </view>
+</view> -->
+<!-- 门头照图片 图片加描述 -->
+<!-- <view class="cu-card article no-card">
+  <view class="cu-item shadow" wx:for="{{imgList_door}}" wx:key="index">
+    <view class="content">
+      <image src='{{imgList_door[index].url}}' mode='aspectFill' bindtap="ViewImageFordoor" data-index='{{index}}' data-url="{{imgList_door[index].url}}"></image>
+      <view class="desc">
+        <input disabled="true" class="text-content" value="{{imgList_door[index].desc}}" style="font-size:{{fontSize28}}rpx"></input>
+      </view>
+    </view>
+  </view>
+</view> -->
+
+<!-- 举报图片/视频 -->
+<view class="cu-bar  solid-bottom bg-white-user">
+  <view class="action">
+    <text class="cuIcon-title text-{{bgColor}}"></text><text style="font-size:{{fontSize}}rpx">发现的存在问题</text>
+  </view>
+</view>
+<!-- 图片加描述 -->
+<view class="cu-card article no-card">
+  <view class="cu-item shadow" wx:for="{{imgList_No}}" wx:key="index">
+
+    <view class="content">
+      <image style="align-self: center;" src='{{imgList_No[index]}}' mode='aspectFill' bindtap="ViewImageForreport_No" data-index='{{index}}' data-url="{{imgList_No[index]}}"></image>
+      <view class="desc">
+        <text class="text-content" style="font-size:{{fontSize28}}rpx;height: auto;">{{imgDescList[index].description}}</text>
+      </view>
+    </view>
+  </view>
+</view>
+<!-- 视频加描述 -->
+<view class="cu-card article no-card">
+  <view class="cu-item shadow" wx:for="{{videoList_No}}" wx:key="index">
+    <view class="content">
+      <video style="align-self: center;" class="video-user" bindtap="ViewVideoForreport" data-url="{{videoList_No[index].url}}" data-index="{{index}}" id='reportVideo{{index}}' src="{{videoList_No[index].url}}" poster="{{videoList_No[index].poster}}" bindfullscreenchange="start"></video>
+      <view class="desc">
+        <text class="text-content" style="font-size:{{fontSize28}}rpx;height: auto;">{{voidDescList[index].description}}</text>
+      </view>
+    </view>
+  </view>
+</view>
+<!-- 录音 -->
+<view class="cu-bar  solid-bottom bg-white-user" wx:if="{{audioSrc_No.length>0}}">
+  <view class="action">
+    <text class="cuIcon-title text-{{bgColor}}" style="font-size:{{fontSize}}rpx"></text><text style="font-size:{{fontSize}}rpx">录音</text>
+  </view>
+</view>
+<view class="cu-chat bg-white" wx:if="{{audioSrc_No.length>0}}" wx:for="{{audioSrc_No}}" wx:key="index">
+  <view class="cu-item">
+    <view wx:if="{{!item.bl}}" class="main" bindtap='playRecord_No' data-id="{{index}}">
+      <view class="action text-bold text-{{bgColor}}}" style="font-size:{{fontSize28}}rpx">
+        第{{index+1}}个录音
+      </view>
+      <!-- 静态图 -->
+      <view class="content shadow">
+        <image class="image-audio-user" src="../../images/yuyin-ico.png" mode="scaleToFill"></image>
+      </view>
+
+    </view>
+    <view wx:if="{{item.bl}}" class="main" bindtap='playRecord_No' data-id="{{index}}">
+      <view class="action text-bold text-{{bgColor}}" style="font-size:{{fontSize28}}rpx">
+        第{{index+1}}个录音
+      </view>
+      <!-- 动图 -->
+      <view class="content shadow">
+        <image class="image-audio-user" src="../../images/yuyin-gif.gif" mode="scaleToFill"></image>
+      </view>
+    </view>
+  </view>
+</view>
+
+
+
+<!-- 定位信息 -->
+<view class="cu-bar  solid-bottom bg-white-user">
+  <view class="action">
+    <text class="cuIcon-title text-{{bgColor}}" style="font-size:{{fontSize}}rpx"></text><text style="font-size:{{fontSize}}rpx">定位信息</text>
+  </view>
+</view>
+<view class="cu-bar bg-white text-center padding-neirong">
+  <view class="action text-black " bindtap="go">
+    <text style="font-size:{{fontSize}}rpx">{{address}}　</text>
+    <text class="cuIcon-locationfill lg text-{{bgColor}}"></text>
+  </view>
+</view>
+
+
+<view hidden="{{checkShow}}">
+  <tui-divider gradual="{{true}}" gradualColor="{{gradualColor}}">
+    <text class="text-grey h1" style="font-size:{{fontSize35}}rpx">责任单位整改资源</text>
+  </tui-divider>
+</view>
+<!-- 拍摄 -->
+<view hidden="{{checkShow}}" class="cu-bar  solid-bottom bg-white-user">
+  <view class="action">
+    <text class="cuIcon-title text-blue"></text><text style="font-size:{{fontSize}}rpx">整改图片/视频</text>
+  </view>
+</view>
+
+<view hidden="{{checkShow}}" class="cu-bar-user bg-white">
+</view>
+<view hidden="{{checkShow}}" class="cu-form-group">
+  <view class="grid col-3 grid-square flex-sub">
+    <view class="bg-img" wx:for="{{imgList_Dep}}" wx:key="index" bindtap="ViewImageForreport_Dep" data-url="{{imgList_Dep[index]}}">
+      <image src='{{imgList_Dep[index]}}' mode='aspectFill'></image>
+
+    </view>
+    <view class="bg-img" wx:for="{{videoList_Dep}}" wx:key="index" bindtap="ViewVideoForreport_Dep" data-url="{{videoList_Dep[index].url}}" data-index="{{index}}">
+      <video id='reportVideoDep{{index}}' src="{{videoList_Dep[index].url}}" poster="{{videoList_Dep[index].poster}}" bindfullscreenchange="start"></video>
+
+    </view>
+
+
+  </view>
+</view>
+
+
+
+<!-- 录音 -->
+<!-- wx:if="{{isRecord}}" -->
+<view hidden="{{checkShow}}" class="cu-bar solid-bottom bg-white-user" wx:if="{{isShow_Dep==0}}">
+  <view class="action">
+    <text class="cuIcon-title text-{{bgColor}} " style="font-size:{{fontSize}}rpx"></text> <text style="font-size:{{fontSize}}rpx">录音</text>
+  </view>
+
+</view>
+
+
+<view hidden="{{checkShow}}" class="cu-chat bg-white" wx:if="{{isShow_Dep==0}}" wx:for="{{audioSrc_Dep}}" wx:key="index">
+  <view class="cu-item">
+    <view wx:if="{{!item.bl}}" class="main" bindtap='playRecord_Dep' data-id="{{index}}">
+      <view class="action text-bold text-{{bgColor}}" style="font-size:{{fontSize28}}rpx">
+        第{{index+1}}个录音
+      </view>
+      <!-- 静态图 -->
+      <view class="content shadow">
+        <image class="image-audio-user" src="../../images/yuyin-ico.png" mode="scaleToFill"></image>
+      </view>
+
+    </view>
+    <view wx:if="{{item.bl}}" class="main" bindtap='playRecord_Dep' data-id="{{index}}">
+      <view class="action text-bold text-{{bgColor}}" style="font-size:{{fontSize28}}rpx">
+        第{{index+1}}个录音
+      </view>
+      <!-- 动图 -->
+      <view class="content shadow">
+        <image class="image-audio-user" src="../../images/yuyin-gif.gif" mode="scaleToFill"></image>
+      </view>
+    </view>
+  </view>
+</view>
+
+
+<!-- 整改说明 -->
+<view hidden="{{checkShow}}" class="cu-bar  solid-bottom bg-white-user">
+  <view class="action">
+    <text class="cuIcon-title text-{{bgColor}}"></text><text style="font-size:{{fontSize}}rpx">整改说明</text>
+  </view>
+</view>
+<!-- !!!!! placeholder 在ios表现有偏移 建议使用 第一种样式 -->
+<view hidden="{{checkShow}}" wx:if="{{commitContent==''}}" class="cu-form-group">
+  <text style="font-size:{{fontSize28}}rpx">　无</text>
+</view>
+<view hidden="{{checkShow}}" wx:else class="cu-form-group ">
+  <text wx:if="{{commitContent}}" style="font-size:{{fontSize28}}rpx">{{commitContent}}</text>
+  <text wx:else="" style="font-size:{{fontSize28}}rpx">无</text>
+</view>
+<!-- 整改时间 -->
+<!-- <view hidden="{{checkShow}}" class="cu-bar  solid-bottom bg-white-user">
+  <view class="action">
+    <text class="cuIcon-title text-{{bgColor}}"></text><text style="font-size:{{fontSize}}rpx">整改时间</text>
+  </view>
+</view> -->
+<!-- !!!!! placeholder 在ios表现有偏移 建议使用 第一种样式 -->
+<!-- <view hidden="{{checkShow}}" class="cu-form-group">
+  <text style="font-size:{{fontSize28}}rpx">{{uploadTime}}</text>
+</view> -->
+<!-- 审批意见 初次待审核 整改合格  长期整改-->
+<!-- <view wx:if="{{tabCur == 0 || tabCur == 2 || tabCur == 5}}" >
+  <view hidden="{{checkShow}}" class="cu-bar  solid-bottom bg-white-user">
+    <view class="action">
+      <text class="cuIcon-title text-blue" ></text><text style="font-size:{{fontSize}}rpx">审批意见</text>
+    </view>
+  </view>
+  <view hidden="{{checkShow}}"  class="cu-form-group ">
+    <text wx:if="{{auditContent}}" style="font-size:{{fontSize28}}rpx">{{auditContent}}</text>
+    <text wx:else="" style="font-size:{{fontSize28}}rpx">无</text>
+  </view>
+  <view hidden="{{checkShow}}" class="cu-bar-user">
+  </view>
+</view> -->
+<!-- 时间线-->
+<view class="cu-modal {{modalName=='TaskLog'?'show':''}}">
+
+  <view class="cu-dialog">
+    <view class="cu-bar bg-white justify-end">
+      <view class="content">整改记录</view>
+      <view class="action" bindtap="hideModal">
+        <text class="cuIcon-close text-red"></text>
+      </view>
+    </view>
+    <scroll-view scroll-y style="text-align: left;max-height: 900rpx;">
+      <view class="cu-timeline" wx:for="{{task_log_list}}" wx:key="task_log_index">
+        <view class="cu-item" style="color:{{bgColor}} ;">
+          <view class="content padding-xl radius shadow shadow-lg bg-white margin-top">
+            <view class="cu-capsule radius">
+              <view class="cu-tag bg-cyan">{{item.year}}</view>
+              <view class="cu-tag line-cyan">{{item.day}}</view>
+            </view>
+            <view class="margin-top"><text decode="{{true}}">{{item.recordBy}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{item.remarks}}</text></view>
+          </view>
+        </view>
+      </view>
+    </scroll-view>
+  </view>
+
+</view>
+<view>
+  <view>
+    <tui-divider gradual="{{true}}" gradualColor="{{gradualColor}}">
+      <text class="text-grey h1" style="font-size:{{fontSize35}}rpx">整改审核</text>
+    </tui-divider>
+  </view>
+  <!-- 审批意见 -->
+  <view class="cu-bar  solid-bottom bg-white-user">
+    <view class="action">
+      <text class="cuIcon-title text-{{bgColor}}"></text><text style="font-size:{{fontSize}}rpx">创文办审批意见</text>
+    </view>
+  </view>
+  <!-- !!!!! placeholder 在ios表现有偏移 建议使用 第一种样式 -->
+  <view class="cu-form-group ">
+    <textarea bindinput="set_auditContent" value="" style="font-size:{{fontSize28}}rpx;{{(tabCur == 2 || tabCur == 3 || tabCur == 4 ) == true?'':'pointer-events:none;'}}" placeholder="请输入500字以内的审批意见" value="{{auditContent}}"></textarea>
+  </view>
+    <!-- 公示描述 -->
+    <view wx:if="{{tabCur == 2 || tabCur == 3 || tabCur == 0}}" class="cu-bar  solid-bottom bg-white-user">
+    <view class="action">
+      <text class="cuIcon-title text-{{bgColor}}"></text><text style="font-size:{{fontSize}}rpx">公示描述(审核通过时,将作为公示信息展示在任务记录中)</text>
+    </view>
+  </view>
+  <!-- !!!!! placeholder 在ios表现有偏移 建议使用 第一种样式 -->
+  <view wx:if="{{tabCur == 2 || tabCur == 3 || tabCur == 0}}" class="cu-form-group ">
+    <textarea bindinput="set_auditContent" value="" style="font-size:{{fontSize28}}rpx;{{(tabCur == 2 || tabCur == 3 ) == true?'':'pointer-events:none;'}}" placeholder="请输入500字以内的公示描述" value="{{auditContent}}"></textarea>
+  </view>
+  <!-- 审核按钮组 -->
+ <view wx:if="{{tabCur == 2 || tabCur == 3 }}" class="flex solid-bottom padding justify-center bg-white margin-top" style="width: 100%;">
+ <!-- <form> -->
+  <view class="cu-form-group">
+        <view class="title">首页展示</view>
+        <switch class="sm" bindchange="get_switch_result"></switch>
+  </view>
+  <view class="cu-form-group">
+    <view class=" margin-xs radius">
+      <button role="button" class="cu-btn bg-{{bgColor}} " bindtap="process_fun" data-resulttype="0">通过</button>
+    </view>
+    <view class=" margin-xs radius">
+      <button role="button" class="cu-btn bg-{{bgColor}} " bindtap="process_fun" data-resulttype="1">不通过</button>
+    </view>
+  </view>
+ <!-- </form> -->
+        
+
+    <!-- <view class=" margin-xs radius">
+      <button role="button" class="cu-btn bg-{{bgColor}} " bindtap="process_fun" data-resulttype="2">长期整改</button>
+    </view> -->
+  </view> 
+  <!-- 权属异议审核按钮组-->
+  <view wx:if="{{tabCur == 4}}" class="flex solid-bottom padding justify-left" style="width: 100%;">
+    <view class=" margin-xs radius">
+      <button role="button" class="cu-btn bg-{{bgColor}} " bindtap="open_update_dept_page">更改单位</button>
+    </view>
+    <view class=" margin-xs radius">
+      <button role="button" class="cu-btn bg-{{bgColor}} " bindtap="refuse_fun" data-departmentId="{{departmentId}}">拒绝</button>
+    </view>
+  </view>
+  <!-- 权属异议调整弹窗-->
+  <view class="cu-modal {{modalName=='updateDept'?'show':''}}">
+    <view class="cu-dialog">
+      <view class="cu-bar bg-white justify-end">
+        <view class="content">单位选择</view>
+        <view class="action" bindtap="hideModal">
+          <text class="cuIcon-close text-red"></text>
+        </view>
+      </view>
+      <view>
+        <view class="cu-form-group">
+          <picker mode="selector" range="{{departmentList}}" value="{{index}}" range-key="name" bindchange="updateDeptChange">
+            <view class="picker" style="text-align: left;font-size: 30rpx;">
+              当前选择：{{update_select_dept.name}}
+            </view>
+          </picker>
+        </view>
+        <!-- 权属调整原因 -->
+        <view class="cu-form-group align-start">
+          <textarea bindinput="set_dissent_auditContent" value="" style="font-size:{{fontSize28}}rpx;text-align: left;" placeholder="请输入权属调整原因" value="{{dissent_auditContent}}"></textarea>
+        </view>
+      </view>
+      <!-- 权属异议审核按钮组-->
+      <view class="flex solid-bottom padding justify-center" style="width: 100%;">
+        <view class=" margin-xs radius">
+          <button role="button" class="cu-btn bg-{{bgColor}} " bindtap="updateDept">确定</button>
+        </view>
+        <view class=" margin-xs radius">
+          <button role="button" class="cu-btn bg-{{bgColor}} " bindtap="hideModal">取消</button>
+        </view>
+      </view>
+    </view>
+  </view>
+</view>

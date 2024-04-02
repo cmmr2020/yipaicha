@@ -93,7 +93,29 @@ App({
     wx.setStorageSync('rightId', 0)
     //this.changeUserRight()
   },
-
+  alert(msg,time){
+    //默认1.5s
+   var show_time = 1500
+   if(!isNaN(time)) {
+     show_time = time*1000
+   }
+   wx.showToast({
+     title: msg,
+     icon: 'none',
+     duration: show_time,
+     mask: true
+   })
+  },
+   msg(msg){
+     wx.showModal({
+       title: '提示信息',
+       content: msg,
+       showCancel:false,
+       success (res) {
+         
+       }
+   })
+ },
   // 权限询问
   getRecordAuth: function () {
     wx.getSetting({
@@ -123,7 +145,7 @@ App({
      
       requestUrl: 'http://192.168.20.59:8082'//本地
       //requestUrl:'http://221.216.95.200:8285'//35
-     // requestUrl:'https://wxpu.diaochaonline.com'//35域名
+      //requestUrl:'https://wxpu.diaochaonline.com'//35域名
       //requestUrl: 'https://wmccpu.diaochaonline.com'//线上
   },
   msgData:{

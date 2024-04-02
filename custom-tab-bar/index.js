@@ -60,7 +60,7 @@ Component({
       "selectedIconPath": "../images/camera1.png"
     },
     {
-      "pagePath": "/pages/back/back",
+      "pagePath": "/pages/check_new_index/check_new_index",
       "text": "整改审核",
       "iconPath": "../images/check.png",
       "selectedIconPath": "../images/check1.png"

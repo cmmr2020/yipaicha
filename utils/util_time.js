@@ -8,7 +8,6 @@ function formatTime(time, format) {
   let len = format.length
   return temp.substr(-len)
 }
-
 function formatTimeByNew(value,format) {
   const formateArr = ['Y', 'M', 'D', 'h', 'm', 's'];
   let returnArr = [];
