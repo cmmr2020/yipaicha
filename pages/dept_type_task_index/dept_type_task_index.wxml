@@ -70,10 +70,10 @@
             <view class="td-test" wx:for="{{item.departmentTaskVoList}}" wx:key="index1" wx:for-index="index1" wx:for-item="item1">
               <view wx:if="{{item1.deptType == 1}}">
                   <text class="cuIcon-activityfill lg text-red">{{item1.name}} </text>
-                </view>
-                <view wx:else="">
+              </view>
+              <view wx:else="">
                   <text>{{item1.name}} </text>
-                </view>
+              </view>
             </view>
           </view> -->
         </view>

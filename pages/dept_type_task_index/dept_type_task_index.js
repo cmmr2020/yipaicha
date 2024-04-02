@@ -65,10 +65,10 @@ Page({
   onLoad(options) {
     var that = this;
     var requestUrl = app.globalData.requestUrl; //请求路径
-    var projectId = options.projectId;
+    var projectId = app.projectId;
     var terminalUserId = app.terminalUserId; //调查员id
     var fontSize = wx.getStorageSync('fontSize');
-    var bgColor = wx.getStorageSync('bgColor');
+    var bgColor = wx.getStorageSync('bgColor');    
     that.setData({
       requestUrl: requestUrl,
       projectId: projectId,
@@ -285,55 +285,6 @@ Page({
     })
     this.getTaskList()
   },
-  //查询任务统计 弹窗提示
-  getProjectFieldTaskTips: function () {
-    var that = this;
-    //调用全局 请求方法
-    app.wxRequest(
-      'GET',
-      that.data.requestUrl + "/mobile/fieldTask/getDepartmentTips",
-      {
-        "projectId": that.data.projectId,
-      },
-      app.seesionId,
-      (res) => {
-        var data = res.data
-        if (data.status = "success") {
-          var projectData = data.retObj;
-          //console.log(projectData)
-          var tips = "共" + projectData.allNum + "条任务，其中" + projectData.unRectifyNum + "条未整改、" +
-            projectData.unCheckNum + "条已整改、" + projectData.longTaskNum + "条长期整改、"
-            + projectData.standardNum + "条整改合格、";
-          if (projectData.sortName != "0" && projectData.sortName) {
-            var tab4 = {
-              id: 4,
-              name: '待审核'
-            }
-            var tabArr = that.data.problemType_user
-            tabArr.push(tab4)
-            //显示审核按钮
-            that.setData({
-              problemType_user: tabArr
-            })
-          } else {
-            tips += projectData.sortName + "条待审核、"
-          }
-          tips += projectData.unStandardNum + "条不达标。";
-          if (projectData.allNum > 0) {
-            app.msg(tips)
-          }
-          that.setData({
-            taskDelayNum: projectData.standardPercent
-          })
-        } else {
-          app.alert("加载失败")
-        }
-      },
-      (err) => {
-
-      }
-    )
-  },
   //上拉函数
   onReachBottom: function () { //触底开始下一页
     var that = this;
@@ -441,58 +392,28 @@ Page({
     if (search_param) {
       search_param_str = JSON.stringify(search_param)
     }
-    //当前为 未整改或长期整改时
-    if (tabCur == 0 || tabCur == 2) {
-      if (rectifyFlag) {
-        return;
-      }
+    //当前为未整改时
+    if (tabCur == 0 ) {
+      // if (rectifyFlag) {
+      //   return;
+      // }
       rectifyFlag = true;
-      //调用全局 请求方法
-      // app.wxRequest(
-      //   'POST',
-      //   that.data.requestUrl + "/mobile/fieldTask/setRectifyTimeByMoblie",
-      //   { taskId: taskId },
-      //   app.seesionId,
-      //   (res) => {
-      //     var data = res.data
-      //     if (data.status = "success") {
-            
-      //     } else {
-      //       if (data.message == '服务器错误') {
-      //         app.alert(data.message)
-      //         return;
-      //       }
-      //       app.msg(data.message)
-      //     }
-      //     rectifyFlag = false;
-      //   },
-      //   (err) => {
-      //     app.alert("网络错误")
-      //   }
-      // )
-      wx.navigateTo({
-        url: '../dept_task_detail/dept_task_detail?id=' + taskId + '&projectId=' + projectId + '&tabCur=' + tabCur + '&pageScrollto_id=' + pageScrollto_id + '&search_param_str=' + search_param_str + '&pagenum=' + pagenum + '&maxPageNum=' + maxPageNum,
-        events: {
-          acceptDataFromOpenedPage: function (data) {
-            that.setData({
-              children_page_data: data
-            })
-          },
-        }
-      })
     } else {
-      wx.navigateTo({
-        url: '../dept_task_detail/dept_task_detail?id=' + taskId + '&projectId=' + projectId + '&tabCur=' + tabCur + '&pageScrollto_id=' + pageScrollto_id + '&search_param_str=' + search_param_str + '&pagenum=' + pagenum + '&maxPageNum=' + maxPageNum,
-        events: {
-          acceptDataFromOpenedPage: function (data) {
-            that.setData({
-              children_page_data: data
-            })
-          },
-        }
-      })
+      rectifyFlag = false;
     }
+
+    wx.navigateTo({
+      url: '../dept_task_detail/dept_task_detail?id=' + taskId + '&projectId=' + projectId + '&tabCur=' + tabCur + '&pageScrollto_id=' + pageScrollto_id + '&search_param_str=' + search_param_str + '&pagenum=' + pagenum + '&maxPageNum=' + maxPageNum,
+      events: {
+        acceptDataFromOpenedPage: function (data) {
+          that.setData({
+            children_page_data: data
+          })
+        },
+      }
+    })
   },
+
   //多选框监听方法
   save_taskIds: function (e) {
     this.setData({

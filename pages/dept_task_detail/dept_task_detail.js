@@ -574,10 +574,9 @@ Page({
       },
       app.seesionId,
       (res) =>{
-        console.log("任务详情：", res.data.retObj)
+        //console.log("任务详情：", res.data.retObj)
         if (res.data.status === "success") {
           var data = res.data.retObj
-          console.log(data);
           //实地资源
           // var images = res.data.retObj.answerResourceMap[0];
           // var videos = res.data.retObj.answerResourceMap[2];

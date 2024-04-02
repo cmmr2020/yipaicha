@@ -95,7 +95,7 @@
       </view>
       <!-- 静态图 -->
       <view class="content shadow">
-        <image class="image-audio-user" src="../../../../images/yuyin-ico.png" mode="scaleToFill"></image>
+        <image class="image-audio-user" src="/images/yuyin-ico.png" mode="scaleToFill"></image>
       </view>
 
     </view>
@@ -105,7 +105,7 @@
       </view>
       <!-- 动图 -->
       <view class="content shadow">
-        <image class="image-audio-user" src="../../../../images/yuyin-gif.gif" mode="scaleToFill"></image>
+        <image class="image-audio-user" src="/images/yuyin-gif.gif" mode="scaleToFill"></image>
       </view>
     </view>
   </view>
@@ -178,7 +178,7 @@
       </view>
       <!-- 静态图 -->
       <view class="content shadow">
-        <image class="image-audio-user" src="../../../../images/yuyin-ico.png" mode="scaleToFill"></image>
+        <image class="image-audio-user" src="/images/yuyin-ico.png" mode="scaleToFill"></image>
       </view>
 
     </view>
@@ -188,7 +188,7 @@
       </view>
       <!-- 动图 -->
       <view class="content shadow">
-        <image class="image-audio-user" src="../../../../images/yuyin-gif.gif" mode="scaleToFill"></image>
+        <image class="image-audio-user" src="/images/yuyin-gif.gif" mode="scaleToFill"></image>
       </view>
     </view>
   </view>
