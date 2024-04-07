@@ -13,10 +13,10 @@
   <view class="title text-bold" style="font-size:{{fontSize}}rpx">具体问题:</view>
   <text class="item-left" style="font-size:{{fontSize28}}rpx">{{questionContent}}</text>
 </view>
-<!-- <view class="cu-form-group ">
-  <view class="title text-bold" style="font-size:{{fontSize}}rpx">问题:</view>
-  <text class="item-left" style="font-size:{{fontSize28}}rpx">{{questionContent}}</text>
-</view> -->
+<view class="cu-form-group ">
+  <view class="title text-bold" style="font-size:{{fontSize}}rpx">检查标准:</view>
+  <text class="item-left" style="font-size:{{fontSize28}}rpx">{{sortListStr}}</text>
+</view>
 <view class="cu-form-group ">
   <view class="title text-bold" style="font-size:{{fontSize}}rpx">发现时间:</view>
   <text class="item-left" style="font-size:{{fontSize28}}rpx">{{findTime}}</text>

@@ -163,7 +163,8 @@ Page({
     bgColor: '',
     // 0待整改（未整改/整改不达标继续整改）  1 已整改 2 长期整改 3 整改合格 4 待审核
     tabCur: '',
-    update_select_dept: ''//选中的部门
+    update_select_dept: '',//选中的部门
+    sortListStr:''//检查标准
   },
 
 
@@ -654,7 +655,8 @@ Page({
             finishTime: res.data.retObj.finishTime,
             longTask: res.data.retObj.longTask,
             departmentName: departmentName,
-            uploadTime: res.data.retObj.uploadTime
+            uploadTime: res.data.retObj.uploadTime,
+            sortListStr:data.sortListStr
           })
 
         }

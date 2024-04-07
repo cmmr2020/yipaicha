@@ -1,4 +1,3 @@
-
 <!-- 地图 -->
 <view class="container padding bg-white " hover-stop-propagation="false" hover-class="none">
   <!-- 地图控件 -->
@@ -226,4 +225,3 @@
     </view>
   </view>
 </view>
-

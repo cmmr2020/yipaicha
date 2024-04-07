@@ -112,7 +112,7 @@ var requestUrl = that.data.requestUrl;//服务器路径
       },
       app.seesionId,
       (res) =>{
-        // console.log("退回：",res);
+         console.log("退回：",res);
         if (res.data.status === "success") {
           that.setData({
             backList: that.data.backList.concat(res.data.retObj),
