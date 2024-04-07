@@ -20,6 +20,7 @@ Page({
     long_setTime: false,//长期整改结束日期选择框
     long_task_finish_Time: '',//长期整改结束时间
     process_auditContent: '',//整改审核审批意见
+    pubRemark:'',//公示信息
     //资源
     retObj: [],
     imgDescList: [{
@@ -1659,6 +1660,11 @@ Page({
       process_auditContent: e.detail.value,
     })
   },
+  set_pubRemark: function (e) {
+    this.setData({
+      pubRemark: e.detail.value,
+    })
+  },
   //更新全权属异议原因
   set_dissent_auditContent: function (e) {
     this.setData({
@@ -1679,21 +1685,23 @@ Page({
     var result_type = e.currentTarget.dataset.resulttype
     var taskId = that.data.taskId
     var auditContent = that.data.process_auditContent
+    var pubRemark = that.data.pubRemark
     if (auditContent.length > 500) {
       app.msg('审批意见不能超过500字')
       return
     }
     var param;
     if (result_type == 0) {
-      //批量合格
+      //合格
       param = {
         id: taskId,
         projectId: projectId,
         result: 0,
         auditContent: auditContent,
+        pubRemark:pubRemark
       }
     } else {
-      //批量不合格\长期整改
+      //不合格\长期整改
       param = {
         id: taskId,
         projectId: projectId,

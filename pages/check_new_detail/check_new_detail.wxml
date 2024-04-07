@@ -276,7 +276,7 @@
   </view>
   <!-- !!!!! placeholder 在ios表现有偏移 建议使用 第一种样式 -->
   <view wx:if="{{tabCur == 2 || tabCur == 3 || tabCur == 0}}" class="cu-form-group ">
-    <textarea bindinput="set_auditContent" value="" style="font-size:{{fontSize28}}rpx;{{(tabCur == 2 || tabCur == 3 ) == true?'':'pointer-events:none;'}}" placeholder="请输入500字以内的公示描述" value="{{auditContent}}"></textarea>
+    <textarea bindinput="set_pubRemark" value="" style="font-size:{{fontSize28}}rpx;{{(tabCur == 2 || tabCur == 3 ) == true?'':'pointer-events:none;'}}" placeholder="请输入公示描述信息,审核合格时此描述有效,默认展示预设描述。" value="{{pubRemark}}"></textarea>
   </view>
   <!-- 审核按钮组 -->
  <view wx:if="{{tabCur == 2 || tabCur == 3 }}" class="flex solid-bottom padding justify-center bg-white margin-top" style="width: 100%;">
