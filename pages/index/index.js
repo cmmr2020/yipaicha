@@ -107,6 +107,12 @@ Page({
                   })
                   return;
                 }
+                if(res.data.retObj.govDelFlag=='0'){
+                  wx.redirectTo({
+                    url: '../error_tip/error_tip?msgCode=m_10005'
+                  })
+                  return;
+                }
                 var app = getApp();
                 app.openid = res.data.retObj.openid;
                 app.projectId = res.data.retObj.projectId;

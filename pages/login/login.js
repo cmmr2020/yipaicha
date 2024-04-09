@@ -74,8 +74,8 @@ Page({
       },
       app.seesionId,
       (res) =>{
+        console.log("后台传输的数据：", res)
         if (res.data.status == 'success') {
-          console.log("后台传输的数据：", res)
           var list = res.data.retObj.qxMenus;
           var terminalUserName = res.data.retObj.terminalUserName;
           var departmentName = res.data.retObj.departmentName
@@ -113,7 +113,7 @@ Page({
           // })
         } else {
           wx.showToast({
-            title: '登录失败！请检查您输入的信息是否有误。',
+            title: res.data.message,
             icon: 'none',
             duration: 2000,
             mask: true

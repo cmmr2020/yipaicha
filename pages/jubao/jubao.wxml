@@ -89,7 +89,7 @@
   </view>
 </view>
 <view class="cu-modal bottom-modal {{modalName=='ChooseModal'?'show':''}}" bindtap="hideModal">
-  <view class="cu-dialog" catchtap>
+  <view class="cu-dialog" catchtap style="padding-bottom: 18%;">
     <view class="cu-bar bg-white">
       <view class="action text-blue" bindtap="problemTypeCancel">全部取消</view>
       <view class="action text-green" bindtap="problemTypeConfirm">确定</view>
@@ -189,7 +189,7 @@
 
 
 
-<view wx:if="{{canIUse}}" hidden="{{hidden}}" >
+<view wx:if="{{canIUse}}" hidden="{{hidden}}" style="padding-bottom: 18%">
     <button class='cu-btn block bg-blue margin-tb-sm lg'  type='primary' open-type='getUserInfo' bindgetuserinfo='bindGetUserInfo'>微信授权</button>
 </view>
 <view wx:else>请升级微信版本</view>  
@@ -216,7 +216,7 @@
     <!-- </view> -->
   </view>
 </view>
-<view class="cu-modal bottom-modal {{modalName=='bottomModal'?'show':''}}">
+<view class="cu-modal bottom-modal {{modalName=='bottomModal'?'show':''}}" style="padding-bottom: 18%">
   <view class="cu-dialog">
     <view class="padding-xl">
       <view class="padding flex flex-direction">

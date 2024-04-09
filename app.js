@@ -143,9 +143,9 @@ App({
     userInfo: null,
       // requestUrl:'http://47.92.38.70:8285'//线上
      
-      requestUrl: 'http://192.168.20.59:8082'//本地
+      //requestUrl: 'http://192.168.20.59:8082'//本地
       //requestUrl:'http://221.216.95.200:8285'//35
-      //requestUrl:'https://wxpu.diaochaonline.com'//35域名
+        requestUrl:'https://wxpu.diaochaonline.com'//35域名
       //requestUrl: 'https://wmccpu.diaochaonline.com'//线上
   },
   msgData:{
@@ -153,6 +153,7 @@ App({
     m_10002:'抱歉，您所在城市不在当前项目的执行城市范围之内，无法继续使用 “文明创城随手拍”小程序，进行不文明现象上报！',
     m_10003:'抱歉，您未授权获取您的地理位置，因此无法继续使用 “文明创城随手拍”小程序，进行不文明现象上报！请根据引导开启获取位置权限再试~',
     m_10004:'抱歉，您所在行政区域暂未开启“文明创城随手拍”相关活动,无法进行不文明现象上报！',
+    m_10005:'抱歉，您所属政府状态已设为无效,无法进行不文明现象上报!请联系管理员恢复。',
   }
    
 })
