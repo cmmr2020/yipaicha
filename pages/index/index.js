@@ -73,6 +73,7 @@ Page({
     if (!govCode) {
       var govCode='0'
     }
+    var appId = wx.getAccountInfoSync().miniProgram.appId;
     wx.login({
       success(res) {
         if (res.code) {
@@ -89,7 +90,8 @@ Page({
                govCode: govCode,
                //govCode: 'TJBH01CS',//'测试机',
                //govCode: 'BJSCYQ',//线上
-               code: res.code
+               code: res.code,
+               appId:appId
             },
             success(res) {
               console.log("请求用户：",res)
