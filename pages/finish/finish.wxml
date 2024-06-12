@@ -28,7 +28,7 @@
 <!-- 举报分类 -->
 <view class="cu-bar  solid-bottom">
   <view class="action">
-    <text class="cuIcon-title text-blue"></text>举报分类
+    <text class="cuIcon-title text-blue"></text>信息类型
   </view>
 </view>
 <view class="cu-bar-neirong bg-white padding-neirong">
@@ -40,7 +40,7 @@
 <!-- 举报分类 -->
 <view class="cu-bar  solid-bottom">
   <view class="action">
-    <text class="cuIcon-title text-blue"></text>点位名称
+    <text class="cuIcon-title text-blue"></text>位置描述
   </view>
 </view>
 <view class="cu-bar-neirong bg-white padding-neirong">
@@ -62,7 +62,7 @@
       <image class="imgeaaa" src='{{reportImgSrc[index]}}' mode='aspectFill'></image>
     </view>
     <view class="bg-img" wx:for="{{reportVideoSrc}}" wx:key="index" bindtap="ViewVideoForReport" data-url="{{reportVideoSrc[index]}}" data-index="{{index}}">
-      <video class="imgeaaa" id='reportVideo{{index}}' src="{{reportVideoSrc}}" poster="{{reportVideoSrc[index].poster}}">
+      <video class="imgeaaa" id='reportVideo{{index}}' src="{{reportVideoSrc}}" poster="{{reportVideoSrc[index].poster}}"  object-fit="contain"  picture-in-picture-mode="push">
       </video>
     </view>
 

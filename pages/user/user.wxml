@@ -1,31 +1,49 @@
 <!--index.wxml hidden中变量为false，进行渲染，true进行隐藏-->
 
-<view class="userinfo bg-white" > <!--bind:tap="show_edit"-->
-  <view class="top">
-  <view>
-      <image class="head_img" src="{{headeSrcPath}}" />
+<view class="userinfo bg-white">
+  <view class="top" style="width: 100%;">
+    <view wx:if="{{isLogin}}" class="flex justify-end" style="margin-right: 5%;" bind:tap="loginOut">
+      <view class="margin-xs radius">
+        <tex class="cuIcon-exit lg text-blue" style="font-size: 40rpx;"></tex>
+      </view>
     </view>
-    <view class="user_name">
-      <text>{{userNickName}}</text>
+    <view bind:tap="show_edit">
+      <view>
+        <image class="head_img" src="{{headeSrcPath}}" />
+      </view>
+      <view class="flex-sub text-center">
+        <view class="text-center text-shadow text-black solid-bottom padding-sm ">
+					<view class="text-xl">{{userNickName}}</view>
+				</view>
+        <view class="text-center text-shadow text-grey solid-bottom padding-sm ">
+					<view class="text-df">{{userName}}</view>
+				</view>
+      <!-- <view class="solid-bottom text-xl padding">
+        <text class="text-black">{{userNickName}}</text>
+      </view>
+      <view class="solid-bottom text-df padding">
+        <text class="text-grey">{{userName}}</text>
+      </view> -->
     </view>
     </view>
+  </view>
 </view>
 <view class="cu-list menu sm-border card-menu margin-top">
-     <view class="cu-item arrow"  bindtap="goToLogin">
-      <view class="content">
+  <view class="cu-item arrow" bindtap="goToLogin">
+    <view class="content">
       <text class="cuIcon-profile lg text-blue"></text>
-        <text class="text-grey">绑定账号</text>
-      </view>
+      <text class="text-grey">绑定账号</text>
     </view>
+  </view>
 </view>
 <view class="cu-list menu sm-border card-menu margin-top">
-    <view class="cu-item arrow" bindtap="goTojubaodetail">
-      <view class="content">
-        <text class=" cuIcon-warn text-blue"></text>
-        <text class="text-grey">我的举报</text>
-      </view>
+  <view class="cu-item arrow" bindtap="goTojubaodetail">
+    <view class="content">
+      <text class=" cuIcon-warn text-blue"></text>
+      <text class="text-grey">我的举报</text>
     </view>
-     <!-- <view class="cu-item arrow">
+  </view>
+  <!-- <view class="cu-item arrow">
       <view class="content">
         <text class="cuIcon-tagfill text-green"></text>
         <text class="text-grey">xxxxxxx</text>
@@ -33,27 +51,28 @@
     </view> -->
 </view>
 
-<view class="cu-list menu sm-border card-menu margin-top">
+<!--创城部需求  暂时隐藏功能-->
+<!-- <view class="cu-list menu sm-border card-menu margin-top">
      <view class="cu-item arrow"  bindtap="goToedit">
       <view class="content">
       <text class="cuIcon-edit lg text-blue"></text>
         <text class="text-grey">补全信息</text>
       </view>
     </view>
-</view>
+</view> -->
 <view class="cu-list menu sm-border card-menu margin-top">
-     <view class="cu-item arrow"  bindtap="goToabout">
-      <view class="content">
+  <view class="cu-item arrow" bindtap="goToabout">
+    <view class="content">
       <text class="cuIcon-group lg text-blue"></text>
-        <text class="text-grey">关于我们</text>
-      </view>
+      <text class="text-grey">关于我们</text>
     </view>
+  </view>
 </view>
 <view class="copyright">
   <text class="text-grey text-xs">© 北京美兰德信息咨询有限公司 技术支持</text>
 </view>
 
-<view class="cu-modal bottom-modal {{modalName=='bottomModal'?'show':''}}">
+<view class="cu-modal bottom-modal {{modalName=='bottomModal'?'show':''}}" style="padding-bottom: 15%;">
   <view class="cu-dialog">
     <view class="cu-bar bg-white">
       <view class="action text-green" bind:tap="updateUserInfoByWX">确定</view>
@@ -61,38 +80,17 @@
     </view>
     <view class="padding-xl">
       <view data-weui-theme="{{theme}}">
-          <button class="avatar-wrapper" open-type="chooseAvatar" bind:chooseavatar="onChooseAvatar">
-            <image class="avatar" src="{{avatarUrl}}"></image>
-          </button>
-          <mp-form>
-            <mp-cells>
-              <mp-cell>
-                <input type="nickname" class="weui-input" placeholder="请输入昵称" bindblur="getNickName" />
-              </mp-cell>
-            </mp-cells>
-          </mp-form>
-        </view>
-    </view>
-  </view>
-</view>
-
-<!-- <view class="cu-modal bottom-modal {{modalName=='bottomModal'?'show':''}}">
-  <view class="cu-dialog">
-    <view class="padding-xl">
-      <view class="padding flex flex-direction">
-        <view data-weui-theme="{{theme}}">
-          <button class="avatar-wrapper" open-type="chooseAvatar" bind:chooseavatar="onChooseAvatar">
-            <image class="avatar" src="{{avatarUrl}}"></image>
-          </button>
-          <mp-form>
-            <mp-cells>
-              <mp-cell>
-                <input type="nickname" class="weui-input" placeholder="请输入昵称" />
-              </mp-cell>
-            </mp-cells>
-          </mp-form>
-        </view>
+        <button class="avatar-wrapper" open-type="chooseAvatar" bind:chooseavatar="onChooseAvatar">
+          <image class="avatar" src="{{avatarUrl}}"></image>
+        </button>
+        <mp-form>
+          <mp-cells>
+            <mp-cell>
+              <input type="nickname" class="weui-input" placeholder="请输入昵称" bindblur="getNickName" />
+            </mp-cell>
+          </mp-cells>
+        </mp-form>
       </view>
     </view>
   </view>
-</view> -->
+</view>

@@ -1,5 +1,5 @@
 const util = require('../../utils/util_time.js')
-//import regeneratorRuntime from '../../utils/runtime.js'
+// import regeneratorRuntime from '../../utils/runtime.js'
 // 引入跳转js
 import router from '../../utils/router.js';
 var app = getApp();
@@ -209,7 +209,7 @@ Page({
       fontSize35:parseInt(fontSize)+4,
       fontSize28:parseInt(fontSize)-2
     })
-    console.log("任务id：", this.data.taskId, ", 项目id：", this.data.projectId)
+    //console.log("任务id：", this.data.taskId, ", 项目id：", this.data.projectId)
     //获取数据
     that.detail();
     //that.getGovPro();
@@ -1055,8 +1055,8 @@ Page({
   ChooseImage(e) {
     wx.chooseImage({
       count: 1, //默认9
-      sizeType: ['original', 'compressed'], //可以指定是原图还是压缩图，默认二者都有
-      sourceType: ['album', 'camera'], //从相册选择
+      sizeType: ['compressed'], //可以指定是原图还是压缩图，默认二者都有
+      sourceType: ['camera'],
       success: (res) => {
         if (this.data.imgList.length != 0) {
           this.setData({
@@ -1084,7 +1084,7 @@ Page({
       'poster': ''
     };
     wx.chooseVideo({
-      sourceType: ['album', 'camera'],
+      sourceType: ['camera'],
       maxDuration: 30,
       camera: 'back',
       success: (res) => {
@@ -1137,13 +1137,13 @@ Page({
     });
   },
   ViewVideoForreport(e) {
-    console.log("视频的啥？：", e);
-    this.VideoContext = wx.createVideoContext('reportVideo' + e.currentTarget.dataset.url);
+    //console.log("视频的啥？：", e);
+    this.VideoContext = wx.createVideoContext('reportVideo' + e.currentTarget.dataset.index);
     this.VideoContext.requestFullScreen(0);
   },
   ViewVideoForreport_Dep(e) {
-    console.log("部门视频的啥？：", e);
-    this.VideoContext = wx.createVideoContext('reportVideoDep' + e.currentTarget.dataset.url);
+    //console.log("部门视频的啥？：", e);
+    this.VideoContext = wx.createVideoContext('reportVideoDep' + e.currentTarget.dataset.index);
     this.VideoContext.requestFullScreen(0);
   },
 
@@ -1288,7 +1288,7 @@ Page({
     })
     for (var index = 0; index < reportImg.length; index++) {
       //举报图片
-      await that.uploadImage(reportImg[index]).then((res) => {
+      await that.uploadImage(reportImg[index],index).then((res) => {
         // console.log("图片上传完了resourceList:",that.data.resourceList.length);
 
       })
@@ -1319,12 +1319,6 @@ Page({
               title: '资源上传中',
               mask:true
             })
-      // wx.showToast({
-      //   title: '资源上传中',
-      //   icon: 'none',
-      //   duration: 1000,
-      //   mask: true
-      // })
       console.log("全部上传成功了")
       that.uploadAnswerTrue();
       wx.hideLoading()
@@ -1342,14 +1336,77 @@ Page({
 
     }
   },
+  //举报图片集合
+  // uploadImage: function (filePath, index) {
+  //   var that = this;
+  //   var requestUrl = that.data.requestUrl; //请求路径
+  //   //举报图片集合
+  //   var reportImg = that.data.imgList;
+  //   //console.log("图片长传集合：", reportImg, "图片长度：", reportImg.length)
+  //   var i = that.data.i;
+  //   var success = that.data.success;
+  //   var fail = that.data.fail;
+  //   var resourceList = that.data.resourceList;
+
+  //   var terminalUserId = that.data.terminalUserId;
+  //   var projectId = that.data.projectId;
+  //   var taskId = that.data.taskId;
+  //   var code = that.data.code;
+  //   var key = new Date().getTime() + '_'+index
+  //   //上传举报图片
+  //   return new Promise((resolve, reject) => {
+  //     wx.uploadFile({
+  //       url: requestUrl + '/public/fieldTask/upload',
+  //       name: 'reportImg-' + key,
+  //       filePath: filePath,
+  //       formData: {
+  //         'path': 'reportImg-' + key,
+  //         'taskId':taskId,
+  //         'projectId': projectId,
+  //         'type': 0,
+  //         'code': code
+  //       },
+  //       success(res) {
+  //         console.log('提交的key:'+key)
+  //         console.log('提交的filePath:'+filePath)
+
+  //         var imageMap = JSON.parse(res.data);
+  //         if (imageMap.url != null && imageMap.url != '') {
+  //           console.log("新的提交数据：", imageMap)
+  //           // 操作成功
+  //           resourceList.push({
+  //             url: imageMap.url,
+  //             type: 0,
+  //             name: key,
+  //             status:1
+  //           })
+  //           resolve(res.data)
+  //         } else {
+  //           wx.showToast({
+  //             title: '图片资源上传失败',
+  //             icon: 'none',
+  //             duration: 1000,
+  //             mask: true
+  //           })
+  //         }
+
+  //       },
+  //       //请求失败
+  //       fail: function (err) {},
+  //       complete: () => {
+
+  //       }
+  //     })
+  //   })
+  // },
 
   //举报图片集合
-  uploadImage: function(filePath) {
+  uploadImage:function(filePath,index) {
     var that = this;
     var requestUrl = that.data.requestUrl; //请求路径
     //举报图片集合
     var reportImg = that.data.imgList;
-    console.log("图片长传集合：", reportImg, "图片长度：", reportImg.length)
+    //console.log("图片长传集合：", reportImg, "图片长度：", reportImg.length)
     var i = that.data.i;
     var success = that.data.success;
     var fail = that.data.fail;
@@ -1359,17 +1416,18 @@ Page({
     var projectId = that.data.projectId;
     var taskId = that.data.taskId;
     var code = that.data.code;
-
+    var key = new Date().getTime() + '_'+index
 
     //上传举报图片
     //
     return new Promise((resolve, reject) => {
+      console.log(key)
       wx.uploadFile({
         url: requestUrl + '/public/fieldTask/upload',
         filePath: filePath,
-        name: 'reportImg' + i + terminalUserId,
+        name: 'reportImg' + key,
         formData: {
-          'path': 'reportImg' + i + terminalUserId,
+          'path': 'reportImg' + key,
           'type': '0',
           'projectId': projectId,
           'taskId': taskId,
@@ -1385,7 +1443,7 @@ Page({
             resourceList.push({
               url: imageMap.url,
               type: 0,
-              name: new Date().getTime() + '_'+i,
+              name: key,
               status:1
             })
 
@@ -1420,8 +1478,7 @@ Page({
 
       })
     })
-
-  },
+   },
   //举报视频集合
   uploadVideo: function(filePath) {
     var that = this;

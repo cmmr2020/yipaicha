@@ -14,13 +14,15 @@ Page({
     avataUrl:'',
     icon: ['right'],
     canIUse: wx.canIUse('button.open-type.getUserInfo'),
-      hidden: false,
+     hidden: false,
      hidden1: true,
      //openid
       openid:'',
       userInfo: {},
-      headeSrcPath: '../../images/ic_me.png',
+      headeSrcPath: defaultAvatarUrl,//'../../images/ic_me.png',
+      userName: "",
       userNickName: "微信用户",
+      isLogin:false,
       avatarUrl: defaultAvatarUrl,
       theme: wx.getSystemInfoSync().theme,
       modalName:'',
@@ -30,30 +32,28 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad(option) {
-    //console.log(option)
-    // this.wxLogin();
-    //查看是否授权
-    // wx.getSetting({
-    //   success: function (res) {
-    //     if (res.authSetting['scope.userInfo']) {
-    //       console.log("用户授权了");
-    //     } else {
-    //       //用户没有授权
-    //       console.log("用户没有授权");
-    //     }
-    //   }
-    // })
- 
+    let that = this
+    if(app.nickname){
+      that.setData({
+        userNickName:app.nickname
+      })
+    }
+    if(app.headUrl){
+      that.setData({
+        headeSrcPath:app.headUrl
+      })
+    }
   },
   onShow() {
     var that = this;
     var openid = app.openid;
     var requestUrl = app.globalData.requestUrl;
-    if(app.departmentName && app.terminalName){
+    if(app.terminalName){
       that.setData({
         openid: openid,
         requestUrl:requestUrl,
-        userNickName: app.terminalName
+        userName: app.terminalName,
+        isLogin:true
       })
     }else{
       that.setData({
@@ -63,8 +63,8 @@ Page({
     }
 
     let rightId = wx.getStorageSync('rightId') || 0
-    //菜单类型0时  个人中心index为2  其他为3
-    let num = rightId === 0 ? 2 : 3
+    //菜单类型0时  个人中心index为1  其他为2
+    let num = rightId === 0 ? 1 : 2
     if (typeof this.getTabBar === 'function' &&
       this.getTabBar()) {
       this.getTabBar().setData({
@@ -166,30 +166,108 @@ bindGetUserInfo: function (res) {
     })
   },
   updateUserInfoByWX(){
-    var requestUrl = this.data.requestUrl;
-    var openId = this.data.openid;
-    var n_name = this.data.temp_userNickName
-        //调用全局 请求方法
-      app.wxRequest(
-        'POST',
-        requestUrl + '/member/manage/updateUserForWx',
-        {
-            "openId":openId,
-            "nickName":n_name,
-        },
-        app.seesionId,
-        (res) =>{
+    let that = this;
+    // console.log('昵称:',that.data.temp_userNickName)
+    // console.log('头像:',that.data.avatarUrl)
+    var requestUrl = that.data.requestUrl;
+    var openId = that.data.openid;
+    var n_name = that.data.temp_userNickName
+    if(that.data.avatarUrl == defaultAvatarUrl){
+      app.msg('请先设置头像')
+    }
+    wx.showLoading();
+    wx.uploadFile({
+      url: requestUrl + '/member/manage/updateUserForWx',
+      filePath: that.data.avatarUrl,
+      name: 'avatarUrl_'+openId,
+      header: {
+        'content-type':'application/x-www-form-urlencoded',
+        'Accept': 'application/json',
+        "cookie":app.seesionId
+       },
+      formData: {
+        'path':'avatarUrl_'+openId,
+        "openId":openId,
+        "nickName":n_name
+      },
+      success(res) {
           console.log(res)
-          this.setData({
-            headeSrcPath:this.data.avatarUrl,
+          that.setData({
+            headeSrcPath:that.data.avatarUrl,
             userNickName:n_name
           })
-          this.hideModal()
-        },
-        (err) =>{
+          that.hideModal()
+      },
+      //请求失败
+      fail: function (err) {
+      },
+      complete: () => {
+        wx.hideLoading()
+      }
+    })
+        //调用全局 请求方法
+      // app.wxRequest(
+      //   'POST',
+      //   requestUrl + '/member/manage/updateUserForWx',
+      //   {
+      //       "openId":openId,
+      //       "nickName":n_name,
+      //   },
+      //   app.seesionId,
+      //   (res) =>{
+      //     console.log(res)
+      //     this.setData({
+      //       headeSrcPath:this.data.avatarUrl,
+      //       userNickName:n_name
+      //     })
+      //     this.hideModal()
+      //   },
+      //   (err) =>{
 
+      //   }
+      // )
+
+  },
+  loginOut(){
+    var requestUrl = this.data.requestUrl;
+    wx.showModal({
+      title: '提示',
+      content: '您是否退出当前帐号?',
+      success (res) {
+        if (res.confirm) {
+          //console.log('用户点击确定')
+              //调用全局 请求方法
+            app.wxRequest(
+              'POST',
+              requestUrl + '/member/manage/userLoginOut',
+              {
+                  "openId":app.openid
+              },
+              app.seesionId,
+              (res) =>{
+                console.log(res)
+                if(res.status = 'success'){
+                  //清空登录信息
+                  app.departmentId = '',//当前账号所属部门id
+                  app.departmentName ='',//当前账号所属部门名称
+                  app.terminalUserId ='',//登录用户id
+                  app.terminalName ='',//登录用户名称
+                  //改变tabbar
+                  wx.setStorageSync('rightId', 0)
+                  app.changeUserRight()
+                  wx.reLaunch({
+                    url: '../menuBack/menuBack?c1='+wx.getStorageSync('code')+'&c2='+wx.getStorageSync('project_code')
+                  })
+                }else{
+                  app.alert('操作失败')
+                }
+              },
+              (err) =>{
+                app.alert('操作失败')
+              }
+            )
         }
-      )
-
+      }
+    })
   }
 })

@@ -4,12 +4,6 @@ Component({
     rightId:wx.getStorageSync('rightId') || 0,
     list: [
       {
-        "pagePath": "/pages/index/index",
-        "text": "首页",
-        "iconPath": "../images/home.png",
-        "selectedIconPath": "../images/home1.png"
-      },
-      {
         "pagePath": "/pages/jubao/jubao",
         "text": "上报",
         "iconPath": "../images/camera.png",
@@ -22,12 +16,7 @@ Component({
         "selectedIconPath": "../images/user1.png"
       }
     ],
-    list1: [{
-      "pagePath": "/pages/index/index",
-      "text": "首页",
-      "iconPath": "../images/home.png",
-      "selectedIconPath": "../images/home1.png"
-    },
+    list1: [
     {
       "pagePath": "/pages/jubao/jubao",
       "text": "上报",
@@ -47,12 +36,7 @@ Component({
       "selectedIconPath": "../images/user1.png"
     }
     ],
-    list2: [{
-      "pagePath": "/pages/index/index",
-      "text": "首页",
-      "iconPath": "../images/home.png",
-      "selectedIconPath": "../images/home1.png"
-    },
+    list2: [
     {
       "pagePath": "/pages/jubao/jubao",
       "text": "上报",
@@ -72,6 +56,76 @@ Component({
       "selectedIconPath": "../images/user1.png"
     }
     ]
+    // list: [
+    //   {
+    //     "pagePath": "/pages/index/index",
+    //     "text": "首页",
+    //     "iconPath": "../images/home.png",
+    //     "selectedIconPath": "../images/home1.png"
+    //   },
+    //   {
+    //     "pagePath": "/pages/jubao/jubao",
+    //     "text": "上报",
+    //     "iconPath": "../images/camera.png",
+    //     "selectedIconPath": "../images/camera1.png"
+    //   },
+    //   {
+    //     "pagePath": "/pages/user/user",
+    //     "text": "个人中心",
+    //     "iconPath": "../images/user.png",
+    //     "selectedIconPath": "../images/user1.png"
+    //   }
+    // ],
+    // list1: [{
+    //   "pagePath": "/pages/index/index",
+    //   "text": "首页",
+    //   "iconPath": "../images/home.png",
+    //   "selectedIconPath": "../images/home1.png"
+    // },
+    // {
+    //   "pagePath": "/pages/jubao/jubao",
+    //   "text": "上报",
+    //   "iconPath": "../images/camera.png",
+    //   "selectedIconPath": "../images/camera1.png"
+    // },
+    // {
+    //   "pagePath": "/pages/dept_type_task_index/dept_type_task_index",
+    //   "text": "整改上报",
+    //   "iconPath": "../images/work.png",
+    //   "selectedIconPath": "../images/work1.png"
+    // },
+    // {
+    //   "pagePath": "/pages/user/user",
+    //   "text": "个人中心",
+    //   "iconPath": "../images/user.png",
+    //   "selectedIconPath": "../images/user1.png"
+    // }
+    // ],
+    // list2: [{
+    //   "pagePath": "/pages/index/index",
+    //   "text": "首页",
+    //   "iconPath": "../images/home.png",
+    //   "selectedIconPath": "../images/home1.png"
+    // },
+    // {
+    //   "pagePath": "/pages/jubao/jubao",
+    //   "text": "上报",
+    //   "iconPath": "../images/camera.png",
+    //   "selectedIconPath": "../images/camera1.png"
+    // },
+    // {
+    //   "pagePath": "/pages/check_new_index/check_new_index",
+    //   "text": "整改审核",
+    //   "iconPath": "../images/check.png",
+    //   "selectedIconPath": "../images/check1.png"
+    // },
+    // {
+    //   "pagePath": "/pages/user/user",
+    //   "text": "个人中心",
+    //   "iconPath": "../images/user.png",
+    //   "selectedIconPath": "../images/user1.png"
+    // }
+    // ]
   },
   attached() {
     this.changeList()

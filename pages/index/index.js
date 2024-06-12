@@ -29,7 +29,7 @@ Page({
 //分享小程序
   onShareAppMessage: function (res) {
     return {
-      title: '创城公众版版小程序！',
+      title: '易拍查',
       path: '/pages/index/index',
       success: function () { },
       fail: function () { }
@@ -47,9 +47,12 @@ Page({
     })
     // console.log("这是啥",requestUrl)
     var govCode = wx.getStorageSync('code')
-    //console.log("code转过来了吗", govCode)
-    that.login(govCode);
-    wx.clearStorage()
+    var projectCode= wx.getStorageSync('project_code')
+    console.log("code转过来了吗", govCode)
+    console.log("code转过来了吗",projectCode )
+    
+    that.login(govCode,projectCode);
+    //wx.clearStorage()
   },
   onShow() {
     if (typeof this.getTabBar === 'function' &&
@@ -66,7 +69,7 @@ Page({
     //   }
     // })
   },
-  login(govCode){
+  login(govCode,projectCode){
   // 获取用户信息
     let that = this;
     var requestUrl = that.data.requestUrl;
@@ -80,16 +83,13 @@ Page({
           //发起网络请求
           wx.request({
             url: requestUrl+'/member/manage/userLogin',
-            // url: 'https://wxpu.diaochaonline.com/member/manage/userLogin',
-            // url: 'http://47.92.38.70:8285/member/manage/userLogin',
             method: "GET",
             header: {
               "Content-Type": "application/json"
             },
             data: {
                govCode: govCode,
-               //govCode: 'TJBH01CS',//'测试机',
-               //govCode: 'BJSCYQ',//线上
+               projectCode:projectCode,
                code: res.code,
                appId:appId
             },
@@ -118,8 +118,10 @@ Page({
                 var app = getApp();
                 app.openid = res.data.retObj.openid;
                 app.projectId = res.data.retObj.projectId;
+                app.projectName = res.data.retObj.projectName;
                 app.sessionKey = res.data.retObj.sessionKey;
                 app.nickname = res.data.retObj.nickname;
+                app.headUrl = res.data.retObj.headUrl;
                 app.projectLat = res.data.retObj.projectLat;
                 app.projectLog = res.data.retObj.projectLog;
                 app.govName = res.data.retObj.govName;
@@ -135,19 +137,18 @@ Page({
                 wx.setStorageSync('bgColor','purple');
                 let menuType = 0;
                 if(res.data.retObj2){
-                  var list = res.data.retObj2.qxMenus;
-                  var terminalUserName = res.data.retObj2.terminalUserName;
+                  var list = res.data.retObj2.qxRole;
+                  var terminalUserName = res.data.retObj2.sysUserName;
                   var departmentName = res.data.retObj2.departmentName
-                  app.terminalUserId = res.data.retObj2.terminalUserId;
-                  app.terminalName = res.data.retObj2.terminalUserName.split('#')[1];
-                  app.departmentId = res.data.retObj2.departmentId;
+                  app.terminalUserId = res.data.retObj2.sysUserId;
+                  app.terminalName = res.data.retObj2.sysUserName.split('#')[1];
                   app.departmentName = departmentName;
                 //此角色只可设置一个  tab-bar最多可配置五个  最少两个
                 for(let i=0; i<list.length; i++){
                   let menu = list[i]
-                  if(menu.code == 'TC-0014'){//整改上报
+                  if(menu.name == '责任单位-P'){//整改上报
                     menuType = 1
-                  }else if(menu.code == 'TC-0015'){//整改上传
+                  }else if(menu.name == '创文办-P'){//整改上传
                     menuType = 2
                   }
                 }
@@ -175,7 +176,7 @@ Page({
                   
                 }else{
                   //加载轮播图
-                    that.getSwiperList();
+                    //that.getSwiperList();
                     //加载问题栏
                     that.getProblemType();
                     //默认第一次加载任务列表（全部）

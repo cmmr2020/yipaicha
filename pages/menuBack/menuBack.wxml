@@ -1,0 +1,7 @@
+<view class='{{loadShow=="true"?"show":"hide"}}'>
+  <view class='cu-load load-modal' wx:if="{{loadModal}}">
+    <image src='/images/logo_user.jpg' class='png' mode='aspectFit'></image>
+    <view class='blue-text'>加载中...</view>
+  </view>
+  <image class="headimg" src="/images/hello1.jpg"> </image>
+</view>

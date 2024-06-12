@@ -1,7 +1,8 @@
 {
   "description": "项目配置文件",
   "packOptions": {
-    "ignore": []
+    "ignore": [],
+    "include": []
   },
   "setting": {
     "urlCheck": false,
@@ -43,12 +44,8 @@
   },
   "compileType": "miniprogram",
   "libVersion": "2.11.0",
-  "appid": "wxfe404812ffb36d6a",
-  "projectname": "wx-public",
-  "debugOptions": {
-    "hidedInDevtools": []
-  },
-  "isGameTourist": false,
+  "appid": "wxa677dcf2b71eae4b",
+  "projectname": "wx-yipaicha",
   "simulatorType": "wechat",
   "simulatorPluginLibVersion": {},
   "condition": {
@@ -142,5 +139,9 @@
         }
       ]
     }
+  },
+  "editorSetting": {
+    "tabIndent": "insertSpaces",
+    "tabSize": 2
   }
 }

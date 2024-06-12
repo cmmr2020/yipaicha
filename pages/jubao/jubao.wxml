@@ -1,3 +1,4 @@
+
 <!-- 地图 -->
 <view class="container padding bg-white " hover-stop-propagation="false" hover-class="none">
   <!-- 地图控件 -->
@@ -11,28 +12,29 @@
 <!-- 地址定位 -->
 <view class="cu-bar  solid-bottom">
   <view class="action">
-    <text class="cuIcon-title text-blue"></text>地址定位
+    <text class="cuIcon-title text-blue"></text>上报地点
   </view>
    <view class="action">
+    <button class="cu-btn bg-blue shadow" catchtap="manualLocation">手动定位</button><text>　</text>
     <button class="cu-btn bg-blue shadow" catchtap="currentLocation">刷新</button><text>　</text>
-    <button class="cu-btn bg-blue shadow" hidden="{{addIsShowA}}" bind:tap="addressGoA">地址拍摄</button>
-     <button class="cu-btn bg-blue shadow" hidden="{{addIsShowB}}" bind:tap="addressGoB">取消拍摄</button>
+    <!-- <button class="cu-btn bg-blue shadow" hidden="{{addIsShowA}}" bind:tap="addressGoA">地址拍摄</button>
+     <button class="cu-btn bg-blue shadow" hidden="{{addIsShowB}}" bind:tap="addressGoB">取消拍摄</button> -->
   </view>
 </view>
 
 
 
-<view class="cu-form-group  bg-white">
-  <input class="weui-input" value="{{address}}" disabled="true"/>
+<view class="cu-form-group  bg-white" style="pointer-events: none;">
+  <textarea class="weui-input" value="{{address}}"></textarea>
 </view>
 
 <view class="cu-bar  solid-bottom">
   <view class="action">
-    <text class="cuIcon-title text-blue"></text>点位名称
+    <text class="cuIcon-title text-blue"></text>位置描述
   </view>
 </view>
 <view class="cu-form-group  bg-white">
-  <input class="weui-input" type="text" placeholder="请输入，您当前所处的点位名称。"  	bindinput="saveLocationName"	confirm-type="done"/>
+  <input class="weui-input" type="text" placeholder="填写所在位置的详细描述。（选填）"  	bindinput="saveLocationName"	confirm-type="done"/>
 </view>
 
 
@@ -44,7 +46,7 @@
 
 <view class="cu-bar  solid-bottom">
   <view class="action">
-    <text class="cuIcon-title text-blue"></text>举报问题分类
+    <text class="cuIcon-title text-blue"></text>信息类型
   </view>
   <view class="action">
     <button class="cu-btn bg-blue shadow" bindtap="showModal" data-target="ChooseModal">选择</button>
@@ -54,7 +56,9 @@
   <view class="text-cut padding bg-white radius" style="width:100%">
     <view class="flex flex-wrap">
       <view class="padding-xs" wx:for="{{showProblemType}}" wx:key="index" wx:if="{{item.name!='gray'}}">
-        <view class="cu-tag bg-blue {{item.checked==true?'show':'hide'}}" bindtap="alertTip" data-tips="{{item.tips}}" data-sortname="{{item.name}}">{{item.name}}<view class="cu-tag badge {{item.tips==''?'hide':'show'}}" style="margin-right:1%">?</view></view>      
+        <view class="cu-tag bg-blue {{item.checked==true?'show':'hide'}}" bindtap="alertTip" data-tips="{{item.tips}}" data-sortname="{{item.name}}">{{item.name}}
+        <!-- <view class="cu-tag badge {{item.tips==''?'hide':'show'}}" style="margin-right:1%;display:flex">?</view> -->
+        </view>      
       </view>
     </view>
   </view>
@@ -107,15 +111,15 @@
 
 <view class="cu-bar  solid-bottom">
   <view class="action">
-    <text class="cuIcon-title text-blue"></text>举报图片上传
+    <text class="cuIcon-title text-blue"></text>上报图片、视频
   </view>
 </view>
 <view class="cu-bar bg-white">
   <view class="action">
-    上传图片或视频
+    上传图片或视频（限最多4张图片和1段视频）
   </view>
   <view class="action">
-    {{reportlength}}/4
+    {{reportlength}}/5
   </view>
 </view>
 <view class="cu-form-group">
@@ -133,7 +137,7 @@
       </view>
     </view>
 
-    <view class="solids" bindtap="showModal2" wx:if="{{reportlength<4}}" data-target="Modal" data-type="report">
+    <view class="solids" bindtap="showModal2" wx:if="{{reportlength<5}}" data-target="Modal" data-type="report">
       <text class="cuIcon-cameraadd"></text>
     </view>
   </view>
@@ -177,15 +181,19 @@
 
 <view class="cu-bar  solid-bottom">
   <view class="action">
-    <text class="cuIcon-title text-blue"></text>举报描述
+    <text class="cuIcon-title text-blue"></text>信息描述
   </view>
 </view>
 <!-- !!!!! placeholder 在ios表现有偏移 建议使用 第一种样式 -->
-<view class="cu-form-group">
+<view class="cu-form-group" style="position: relative;">
   <textarea  value="{{desc}}"  maxlength="-1"  bindinput="textareaAInput" placeholder="请输入举报内容" ></textarea>
+  <view class="cu-item" style="position: absolute;right: 3%;margin-top: 15%;font-size: 50rpx;" button-disabled="{{bottomButtonDisabled}}" bindtouchstart="streamRecord" bindtouchend="streamRecordEnd"><text class="cuIcon-voicefill lg text-gray"></text></view>
 </view>
-<button type="primary" class="cu-btn block bg-blue margin-tb-sm lg" button-disabled="{{bottomButtonDisabled}}" bindtouchstart="streamRecord" bindtouchend="streamRecordEnd">按下录音，语音转换</button>
-<button hidden="{{hiddenUser}}" class="cu-btn block bg-blue margin-tb-sm lg" bindtap='submit_syn'>提交</button>
+<!-- <button type="primary" class="cu-btn block bg-blue margin-tb-sm lg" button-disabled="{{bottomButtonDisabled}}" bindtouchstart="streamRecord" bindtouchend="streamRecordEnd">按下录音，语音转换</button> -->
+<view class="margin-tb-sm text-center">
+  <button hidden="{{hiddenUser}}" class="cu-btn round bg-blue lg shadow" bindtap='submit_syn' style="width: 50%;margin-top: 2%;">提交</button>
+</view>
+
 
 
 
@@ -210,8 +218,8 @@
     </view>
     <!-- <view class="padding-xl justify-end"> -->
     <view class="padding flex flex-direction">
-      <button class="cu-btn bg-green lg" bindtap='ChooseImage'>上传照片 </button>
-      <button class="cu-btn bg-blue margin-tb-sm lg" bindtap='chooseVideo'>上传视频</button>
+      <button wx:if="{{imgList.length < 4}}" class="cu-btn bg-green lg" bindtap='ChooseImage'>上传照片 </button>
+      <button wx:if="{{videoList.length < 1}}" class="cu-btn bg-blue margin-tb-sm lg" bindtap='chooseVideo'>上传视频</button>
     </view>
     <!-- </view> -->
   </view>

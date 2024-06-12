@@ -27,24 +27,34 @@ Page({
     indexDep: null,
     pickerDep: [],
     TabCur: 3,
+    // problemType_user: [{
+    //   id: 3,
+    //   name: '初次待审核'
+    // }, {
+    //   id: 2, //接口需要+1
+    //   name: '多次待审核'
+    // }, {
+    //   id: 1,
+    //   name: '未整改'
+    // }, /*{
+    //   id: 5,
+    //   name: '长期整改'
+    // },*/ {
+    //   id: 0,
+    //   name: '整改合格'
+    // }, {
+    //   id: 4,
+    //   name: '权属异议'
+    // }],
     problemType_user: [{
       id: 3,
-      name: '初次待审核'
-    }, {
-      id: 2, //接口需要+1
-      name: '多次待审核'
-    }, {
-      id: 1,
+      name: '待审核'
+    },{
+      id: 9,
       name: '未整改'
-    }, /*{
-      id: 5,
-      name: '长期整改'
-    },*/ {
+    },{
       id: 0,
       name: '整改合格'
-    }, {
-      id: 4,
-      name: '权属异议'
     }],
     //项目id
     projectId: '',
@@ -75,6 +85,7 @@ Page({
     //权属异议直接默认日期
     dissent_date: util.formatTimeByNew(new Date(), 'Y-M-D'),
     children_page_data:'',//子页面返回的任务列表参数
+    projectList:[]//项目列表
   },
   /**
    * 生命周期函数--监听页面加载
@@ -86,6 +97,9 @@ Page({
     var fontSize = wx.getStorageSync('fontSize');
     var bgColor = wx.getStorageSync('bgColor');
     var terminalUserId = app.terminalUserId; //调查员id
+    wx.setNavigationBarTitle({
+      title: app.projectName,
+    })
     that.setData({
       projectId: projectId,
       requestUrl: requestUrl,
@@ -96,6 +110,8 @@ Page({
       fontSize28: parseInt(fontSize) - 2,
       fontSize20: parseInt(fontSize) - 10,
     })
+    //加载项目列表
+    that.getProjectList();
     //that.getDepList();
   },
   onShow:function(){
@@ -103,10 +119,10 @@ Page({
     if (typeof this.getTabBar === 'function' &&
     this.getTabBar()) {
     this.getTabBar().setData({
-      selected: 2
+      selected: 1
     })
   }
-    console.log(that.data.children_page_data)
+    //console.log(that.data.children_page_data)
     if(that.data.children_page_data){
       var task_list_param = that.data.children_page_data
       var pageScrollto_id = task_list_param.pageScrollto_id
@@ -145,6 +161,60 @@ Page({
       this.getCheckFieldTaskList()
     }
     }
+  },
+  showListModel(e){
+    var that = this;
+    that.setData({
+      modalName: e.currentTarget.dataset.target
+    })
+    //console.log(that.data.modalName)
+  },
+    /**
+   * 获取当前政府项目列表
+   */
+  getProjectList(){
+    //console.log('政府code',wx.getStorageSync('code'))
+    let govCode = wx.getStorageSync('code');
+    let that = this;
+    var requestUrl = that.data.requestUrl;
+    //调用全局 请求方法
+    app.wxRequest(
+      'GET',
+      requestUrl + "/home/manage/getPublicProjectList",
+      {
+        "govCode": govCode
+      },
+      app.seesionId,
+      (res) =>{
+        if (res.data.status === "success") {
+          console.log(res)
+          that.setData({
+            projectList: res.data.retObj
+          })
+        }
+      },
+      (err) =>{
+        app.msg('系统错误')
+      }
+    )
+  },
+    /**
+   * 查询项目任务列表
+   */
+  showProjectTask(e){
+    let that =this;
+    wx.setNavigationBarTitle({
+      title: e.currentTarget.dataset.name,
+    })
+    that.setData({
+      taskList: [],
+      maxPageNum: 0, //总页数
+      isNull: '',
+      TabCur:3,
+      projectId:e.currentTarget.dataset.id,
+    })
+   //加载任务列表
+    this.getCheckFieldTaskList()
   },
   //获取项目下部门
   getDepList: function () {
@@ -247,14 +317,14 @@ Page({
       }
       that.data.task_request_dataParam.terminalUserId = terminalUserId;
       if (TabCur == 3) {//初次待审核
-        that.data.task_request_dataParam.result = 3,
-          that.data.task_request_dataParam.auditType = 0
+        that.data.task_request_dataParam.result = 3
+        //that.data.task_request_dataParam.auditType = 0
       } else if (TabCur == 2) {//多次待审核
         that.data.task_request_dataParam.result = 3
         that.data.task_request_dataParam.auditType = 1
-      } else if (TabCur == 1) {//未整改
+      } else if (TabCur == 9) {//未整改
         that.data.task_request_dataParam.result = 1
-        that.data.task_request_dataParam.longTask = 0
+        //that.data.task_request_dataParam.longTask = 0
       } else if (TabCur == 5) {//长期整改
         that.data.task_request_dataParam.result = 1
         that.data.task_request_dataParam.longTask = 1
@@ -274,7 +344,7 @@ Page({
       app.seesionId,
       (res) => {
         if (res.data.status === "success") {
-          if (res.data.retObj.list) {
+          if (res.data.retObj.list && res.data.retObj.list.length > 0) {
             var list = res.data.retObj.list;
             var arr = list;
             console.log(list)
@@ -310,15 +380,10 @@ Page({
             //console.log("待审核数据：", that.data.taskList)
           } else {
             that.setData({
-              isNull: 'true',
+              //isNull: 'true',
               modalName: ''
             })
-            wx.showToast({
-              title: '该状态下无任务',
-              icon: 'none', // "success", "loading", "none"
-              duration: 1500,
-              mask: false,
-            })
+            app.msg('暂无数据')
           }
         } else {
           wx.showToast({
@@ -405,7 +470,7 @@ Page({
             }
           } else {
             that.setData({
-              isNull: 'true',
+              //isNull: 'true',
               modalName: ''
             })
             wx.showToast({

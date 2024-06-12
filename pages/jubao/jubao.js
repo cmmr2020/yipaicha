@@ -14,13 +14,13 @@ const manager = plugin.getRecordRecognitionManager()
 
 Page({
   data: {
-    rightId:wx.getStorageSync('rightId') || 0,
-    requestUrl: '',//服务器路径
+    rightId: wx.getStorageSync('rightId') || 0,
+    requestUrl: '', //服务器路径
     address: "正在获取地址...",
     longitude: 116.397452,
     latitude: 39.909042,
     // key: 'W4WBZ-TUD65-IDAIR-QPM36-HMFQ5-CGBZP',
-    key:'MYQBZ-CZ2W3-N5Z3H-YM2RD-BNDGZ-HHB2O',
+    key: 'MYQBZ-CZ2W3-N5Z3H-YM2RD-BNDGZ-HHB2O',
     //框架属性
     CustomBar: app.globalData.CustomBar,
     //分类显示判断标志
@@ -64,46 +64,47 @@ Page({
     // 用户地址
     userCity: '',
     bottomButtonDisabled: false, // 底部按钮disabled
-    recording: false,  // 正在录音
-    recordStatus: 0,  // 状态： 0 - 录音中 1- 翻译中 2 - 翻译完成/二次翻译
+    recording: false, // 正在录音
+    recordStatus: 0, // 状态： 0 - 录音中 1- 翻译中 2 - 翻译完成/二次翻译
     resourceList: [], // 封装资源列表
-    hidden:false,
-    hiddenUser:false,
+    hidden: false,
+    hiddenUser: false,
     canIUse: wx.canIUse('button.open-type.getUserInfo'),
-    addIsShow:true,
-    addIsShowB:true,
-    addIsShowA:false,
-    i:0,
-    sortTipIsShow:false,
-    sortNameBymodal:'',
-    sortTipBymodal:'',
-    locationName:'',
+    addIsShow: true,
+    addIsShowB: true,
+    addIsShowA: false,
+    i: 0,
+    sortTipIsShow: false,
+    sortNameBymodal: '',
+    sortTipBymodal: '',
+    locationName: '',
+    isDisabled: true, //解决文本框 禁用显示空白的bug
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
-  onLoad: function(options) {
+  onLoad: function (options) {
     var requestUrl = app.globalData.requestUrl;
-     var openid = app.openid;
+    var openid = app.openid;
     var projectId = wx.getStorageSync('projectId');
-    var nickname =  wx.getStorageSync('nickname');
-     // console.log("nickname",nickname)
-     if (nickname) {
+    var nickname = wx.getStorageSync('nickname');
+    console.log("projectId", projectId)
+    if (nickname) {
       // console.log("有值")
       this.setData({
-        hidden:true
+        hidden: true
       })
-     }else{
+    } else {
       // console.log("无值")
       this.setData({
-        hiddenUser:true
+        hiddenUser: true
       })
-     }
+    }
     this.setData({
-      requestUrl:requestUrl,
-      openid:openid,
-      projectId:projectId
+      requestUrl: requestUrl,
+      openid: openid,
+      projectId: projectId
     })
     this.initRecord()
     qqmapsdk = new QQMapWX({
@@ -112,32 +113,32 @@ Page({
     this.currentLocation();
     this.getProblemType();
   },
-  onShow : function(){
+  onShow: function () {
     let that = this;
     if (typeof this.getTabBar === 'function' &&
       this.getTabBar()) {
       this.getTabBar().setData({
-        selected: 1
+        selected: 0
       })
     }
-    // app.eventBus.on('rightChange', data =>{
-    //   if(data !== this.data.rightId){
-    //     this.setData({
-    //       rightId: data
-    //     })
-    //   }
-    // })
     wx.getSetting({
-      success (res) {
+      success(res) {
         //没有的话  引导用户开启后台定位权限
-        if(!res.authSetting['scope.userLocation']){
+        if (!res.authSetting['scope.userLocation']) {
           wx.showModal({
             title: '提示',
             content: '上报问题需要获取您的位置信息,请根据引导开启权限 ！若拒绝授权,您将无法上报问题 ！',
-            success (res) {
+            success(res) {
               if (res.confirm) {
-                that.setData({
-                  modalName:'bottomModal'
+                //二次验证  若没点选系统弹出的允许  则引导用户开启定位权限
+                wx.getSetting({
+                  success(res) {
+                    if (!res.authSetting['scope.userLocation']) {
+                      that.setData({
+                        modalName: 'bottomModal'
+                      })
+                    }
+                  }
                 })
               } else if (res.cancel) {
                 wx.redirectTo({
@@ -150,33 +151,33 @@ Page({
       }
     })
   },
-  goSetting:function(){
+  goSetting: function () {
     let that = this;
     that.setData({
-      modalName:''
+      modalName: ''
     })
     wx.openSetting({
-      success (res) {
-       //console.log(res.authSetting)
-        if(res.authSetting['scope.userLocation']){
+      success(res) {
+        //console.log(res.authSetting)
+        if (res.authSetting['scope.userLocation']) {
           that.currentLocation();
         }
       }
     })
-},
+  },
   //地址拍摄的控制
-  addressGoA:function(){
+  addressGoA: function () {
     this.setData({
-      addIsShow:false,
-      addIsShowA:true,
-      addIsShowB:false
+      addIsShow: false,
+      addIsShowA: true,
+      addIsShowB: false
     })
   },
-  addressGoB:function(){
+  addressGoB: function () {
     this.setData({
-      addIsShow:true,
-      addIsShowA:false,
-      addIsShowB:true,
+      addIsShow: true,
+      addIsShowA: false,
+      addIsShowB: true,
       addressImgList: [],
       addressVideoList: []
     })
@@ -207,57 +208,25 @@ Page({
       var openid = that.data.openid;
 
       //调用全局 请求方法
-    app.wxRequest(
-      'POST',
-      requestUrl+'/member/manage/saveUser',
-      {
-          city:city,
-          country:country,
-          gender:gender,
-          language:language,
-          nickName:nickName,
-          province:province,
-          openid:openid
-      },
-      app.seesionId,
-      (res) =>{
+      app.wxRequest(
+        'POST',
+        requestUrl + '/member/manage/saveUser', {
+          city: city,
+          country: country,
+          gender: gender,
+          language: language,
+          nickName: nickName,
+          province: province,
+          openid: openid
+        },
+        app.seesionId,
+        (res) => {
 
-      },
-      (err) =>{
+        },
+        (err) => {
 
-      }
-    )
-      // wx.request({
-      //   // 必需
-      //   url: requestUrl+'/member/manage/saveUser',
-      //   data: {
-      //     city:city,
-      //     country:country,
-      //     gender:gender,
-      //     language:language,
-      //     nickName:nickName,
-      //     province:province,
-      //     openid:openid
-      //   },
-      //   method:"POST",
-      //   header: {
-      //     'Content-Type': 'application/x-www-form-urlencoded'
-      //   },
-      //   success: (res) => {
-      //     // console.log(res)
-      //     if (res.data.status==="success") {
-      //       // console.log("保存成功")
-      //     }
-      //   },
-      //   fail: (res) => {
-          
-      //   },
-      //   complete: (res) => {
-          
-      //   }
-      // })
-
-
+        }
+      )
     } else {
       //用户按了拒绝按钮
       wx.showModal({
@@ -275,10 +244,43 @@ Page({
     }
   },
   /**
-     * 按住按钮开始语音识别
-     */
+   * 按住按钮开始语音识别
+   */
   streamRecord: function (e) {
     //console.log("streamrecord", e)
+    let that = this;
+    wx.getSetting({
+      success(res) {
+        if (!res.authSetting['scope.record']) {
+          wx.authorize({
+            scope: 'scope.record',
+            success () {
+              
+            },
+            fail(){
+              wx.showModal({
+                title: '提示信息',
+                content: '您拒绝授权麦克风权限,将无法使用语音转换功能',
+                showCancel:true,
+                cancelText:'知道了',
+                confirmText:'授权',
+                success (res) {
+                  if (res.confirm) {
+                    that.setData({
+                      modalName: 'bottomModal'
+                    })
+                  } else if (res.cancel) {
+                    console.log('用户点击取消')
+                  }
+                }
+            })
+              console.log('用户拒绝')
+              return
+            }
+        })
+      }
+    }
+    })
     wx.showToast({
       title: '请按住讲话~',
       icon: 'loading',
@@ -291,8 +293,7 @@ Page({
         //console.log(res);
       }
     });
-    manager.start({
-    })
+    manager.start({})
   },
 
 
@@ -319,8 +320,8 @@ Page({
     })
   },
   /**
-    * 识别内容为空时的反馈
-    */
+   * 识别内容为空时的反馈
+   */
   showRecordEmptyTip: function () {
     this.setData({
       recording: false,
@@ -361,9 +362,9 @@ Page({
       }
       this.data.desc = text
       this.setData({
-        desc : text
+        desc: text
       })
-    
+
     }
 
     // 识别错误事件
@@ -399,30 +400,29 @@ Page({
     //调用全局 请求方法
     app.wxRequest(
       'GET',
-      requestUrl+"/home/manage/searchQuestionSorts",
-      {
+      requestUrl + "/home/manage/searchQuestionSorts", {
         "projectId": projectId
       },
       app.seesionId,
-      (res) =>{
+      (res) => {
         if (res.data.httpStatusCode === 200) {
           //console.log(res.data.retObj)
-         if(res.data.retObj == undefined){
-           wx.redirectTo({
-             url: '../error_tip/error_tip?msgCode=m_10004'
-           })
-           return
-         } 
-         for (let i = 0; i < res.data.retObj.length; i++) {
-           i.checked == false;
-         }
-         that.setData({
-           problemType: res.data.retObj
-         })
-       }
+          if (res.data.retObj == undefined) {
+            wx.redirectTo({
+              url: '../error_tip/error_tip?msgCode=m_10004'
+            })
+            return
+          }
+          for (let i = 0; i < res.data.retObj.length; i++) {
+            i.checked == false;
+          }
+          that.setData({
+            problemType: res.data.retObj
+          })
+        }
 
       },
-      (err) =>{
+      (err) => {
 
       }
     )
@@ -475,7 +475,7 @@ Page({
       })
     }
   },
-  getAddress: function(lng, lat) {
+  getAddress: function (lng, lat) {
     //根据经纬度获取地址信息
     qqmapsdk.reverseGeocoder({
       location: {
@@ -483,11 +483,11 @@ Page({
         longitude: lng
       },
       success: (res) => {
-         console.log(res)
+        console.log(res)
         // console.log(res.result.formatted_addresses.recommend)
-        this.checkExeProjectCity(res.result.address_component);
+        //this.checkExeProjectCity(res.result.address_component);
         this.setData({
-          address: res.result.formatted_addresses.recommend //res.result.address
+          address: res.result.formatted_addresses.recommend + '【' + res.result.formatted_addresses.standard_address + '】' //res.result.address
         })
       },
       fail: (res) => {
@@ -499,72 +499,90 @@ Page({
     })
   },
   //验证项目执行城市
-  checkExeProjectCity:function(UserAddrData){
+  checkExeProjectCity: function (UserAddrData) {
     let app = getApp();
     //console.log(app.projectExeCity)
     //console.log(UserAddrData)
     var flag = true;
-    if(app.projectExeCity == undefined){
-      return 
+    if (app.projectExeCity == undefined) {
+      return
     }
-    if(app.projectExeCity.length>0&&UserAddrData){
-    flag = false
+    if (app.projectExeCity.length > 0 && UserAddrData) {
+      flag = false
       var projectExeCityList = app.projectExeCity
-      for(let i=0;i<projectExeCityList.length;i++){
+      for (let i = 0; i < projectExeCityList.length; i++) {
         var level = 1;
         let ExeCity = projectExeCityList[i];
-        if(ExeCity.exeCity){
+        if (ExeCity.exeCity) {
           level = 2;
         }
-        if(ExeCity.exeCounty){
+        if (ExeCity.exeCounty) {
           level = 3;
         }
-        if(level == 1){
-            if(UserAddrData.province == ExeCity.exeProvice){
-              flag = true;
-              return;
-            }
-        }else if(level == 2){
-            if(UserAddrData.province == ExeCity.exeProvice&& UserAddrData.city == ExeCity.exeCity){
-              flag = true;
-              return;
-            }
-          }else if(level==3){
-            if(UserAddrData.province == ExeCity.exeProvice&&UserAddrData.city == ExeCity.exeCity&&UserAddrData.district == ExeCity.exeCounty){
-              flag = true;
-              return;
-            }
+        if (level == 1) {
+          if (UserAddrData.province == ExeCity.exeProvice) {
+            flag = true;
+            return;
+          }
+        } else if (level == 2) {
+          if (UserAddrData.province == ExeCity.exeProvice && UserAddrData.city == ExeCity.exeCity) {
+            flag = true;
+            return;
+          }
+        } else if (level == 3) {
+          if (UserAddrData.province == ExeCity.exeProvice && UserAddrData.city == ExeCity.exeCity && UserAddrData.district == ExeCity.exeCounty) {
+            flag = true;
+            return;
           }
         }
       }
-      if(!flag){
-        //console.log('d')
-         wx.redirectTo({
-           url: '../error_tip/error_tip?msgCode=m_10002'
-         })
-      }
+    }
+    if (!flag) {
+      //console.log('d')
+      wx.redirectTo({
+        url: '../error_tip/error_tip?msgCode=m_10002'
+      })
+    }
   },
-  getDps:function(){
-        wx.getSystemInfo({
-        success(res) {
+  getDps: function () {
+    wx.getSystemInfo({
+      success(res) {
         var isopendingwei = res.locationEnabled;
-        if(isopendingwei==false){
-            wx.showModal({
-              title: '提示',
-              content: '请先开启手机GPS定位,然后点击刷新按钮重试',
-              showCancel:false,
-              success (res) {
-                if (res.confirm) {
-                  // console.log('用户点击确定')
-                } 
-              }})
-            return
+        if (isopendingwei == false) {
+          wx.showModal({
+            title: '提示',
+            content: '请先开启手机GPS定位,然后点击刷新按钮重试',
+            showCancel: false,
+            success(res) {
+              if (res.confirm) {
+                // console.log('用户点击确定')
+              }
+            }
+          })
+          return
         }
       }
     })
 
+  },
+  manualLocation() {
+    let that = this
+    wx.chooseLocation({
+      latitude: that.data.latitude,
+      longitude: that.data.longitude,
+      success(res) {
+        that.setData({
+          latitude: res.latitude,
+          longitude: res.longitude,
+          address: res.name + '【' + res.address + '】'
+        })
+        //console.log(res)
       },
-
+      fail(res) {
+        //console.log(res)
+      }
+    })
+  },
   currentLocation() {
     //当前位置
     const that = this;
@@ -580,7 +598,7 @@ Page({
         that.getAddress(res.longitude, res.latitude);
         that.getLocationByUsert(res.longitude, res.latitude);
       },
-      fail(res){
+      fail(res) {
         console.log('获取定位失败')
         console.log(res)
       }
@@ -592,32 +610,32 @@ Page({
   },
 
   //经纬度获取用户位置
-  getLocationByUsert: function(log, lat) {
+  getLocationByUsert: function (log, lat) {
     var that = this;
     qqmapsdk.reverseGeocoder({
       location: {
         latitude: lat,
         longitude: log
       },
-      success: function(res) {
+      success: function (res) {
         let UserCity = res.result.address_component.city;
         that.setData({
           userCity: UserCity
         })
-        // console.log("用户地址：",UserCity)
+        console.log("用户地址：", UserCity)
         // that.userAndProject();
       }
     })
   },
   //经纬度获取项目位置
-  getLocationByProject: function(log, lat) {
+  getLocationByProject: function (log, lat) {
     var that = this;
     qqmapsdk.reverseGeocoder({
       location: {
         latitude: lat,
         longitude: log
       },
-      success: function(res) {
+      success: function (res) {
         let projectCity = res.result.address_component.city;
         that.setData({
           projectCity: projectCity
@@ -627,7 +645,7 @@ Page({
     })
   },
   // 对比地址
-  userAndProject: function() {
+  userAndProject: function () {
     var projectCity = this.data.projectCity;
     var userCity = this.data.userCity;
     if (projectCity != userCity) {
@@ -644,7 +662,7 @@ Page({
     params.imgUrl = "/images/toast/info-circle.png";
     params.duration = 3000;
     this.toast.show(params);
-    setTimeout(function() {
+    setTimeout(function () {
       wx.reLaunch({
         url: "../index/index"
       })
@@ -749,8 +767,10 @@ Page({
     if (type == 'adds') {
       wx.chooseImage({
         count: 1, //默认9
-        sizeType: ['original', 'compressed'], //可以指定是原图还是压缩图，默认二者都有
-        sourceType: ['album', 'camera'], //从相册选择
+        //sizeType: ['original', 'compressed'], //可以指定是原图还是压缩图，默认二者都有
+        //sourceType: ['album', 'camera'], //从相册选择
+        sizeType: ['compressed'], //可以指定是原图还是压缩图，默认二者都有
+        sourceType: ['camera'],
         success: (res) => {
           if (this.data.addressImgList.length != 0) {
             this.setData({
@@ -771,8 +791,8 @@ Page({
     } else {
       wx.chooseImage({
         count: 1, //默认9
-        sizeType: ['original', 'compressed'], //可以指定是原图还是压缩图，默认二者都有
-        sourceType: ['album', 'camera'], //从相册选择
+        sizeType: ['compressed'], //可以指定是原图还是压缩图，默认二者都有
+        sourceType: ['camera'],
         success: (res) => {
           if (this.data.imgList.length != 0) {
             this.setData({
@@ -802,7 +822,7 @@ Page({
     var type = this.data.type;
     if (type == 'adds') {
       wx.chooseVideo({
-        sourceType: ['album', 'camera'],
+        sourceType: ['camera'],
         compressed: false,
         maxDuration: 30,
         camera: 'back',
@@ -829,7 +849,7 @@ Page({
       })
     } else {
       wx.chooseVideo({
-        sourceType: ['album', 'camera'],
+        sourceType: ['camera'],
         compressed: false,
         maxDuration: 30,
         camera: 'back',
@@ -941,29 +961,30 @@ Page({
       modalName: null
     })
   },
-  submit_syn:function(){
-    var  that = this;
-        //获取系统权限是否开启
-     wx.getSystemInfo({
-        success(res) {
+  submit_syn: function () {
+    var that = this;
+    //获取系统权限是否开启
+    wx.getSystemInfo({
+      success(res) {
         var isopendingwei = res.locationEnabled;
-        if(isopendingwei==false){
-            wx.showModal({
-              title: '提示',
-              content: '请先开启手机GPS定位,然后点击刷新按钮重试',
-              showCancel:false,
-              success (res) {
-                if (res.confirm) {
-                  // console.log('用户点击确定')
-                } 
-              }})
-          }else{
-            that.submit_syn_ready();
-          }
+        if (isopendingwei == false) {
+          wx.showModal({
+            title: '提示',
+            content: '请先开启手机GPS定位,然后点击刷新按钮重试',
+            showCancel: false,
+            success(res) {
+              if (res.confirm) {
+                // console.log('用户点击确定')
+              }
+            }
+          })
+        } else {
+          that.submit_syn_ready();
         }
-      })
-     var address = that.data.address;
-     if (address =="正在获取地址...") {
+      }
+    })
+    var address = that.data.address;
+    if (address == "正在获取地址...") {
       wx.showToast({
         title: '请点击刷新按钮获取位置',
         icon: 'none',
@@ -974,9 +995,9 @@ Page({
     }
   },
   //提交按钮111
-  submit_syn_ready: async function(){
-     var that = this;
-       //举报图片集合
+  submit_syn_ready: async function () {
+    var that = this;
+    //举报图片集合
     var reportImg = that.data.imgList;
     //举报视频集合
     var reportVideo = that.data.videoList;
@@ -1029,26 +1050,26 @@ Page({
       mask: true
     })
     //举报图片
-     for (var index = 0; index < reportImg.length; index++) {
-      await that.reportImg_syn(reportImg[index],index).then((res) => {
+    for (var index = 0; index < reportImg.length; index++) {
+      await that.reportImg_syn(reportImg[index], index).then((res) => {
         // console.log("举报图片上传完了resourceList:",that.data.resourceList);
       })
     }
     //举报视频
     for (var index = 0; index < reportVideo.length; index++) {
-      await that.reportVideo_syn(reportVideo[index].src,index).then((res) => {
+      await that.reportVideo_syn(reportVideo[index].src, index).then((res) => {
         // console.log("视频上传完了resourceList:",that.data.resourceList);
       });
     }
     //地址图片
-     for (var index = 0; index < addsImg.length; index++) {
-      await that.addsImg_syn(addsImg[index],index).then((res) => {
+    for (var index = 0; index < addsImg.length; index++) {
+      await that.addsImg_syn(addsImg[index], index).then((res) => {
         // console.log("地址图片上传完了resourceList:",that.data.resourceList);
       })
     }
     //地址视频
-     for (var index = 0; index < addsVideo.length; index++) {
-      await that.addsVideo_syn(addsVideo[index].src,index).then((res) => {
+    for (var index = 0; index < addsVideo.length; index++) {
+      await that.addsVideo_syn(addsVideo[index].src, index).then((res) => {
         // console.log("地址视频上传完了resourceList:",that.data.resourceList);
       })
     }
@@ -1082,12 +1103,12 @@ Page({
     }
   },
   //上传答案/资源
-  uploadAnswerTrue:function(){
+  uploadAnswerTrue: function () {
     var that = this;
-    
+
     var openid = that.data.openid;
-    var projectId  = that.data.projectId;
-    var requestUrl  = that.data.requestUrl;
+    var projectId = that.data.projectId;
+    var requestUrl = that.data.requestUrl;
     //问题分类
     var qustionSort = that.data.showProblemType;
     //举报描述
@@ -1099,7 +1120,7 @@ Page({
     var address = that.data.address;
     //自定义点位名称
     var locationName = that.data.locationName
-     //问题分类
+    //问题分类
     var qustionSort = that.data.showProblemType;
     var sortIds = '';
     for (let i = 0; i < qustionSort.length; i++) {
@@ -1112,36 +1133,35 @@ Page({
     //调用全局 请求方法
     app.wxRequest(
       'POST',
-      requestUrl+"/home/manage/createAnswer_syn",
-      {
+      requestUrl + "/home/manage/createAnswer_syn", {
         "longitude": longitude,
         "latitude": latitude,
         "address": address,
-        "locationName":locationName,
+        "locationName": locationName,
         "desc": desc,
         "qustionSort": sortIds,
         "openid": openid,
         "projectId": projectId,
-        "resourceListStr":JSON.stringify(resourceList)
+        "resourceListStr": JSON.stringify(resourceList)
       },
       app.seesionId,
-      (res) =>{
+      (res) => {
         // console.log("上传答案结束,",res)
-        if (res.data.status==='success') {
+        if (res.data.status === 'success') {
           wx.reLaunch({
             url: "../success/success"
           })
-      }else{
-        wx.showToast({
-          title: res.data.message,
-          icon: 'none',
-          duration: 1000,
-          mask: true
-        })
-      }
+        } else {
+          wx.showToast({
+            title: res.data.message,
+            icon: 'none',
+            duration: 1000,
+            mask: true
+          })
+        }
 
       },
-      (err) =>{
+      (err) => {
 
       }
     )
@@ -1186,37 +1206,37 @@ Page({
     // })
   },
 
- //举报图片集合
-  reportImg_syn:function(filePath,index) {
+  //举报图片集合
+  reportImg_syn: function (filePath, index) {
     var that = this;
-    var requestUrl = that.data.requestUrl;//服务器路径
+    var requestUrl = that.data.requestUrl; //服务器路径
     var projectId = that.data.projectId;
     var openid = that.data.openid;
     var resourceList = that.data.resourceList;
     //上传举报图片
     return new Promise((resolve, reject) => {
-    wx.uploadFile({
-      // url: 'http://192.168.15.146:8080/home/manage/upload',
-      url: requestUrl+'/home/manage/upload_syn',
-      name:'reportImg-'+index+'-'+ openid,
-      filePath: filePath,
-      formData: {
-        'key': 'reportImg-'+index+'-'+ openid,
-        'openid': openid,
-        'projectId':projectId,
-        'type':0
-      },
-      success(res) {
+      wx.uploadFile({
+        // url: 'http://192.168.15.146:8080/home/manage/upload',
+        url: requestUrl + '/home/manage/upload_syn',
+        name: 'reportImg-' + index + '-' + openid,
+        filePath: filePath,
+        formData: {
+          'key': 'reportImg-' + index + '-' + openid,
+          'openid': openid,
+          'projectId': projectId,
+          'type': 0
+        },
+        success(res) {
           var imageMap = JSON.parse(res.data);
           if (imageMap.url != null && imageMap.url != '') {
             // 操作成功
             resolve(res.data)
-              resourceList.push({
-                url: imageMap.url,
-                type: 0,
-                style: 0,
-                delUrl: imageMap.delUrl
-              })
+            resourceList.push({
+              url: imageMap.url,
+              type: 0,
+              style: 0,
+              delUrl: imageMap.delUrl
+            })
           } else {
             wx.showToast({
               title: '举报图片资源上传失败',
@@ -1226,47 +1246,46 @@ Page({
             })
           }
 
-      },
-      //请求失败
-      fail: function(err) {
-      },
-      complete: () => {
+        },
+        //请求失败
+        fail: function (err) {},
+        complete: () => {
 
-      }
+        }
       })
     })
   },
   //举报视频集合
-  reportVideo_syn: function(filePath,index) {
+  reportVideo_syn: function (filePath, index) {
     var that = this;
-    var requestUrl = that.data.requestUrl;//服务器路径
+    var requestUrl = that.data.requestUrl; //服务器路径
     var projectId = that.data.projectId;
     var openid = that.data.openid;
     var resourceList = that.data.resourceList;
-     return new Promise((resolve, reject) => {
-    wx.uploadFile({
-      url: requestUrl+'/home/manage/upload_syn',
-      // url: 'http://192.168.15.146:8080/home/manage/upload',
-      filePath: filePath,
-      name:'reportVideo-'+index+'-'+ openid,
-      formData: {
-        'key': 'reportVideo-'+index+'-'+ openid,
-        'openid': openid,
-        'projectId':projectId,
-        'type':2
-      },
-      success(res) {
-         // console.log("后台返回的举报视频片数据：", res)
+    return new Promise((resolve, reject) => {
+      wx.uploadFile({
+        url: requestUrl + '/home/manage/upload_syn',
+        // url: 'http://192.168.15.146:8080/home/manage/upload',
+        filePath: filePath,
+        name: 'reportVideo-' + index + '-' + openid,
+        formData: {
+          'key': 'reportVideo-' + index + '-' + openid,
+          'openid': openid,
+          'projectId': projectId,
+          'type': 2
+        },
+        success(res) {
+          // console.log("后台返回的举报视频片数据：", res)
           var imageMap = JSON.parse(res.data);
           if (imageMap.url != null && imageMap.url != '') {
             // 操作成功
             resolve(res.data)
-              resourceList.push({
-                url: imageMap.url,
-                type: 2,
-                style: 0,
-                delUrl: imageMap.delUrl
-              })
+            resourceList.push({
+              url: imageMap.url,
+              type: 2,
+              style: 0,
+              delUrl: imageMap.delUrl
+            })
           } else {
             wx.showToast({
               title: '举报视频资源上传失败',
@@ -1275,48 +1294,47 @@ Page({
               mask: true
             })
           }
-      },
-      //请求失败
-      fail: function(err) {
-      },
-      complete: () => {
-        // console.log('上传举报视频执行完毕');
-      }
+        },
+        //请求失败
+        fail: function (err) {},
+        complete: () => {
+          // console.log('上传举报视频执行完毕');
+        }
 
-    })
+      })
     })
   },
-   //地址图片集合
-  addsImg_syn: function(filePath,index) {
+  //地址图片集合
+  addsImg_syn: function (filePath, index) {
     var that = this;
-    var requestUrl = that.data.requestUrl;//服务器路径
+    var requestUrl = that.data.requestUrl; //服务器路径
     var projectId = that.data.projectId;
     var openid = that.data.openid;
     var resourceList = that.data.resourceList;
-     return new Promise((resolve, reject) => {
-    wx.uploadFile({
-      // url: 'http://192.168.15.146:8080/home/manage/upload',
-      url: requestUrl+'/home/manage/upload_syn',
-      filePath: filePath,
-      name:'addsImg-'+index+'-'+ openid,
-      formData: {
-        'key': 'addsImg-'+index+'-'+ openid,
-        'openid': openid,
-        'projectId':projectId,
-        'type':0
-      },
-      success(res) {
-         // console.log("后台返回的地址图片数据：", res)
+    return new Promise((resolve, reject) => {
+      wx.uploadFile({
+        // url: 'http://192.168.15.146:8080/home/manage/upload',
+        url: requestUrl + '/home/manage/upload_syn',
+        filePath: filePath,
+        name: 'addsImg-' + index + '-' + openid,
+        formData: {
+          'key': 'addsImg-' + index + '-' + openid,
+          'openid': openid,
+          'projectId': projectId,
+          'type': 0
+        },
+        success(res) {
+          // console.log("后台返回的地址图片数据：", res)
           var imageMap = JSON.parse(res.data);
           if (imageMap.url != null && imageMap.url != '') {
             // 操作成功
             resolve(res.data)
-              resourceList.push({
-                url: imageMap.url,
-                type: 0,
-                style: 1,
-                delUrl: imageMap.delUrl
-              })
+            resourceList.push({
+              url: imageMap.url,
+              type: 0,
+              style: 1,
+              delUrl: imageMap.delUrl
+            })
           } else {
             wx.showToast({
               title: '地址图片资源上传失败',
@@ -1325,47 +1343,46 @@ Page({
               mask: true
             })
           }
-      },
-      //请求失败
-      fail: function(err) {
-      },
-      complete: () => {
+        },
+        //请求失败
+        fail: function (err) {},
+        complete: () => {
           // console.log('---上传地址图片执行完毕---');
         }
+      })
     })
-     })
   },
   //地址视频
-  addsVideo_syn: function(filePath,index) {
+  addsVideo_syn: function (filePath, index) {
     var that = this;
-    var requestUrl = that.data.requestUrl;//服务器路径
+    var requestUrl = that.data.requestUrl; //服务器路径
     var projectId = that.data.projectId;
     var openid = that.data.openid;
     var resourceList = that.data.resourceList;
-     return new Promise((resolve, reject) => {
-    wx.uploadFile({
-      // url: 'http://192.168.15.146:8080/home/manage/upload',
-      url: requestUrl+'/home/manage/upload_syn',
-      filePath: filePath,
-      name:'addsVideo-'+index+'-'+openid,
-      formData: {
-        'key': 'addsVideo-'+index+'-'+openid,
-        'projectId':projectId,
-        'openid': openid,
-        'type':2
-      },
-      success(res) {
-         // console.log("后台返回的地址视频数据：", res)
+    return new Promise((resolve, reject) => {
+      wx.uploadFile({
+        // url: 'http://192.168.15.146:8080/home/manage/upload',
+        url: requestUrl + '/home/manage/upload_syn',
+        filePath: filePath,
+        name: 'addsVideo-' + index + '-' + openid,
+        formData: {
+          'key': 'addsVideo-' + index + '-' + openid,
+          'projectId': projectId,
+          'openid': openid,
+          'type': 2
+        },
+        success(res) {
+          // console.log("后台返回的地址视频数据：", res)
           var imageMap = JSON.parse(res.data);
           if (imageMap.url != null && imageMap.url != '') {
             // 操作成功
             resolve(res.data)
-              resourceList.push({
-                url: imageMap.url,
-                type: 2,
-                style: 1,
-                delUrl: imageMap.delUrl
-              })
+            resourceList.push({
+              url: imageMap.url,
+              type: 2,
+              style: 1,
+              delUrl: imageMap.delUrl
+            })
           } else {
             wx.showToast({
               title: '地址视频资源上传失败',
@@ -1374,37 +1391,36 @@ Page({
               mask: true
             })
           }
-      },
-      //请求失败
-      fail: function(err) {
-      },
-      complete: () => {
+        },
+        //请求失败
+        fail: function (err) {},
+        complete: () => {
           // console.log('上传地址视频执行完毕');
-      }
+        }
 
-    })
+      })
     })
   },
-  alertTip:function(e){
-    if(!e.currentTarget.dataset.tips){
+  alertTip: function (e) {
+    if (!e.currentTarget.dataset.tips) {
       return
     }
     this.setData({
-      sortNameBymodal:e.currentTarget.dataset.sortname,
-      sortTipBymodal:e.currentTarget.dataset.tips,
-      sortTipIsShow:true
+      sortNameBymodal: e.currentTarget.dataset.sortname,
+      sortTipBymodal: e.currentTarget.dataset.tips,
+      sortTipIsShow: true
     })
   },
-  hideSortModal:function(){
+  hideSortModal: function () {
     this.setData({
-      sortTipIsShow:false
+      sortTipIsShow: false
     })
   },
 
-  saveLocationName(e){
+  saveLocationName(e) {
     let that = this
     that.setData({
-      locationName : e.detail.value
+      locationName: e.detail.value
     })
   }
 

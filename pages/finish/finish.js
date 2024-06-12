@@ -84,6 +84,14 @@ that.detail(id);
     this.VideoContext = wx.createVideoContext('taskVideo' + e.currentTarget.dataset.index);
     this.VideoContext.requestFullScreen(0);
   },
+    start(e) {
+    let fullScreen = e.detail.fullScreen;
+    if (!fullScreen) {
+      this.VideoContext.pause();
+    } else {
+      this.VideoContext.play();
+    }
+  },
   //发送请求获取数据
   detail: function(id) {
     var that = this;
@@ -99,6 +107,7 @@ that.detail(id);
       },
       app.seesionId,
       (res) =>{
+        console.log(res)
         if (res.data.status === "success") {
           var taskRecordData = res.data.retObj.taskRecord;
           var taskRecordList = new Array();
@@ -111,15 +120,31 @@ that.detail(id);
               taskRecordList.push(taskRecordData[i])
             }
           }
+          var reportImgSrcList = [];
+          var ImgSrcList = res.data.retObj.reportImgSrc;
+          if (ImgSrcList != null && ImgSrcList.length > 0) {
+            for (var i = 0; i < ImgSrcList.length; i++) {
+              //console.log("图片的啥啊啊啊啊：", images_dep[i].url)
+              reportImgSrcList.push(ImgSrcList[i].replaceAll('http:','https:'))
+            }
+          }
+          var reportVideoSrcList = [];
+          var VideoSrcList = res.data.retObj.reportVideoSrc;
+          if (VideoSrcList != null && VideoSrcList.length > 0) {
+            for (var i = 0; i < VideoSrcList.length; i++) {
+              //console.log("图片的啥啊啊啊啊：", images_dep[i].url)
+              reportVideoSrcList.push(VideoSrcList[i].replaceAll('http:','https:'))
+            }
+          }
           that.setData({
 
             retObj: res.data.retObj,
             //问题分类
             sort: res.data.retObj.questionSorts,
             //举报图片
-            reportImgSrc: res.data.retObj.reportImgSrc,
+            reportImgSrc: reportImgSrcList,
             //举报视频
-            reportVideoSrc: res.data.retObj.reportVideoSrc,
+            reportVideoSrc: reportVideoSrcList,
             //地址图片
             addstImgSrc: res.data.retObj.addstImgSrc,
             //地址视频

@@ -1,6 +1,6 @@
 {
   "pages": [
-    "pages/index/index",
+    "pages/menuBack/menuBack",
     "pages/jubao/jubao",
     "pages/user/user",
     "pages/swiper/swiper",
@@ -12,7 +12,6 @@
     "pages/ceshi/ceshi",
     "pages/about/about",
     "pages/editInfo/editInfo",
-    "pages/menuBack/menuBack",
     "pages/tip/tip",
     "pages/error_tip/error_tip",
     "pages/login/login",
@@ -21,7 +20,7 @@
     "pages/check_new_index/check_new_index",
     "pages/check_new_detail/check_new_detail"
   ],
-  "requiredPrivateInfos" : [ "getLocation" ],
+  "requiredPrivateInfos" : [ "getLocation","chooseLocation","choosePoi" ],
   "window": {
     "backgroundTextStyle": "light",
     "navigationBarBackgroundColor": "#fff",
@@ -36,12 +35,6 @@
     "custom": true,
     "selectedColor": "#0081ff",
     "list": [
-      {
-        "pagePath": "pages/index/index",
-        "text": "首页",
-        "iconPath": "images/home.png",
-        "selectedIconPath": "images/home1.png"
-      },
       {
         "pagePath": "pages/jubao/jubao",
         "text": "上报",

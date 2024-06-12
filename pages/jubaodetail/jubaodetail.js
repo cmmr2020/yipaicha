@@ -6,7 +6,7 @@ Page({
     requestUrl: '',//服务器路径
   
      tab:[
-     '待审核',"处理中",'已完成',"已退回"
+     '待审核',"处理中",'已查收','已完成',"已退回"
     ],
   
     TabCur: 0,
@@ -73,9 +73,12 @@ Page({
             this.back(1,openid);
           }
           if(e.currentTarget.dataset.id === 2){
-            this.back(0,openid);
+            this.back(4,openid);
           }
           if(e.currentTarget.dataset.id === 3){
+            this.back(0,openid);
+          }
+          if(e.currentTarget.dataset.id === 4){
             this.finish(2,openid);
           }
          
@@ -248,12 +251,14 @@ var requestUrl = that.data.requestUrl;//服务器路径
      if(tab === 1){
       this.back(1,openid);
      }
-
      if(tab === 2){
+      this.back(4,openid);
+    }
+     if(tab === 3){
       this.back(0,openid);
      }
 
-     if(tab === 3){
+     if(tab === 4){
       this.finish(2,openid);
      }
 

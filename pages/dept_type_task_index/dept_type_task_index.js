@@ -58,6 +58,7 @@ Page({
     batch_process_taskIdArr: [],
     processType: '',//批量审核类型
     process_auditContent: ''//批量审批意见
+   ,projectList:[]//项目列表
   },
   /**
    * 生命周期函数--监听页面加载
@@ -69,6 +70,9 @@ Page({
     var terminalUserId = app.terminalUserId; //调查员id
     var fontSize = wx.getStorageSync('fontSize');
     var bgColor = wx.getStorageSync('bgColor');    
+    wx.setNavigationBarTitle({
+      title: app.projectName,
+    })
     that.setData({
       requestUrl: requestUrl,
       projectId: projectId,
@@ -79,18 +83,20 @@ Page({
       fontSize26: parseInt(fontSize) - 12,
       fontSize28: parseInt(fontSize) - 7
     })
+    //加载项目列表
+    that.getProjectList();
     //加载轮播图
-    that.getSwiperList();
+    //that.getSwiperList();
     //that.getProjectFieldTaskTips();
   },
   //刷新页面
   onShow: function () {
-    console.log('页面显示')
+    //console.log('页面显示')
     var that = this;
     if (typeof this.getTabBar === 'function' &&
       this.getTabBar()) {
       this.getTabBar().setData({
-        selected: 2
+        selected: 1
       })
     }
     //console.log(that.data.children_page_data)
@@ -141,6 +147,54 @@ Page({
     // })
   },
 
+  /**
+   * 查询项目任务列表
+   */
+  showProjectTask(e){
+    let that =this;
+    wx.setNavigationBarTitle({
+      title: e.currentTarget.dataset.name,
+    })
+    that.setData({
+      taskList: [],
+      maxPageNum: 0, //总页数
+      isNull: '',
+      TabCur: 0,
+      projectId:e.currentTarget.dataset.id,
+    })
+    //加载任务列表
+    that.getTaskList();
+  },
+
+  /**
+   * 获取当前政府项目列表
+   */
+  getProjectList(){
+    //console.log('政府code',wx.getStorageSync('code'))
+    let govCode = wx.getStorageSync('code');
+    let that = this;
+    var requestUrl = that.data.requestUrl;
+    //调用全局 请求方法
+    app.wxRequest(
+      'GET',
+      requestUrl + "/home/manage/getPublicProjectList",
+      {
+        "govCode": govCode
+      },
+      app.seesionId,
+      (res) =>{
+        if (res.data.status === "success") {
+          console.log(res)
+          that.setData({
+            projectList: res.data.retObj
+          })
+        }
+      },
+      (err) =>{
+        app.msg('系统错误')
+      }
+    )
+  },
    /**
    * 获取轮播图数据
    */
@@ -196,7 +250,7 @@ Page({
   getTaskList: function (pageSize, pageScrollto_id) {
     var that = this;
     var requestUrl = that.data.requestUrl; //请求路径
-    var projectId = app.projectId; //项目id
+    var projectId = that.data.projectId; //项目id
     var TabCur = that.data.TabCur; //整改状态
     //var pagenum = that.data.pagenum;
     var terminalUserId = app.terminalUserId;
@@ -263,8 +317,9 @@ Page({
 
           //console.log("看看这个任务列表：", that.data.taskList)
         } else {
+          app.msg('暂无数据')
           that.setData({
-            isNull: 'true',
+            //isNull: 'true',
             maxPageNum: 1
           })
         }
@@ -326,6 +381,13 @@ Page({
         modalName: e.currentTarget.dataset.target
       })
     }
+  },
+  showListModel(e){
+    var that = this;
+    that.setData({
+      modalName: e.currentTarget.dataset.target
+    })
+    console.log(that.data.modalName)
   },
   hideModal(e) {
     this.setData({

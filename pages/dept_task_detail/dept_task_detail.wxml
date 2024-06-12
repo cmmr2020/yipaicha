@@ -6,29 +6,33 @@
 
 </view>
 <view class="cu-form-group ">
-  <view class="title text-bold" style="font-size:{{fontSize}}rpx">点位:</view>
-  <text class="item-left" style="font-size:{{fontSize28}}rpx">{{locationName}}</text>
-</view>
-<view class="cu-form-group ">
   <view class="title text-bold" style="font-size:{{fontSize}}rpx">具体问题:</view>
   <text class="item-left" style="font-size:{{fontSize28}}rpx">{{remarks}}</text>
 </view>
 <view class="cu-form-group ">
-  <view class="title text-bold" style="font-size:{{fontSize}}rpx">检查标准:</view>
-  <text class="item-left" style="font-size:{{fontSize28}}rpx">{{sortListStr}}</text>
-</view>
-<view class="cu-form-group ">
-  <view class="title text-bold" style="font-size:{{fontSize}}rpx">发现时间:</view>
+  <view class="title text-bold" style="font-size:{{fontSize}}rpx">上报时间:</view>
   <text class="item-left" style="font-size:{{fontSize28}}rpx">{{findTime}}</text>
 </view>
 <view class="cu-form-group ">
-  <view class="title text-bold" style="font-size:{{fontSize}}rpx">负责单位:</view>
+  <view class="title text-bold" style="font-size:{{fontSize}}rpx">责任人/单位:</view>
   <text class="item-left" style="font-size:{{fontSize28}}rpx">{{departmentName}}</text>
 </view>
 <view class="cu-form-group ">
+  <view class="title text-bold" style="font-size:{{fontSize}}rpx">上报地点:</view>
+  <text class="item-left" style="font-size:{{fontSize28}}rpx">{{address}}</text>
+</view>
+<view class="cu-form-group ">
+  <view class="title text-bold" style="font-size:{{fontSize}}rpx">上报位置描述:</view>
+  <text class="item-left" style="font-size:{{fontSize28}}rpx">{{locationName}}</text>
+</view>
+<view class="cu-form-group ">
+  <view class="title text-bold" style="font-size:{{fontSize}}rpx">信息类型:</view>
+  <text class="item-left" style="font-size:{{fontSize28}}rpx">{{sortListStr}}</text>
+</view>
+<!-- <view class="cu-form-group ">
   <view class="title text-bold" style="font-size:{{fontSize}}rpx">整改期限:</view>
   <text class="item-left" style="font-size:{{fontSize28}}rpx">{{finishTime}}</text>
-</view>
+</view> -->
 <view class="cu-form-group " wx:if="{{auditContent}}">
   <view class="title text-bold" style="font-size:{{fontSize}}rpx">审批意见:</view>
   <text class="item-left" style="font-size:{{fontSize28}}rpx">{{auditContent}}</text>
@@ -58,43 +62,47 @@
     <text class="cuIcon-title text-{{bgColor}}"></text><text style="font-size:{{fontSize}}rpx">发现的存在问题</text>
   </view>
 </view>
-<!-- 图片加描述 -->
-<view class="cu-card article no-card">
-  <view class="cu-item shadow" wx:for="{{imgList_No}}" wx:key="index">
-
-    <view class="content">
-      <image src='{{imgList_No[index]}}' mode='aspectFill' bindtap="ViewImageForreport_No" data-index='{{index}}' data-url="{{imgList_No[index]}}"></image>
-      <view class="desc">
-        <input disabled="true" class="text-content" value="{{imgDescList[index].description}}" style="font-size:{{fontSize28}}rpx"></input>
-      </view>
+<view class="cu-form-group">
+  <view class="grid col-4 grid-square flex-sub">
+    <view class="bg-img" wx:for="{{imgList_No}}" wx:key="index" bindtap="ViewImageForreport_No" data-url="{{imgList_No[index]}}">
+      <image class="imgeaaa" src='{{imgList_No[index]}}' mode='aspectFill'></image>
+    </view>
+    <view class="bg-img" wx:for="{{videoList_No}}" wx:key="index" bindtap="ViewVideoForreport" data-url="{{videoList_No[index].url}}" data-index="{{index}}">
+      <video class="imgeaaa" id='reportVideo{{index}}' src="{{videoList_No[index].url}}" poster="{{videoList_No[index].poster}}" bindfullscreenchange="start">
+      </video>
     </view>
   </view>
 </view>
+<!-- 图片加描述 -->
+<!-- <view class="cu-card article no-card">
+  <view class="cu-item shadow" wx:for="{{imgList_No}}" wx:key="index">
+    <view class="content">
+      <image src='{{imgList_No[index]}}' mode='aspectFill' bindtap="ViewImageForreport_No" data-index='{{index}}' data-url="{{imgList_No[index]}}"></image>
+    </view>
+  </view>
+</view> -->
 <!-- 视频加描述 -->
-<view class="cu-card article no-card">
+<!-- <view class="cu-card article no-card">
   <view class="cu-item shadow" wx:for="{{videoList_No}}" wx:key="index">
     <view class="content">
       <video class="video-user" bindtap="ViewVideoForreport" data-url="{{videoList_No[index].url}}" data-index="{{index}}" id='reportVideo{{index}}' src="{{videoList_No[index].url}}" poster="{{videoList_No[index].poster}}" bindfullscreenchange="start"></video>
-      <view class="desc">
-        <input disabled="true" class="text-content" value="{{voidDescList[index].description}}" style="font-size:{{fontSize28}}rpx"></input>
-      </view>
     </view>
   </view>
-</view>
+</view> -->
 <!-- 录音 -->
-<view class="cu-bar  solid-bottom bg-white-user" wx:if="{{audioSrc_No.length>0}}">
+<!-- <view class="cu-bar  solid-bottom bg-white-user" wx:if="{{audioSrc_No.length>0}}">
   <view class="action">
     <text class="cuIcon-title text-{{bgColor}}" style="font-size:{{fontSize}}rpx"></text><text style="font-size:{{fontSize}}rpx">录音</text>
   </view>
-</view>
-<view class="cu-chat bg-white" wx:if="{{audioSrc_No.length>0}}" wx:for="{{audioSrc_No}}" wx:key="index">
+</view> -->
+<!-- <view class="cu-chat bg-white" wx:if="{{audioSrc_No.length>0}}" wx:for="{{audioSrc_No}}" wx:key="index">
   <view class="cu-item">
     <view wx:if="{{!item.bl}}" class="main" bindtap='playRecord_No' data-id="{{index}}">
       <view class="action text-bold text-{{bgColor}}}" style="font-size:{{fontSize28}}rpx">
         第{{index+1}}个录音
-      </view>
+      </view> -->
       <!-- 静态图 -->
-      <view class="content shadow">
+      <!-- <view class="content shadow">
         <image class="image-audio-user" src="/images/yuyin-ico.png" mode="scaleToFill"></image>
       </view>
 
@@ -102,30 +110,30 @@
     <view wx:if="{{item.bl}}" class="main" bindtap='playRecord_No' data-id="{{index}}">
       <view class="action text-bold text-{{bgColor}}" style="font-size:{{fontSize28}}rpx">
         第{{index+1}}个录音
-      </view>
+      </view> -->
       <!-- 动图 -->
-      <view class="content shadow">
+      <!-- <view class="content shadow">
         <image class="image-audio-user" src="/images/yuyin-gif.gif" mode="scaleToFill"></image>
       </view>
     </view>
   </view>
-</view>
+</view> -->
 
 
 
 <!-- 定位信息 -->
 <view wx:if="{{showAddress}}">
-<view class="cu-bar  solid-bottom bg-white-user">
-  <view class="action">
-    <text class="cuIcon-title text-{{bgColor}}" style="font-size:{{fontSize}}rpx"></text><text style="font-size:{{fontSize}}rpx">定位信息</text>
+  <view class="cu-bar  solid-bottom bg-white-user">
+    <view class="action">
+      <text class="cuIcon-title text-{{bgColor}}" style="font-size:{{fontSize}}rpx"></text><text style="font-size:{{fontSize}}rpx">定位信息</text>
+    </view>
   </view>
-</view>
-<view class="cu-bar bg-white text-center padding-neirong">
-  <view class="action text-black " bindtap="go">
-    <text style="font-size:{{fontSize}}rpx">{{address}}　</text>
-    <text class="cuIcon-locationfill lg text-{{bgColor}}"></text>
+  <view class="cu-bar bg-white text-center padding-neirong">
+    <view class="action text-black " bindtap="go">
+      <text style="font-size:{{fontSize}}rpx">{{address}}　</text>
+      <text class="cuIcon-locationfill lg text-{{bgColor}}"></text>
+    </view>
   </view>
-</view>
 </view>
 
 
@@ -239,10 +247,10 @@
   </view>
   <view class="cu-bar bg-white">
     <view class="action" style="font-size:{{fontSize28}}rpx">
-      上传图片或视频
+      上传图片或视频（限最多4张图片和1段视频）
     </view>
     <view class="action" style="font-size:{{fontSize28}}rpx">
-      {{reportlength}}/25
+      {{reportlength}}/5
     </view>
   </view>
   <view class="cu-form-group">
@@ -260,7 +268,7 @@
         </view>
       </view>
 
-      <view class="solids" bindtap="showModal2" wx:if="{{reportlength<=25}}" data-target="Modal" data-type="report">
+      <view class="solids" bindtap="showModal2" wx:if="{{reportlength<5}}" data-target="Modal" data-type="report">
         <text class="cuIcon-cameraadd"></text>
       </view>
     </view>
@@ -276,8 +284,8 @@
       </view>
       <!-- <view class="padding-xl justify-end"> -->
       <view class="padding flex flex-direction">
-        <button class="cu-btn bg-green lg" bindtap='ChooseImage'>上传照片 </button>
-        <button class="cu-btn bg-blue margin-tb-sm lg" bindtap='chooseVideo'>上传视频</button>
+        <button wx:if="{{imgList.length < 4}}" class="cu-btn bg-green lg" bindtap='ChooseImage'>上传照片 </button>
+        <button wx:if="{{videoList.length < 1}}" class="cu-btn bg-blue margin-tb-sm lg" bindtap='chooseVideo'>上传视频</button>
       </view>
       <!-- </view> -->
     </view>
@@ -285,14 +293,14 @@
 
   <!-- 录音 -->
   <!-- wx:if="{{isRecord}}" -->
-  <view class="cu-bar solid-bottom">
+  <!-- <view class="cu-bar solid-bottom">
     <view class="action">
       <text class="cuIcon-title text-{{bgColor}} "></text><text style="font-size:{{fontSize}}rpx">录音</text>
     </view>
     <view class="action">
       <button class="cu-btn bg-{{bgColor}} shadow" bindtap="startRecord" data-target='Modal1' style="font-size:{{fontSize}}rpx">点击录音</button>
     </view>
-  </view>
+  </view> -->
 
   <modal title="{{remainTimeText}}" hidden="{{modalHidden}}" bindconfirm="stopRecord" bindcancel="modalCandel">
     <view>
@@ -329,15 +337,15 @@
     <!--   <textarea maxlength="-1"  bindinput="textareaAInput" placeholder="提供针对此类问题长效管理措施说明" ></textarea> -->
     <textarea maxlength="-1" bindinput="textareaAInput" placeholder="{{modalName=='Modal1' ?' ' : '提供针对此类问题长效管理措施说明'}}" style="font-size:{{fontSize28}}rpx"></textarea>
   </view>
-  <view wx:if="{{tabCur != 2}}">
+  <!-- <view wx:if="{{tabCur != 2}}">
     <view class="cu-form-group" wx:if="{{can_qs && dissent_show}}">
       <view class="title" style="font-size:{{fontSize}}rpx">权属异议</view>
       <switch class="{{bgColor}} sm" bindchange="qs_switch"></switch>
     </view>
-    <!-- <view class="cu-form-group" wx:if="{{can_long}}">
+    <view class="cu-form-group" wx:if="{{can_long}}">
       <view class="title" style="font-size:{{fontSize}}rpx">长期整改</view>
       <switch class="{{bgColor}} sm" bindchange="long_switch"></switch>
-    </view> -->
+    </view>
     <view class="cu-form-group" wx:if="{{long_setTime}}">
       <picker mode="date" value="{{long_task_finish_Time}}" start="{{finishTime==''?2017-01-01:finishTime}}" end="2050-12-30" bindchange="DateChange">
         <view class="picker" style="font-size: {{fontSize}}rpx;">
@@ -348,7 +356,7 @@
         </view>
       </picker>
     </view>
-  </view>
+  </view> -->
   <!-- <view class="cu-form-group">
     <view class="title" style="font-size:{{fontSize}}rpx">整改记录</view>
     <button class="cu-btn bg-{{bgColor}} shadow" bindtap="getTaskLog" data-target='Modal1' style="font-size:{{fontSize}}rpx">查看时间线</button>
@@ -407,8 +415,8 @@
     <view class=" margin-xs radius">
       <button role="button" class="cu-btn bg-{{bgColor}} " bindtap="process_fun" data-resulttype="1">不通过</button>
     </view>
-    <view class=" margin-xs radius">
+    <!-- <view class=" margin-xs radius">
       <button role="button" class="cu-btn bg-{{bgColor}} " bindtap="process_fun" data-resulttype="2">长期整改</button>
-    </view>
+    </view> -->
   </view>
 </view>

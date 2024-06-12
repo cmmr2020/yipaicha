@@ -335,11 +335,12 @@ Page({
     that.setData({
       audioSrc: audioSrc
     })
-    innerAudioContext.autoplay = true
+    //innerAudioContext.autoplay = true
     innerAudioContext.src = this.data.audioSrc[index].src,
-      innerAudioContext.onPlay(() => {
-        console.log('开始播放')
-      })
+    innerAudioContext.play();
+      // innerAudioContext.onPlay(() => {
+      //   console.log('开始播放')
+      // })
 
     // 监听音频自然播放至结束的事件
     innerAudioContext.onEnded(() => {
@@ -348,9 +349,9 @@ Page({
       that.setData({
         audioSrc: audioSrc,
       })
+      innerAudioContext.stop();
       // 取消自然播放至结束的事件
       innerAudioContext.offEnded();
-
     })
 
     // console.log("播放录音", that.data.audioSrc[index])
@@ -372,11 +373,12 @@ Page({
     that.setData({
       audioSrc: audioSrc_No
     })
-    innerAudioContext.autoplay = true
-    innerAudioContext.src = this.data.audioSrc_No[index].src,
-      innerAudioContext.onPlay(() => {
-        console.log('开始播放')
-      })
+    //innerAudioContext.autoplay = true
+    innerAudioContext.src = this.data.audioSrc_No[index].src;
+    innerAudioContext.play()
+      // innerAudioContext.onPlay(() => {
+      //   console.log('开始播放')
+      // })
     // 监听音频自然播放至结束的事件
     innerAudioContext.onEnded(() => {
       console.log("播放结束")
@@ -384,6 +386,7 @@ Page({
       that.setData({
         audioSrc_No: audioSrc_No,
       })
+      innerAudioContext.stop()
       // 取消自然播放至结束的事件
       innerAudioContext.offEnded();
 
@@ -407,12 +410,14 @@ Page({
     that.setData({
       audioSrc_Dep: audioSrc_Dep
     })
-    innerAudioContext.autoplay = true
+    //innerAudioContext.autoplay = true
     innerAudioContext.src = this.data.audioSrc_Dep[index].src,
       console.log(innerAudioContext.src)
-    innerAudioContext.onPlay(() => {
-      console.log('开始播放')
-    })
+      innerAudioContext.play()
+      console.log('开始播放aaa')
+    // innerAudioContext.onPlay(() => {
+    //   console.log('开始播放')
+    // })
     // 监听音频自然播放至结束的事件
     innerAudioContext.onEnded(() => {
       console.log("播放结束")
@@ -420,6 +425,7 @@ Page({
       that.setData({
         audioSrc_Dep: audioSrc_Dep,
       })
+      innerAudioContext.stop()
       // 取消自然播放至结束的事件
       innerAudioContext.offEnded();
 
@@ -1049,8 +1055,8 @@ Page({
   ChooseImage(e) {
     wx.chooseImage({
       count: 1, //默认9
-      sizeType: ['original', 'compressed'], //可以指定是原图还是压缩图，默认二者都有
-      sourceType: ['album', 'camera'], //从相册选择
+      sizeType: ['compressed'], //可以指定是原图还是压缩图，默认二者都有
+      sourceType: ['camera'],
       success: (res) => {
         if (this.data.imgList.length != 0) {
           this.setData({
@@ -1078,7 +1084,7 @@ Page({
       'poster': ''
     };
     wx.chooseVideo({
-      sourceType: ['album', 'camera'],
+      sourceType: ['camera'],
       maxDuration: 30,
       camera: 'back',
       success: (res) => {
@@ -1132,7 +1138,7 @@ Page({
   },
   ViewVideoForreport(e) {
     console.log("视频的啥？：", e);
-    this.VideoContext = wx.createVideoContext('reportVideo' + e.currentTarget.dataset.url);
+    this.VideoContext = wx.createVideoContext('reportVideo' + e.currentTarget.dataset.index);
     this.VideoContext.requestFullScreen({ direction: 0 });
   },
   ViewVideoForreport_Dep(e) {
@@ -1988,5 +1994,8 @@ Page({
         dissent:0
       })
     }
+  },
+  focus(){
+    console.log('获取交单')
   }
 })

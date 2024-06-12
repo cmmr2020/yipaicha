@@ -26,15 +26,6 @@ Page({
     var that = this;
     var requestUrl = that.data.requestUrl; //服务器路径
     //表单规则
-    // let rules = [{
-    //   name: "name",
-    //   rule: ["required", "isChinese", "minLength:2", "maxLength:6"], //可使用区间，此处主要测试功能
-    //   msg: ["请输入姓名", "姓名必须全部为中文", "姓名必须2个或以上字符", "姓名不能超过6个字符"]
-    // }, {
-    //   name: "pwd",
-    //   rule: ["required", "isEnAndNo"],
-    //   msg: ["请输入密码", "密码为8~20位数字和字母组合"]
-    // }];
     let rules = [{
       name: "name",
       rule: ["required"], //可使用区间，此处主要测试功能
@@ -49,7 +40,7 @@ Page({
     let checkRes = form.validation(formData, rules);
     if (!checkRes) {
       // console.log("跳转")
-      var gov_code = 'TJBH01CS';
+      var gov_code = wx.getStorageSync('code');
       var name = e.detail.value.name;
       if(gov_code){
         name = gov_code + '#' + name
@@ -76,20 +67,19 @@ Page({
       (res) =>{
         console.log("后台传输的数据：", res)
         if (res.data.status == 'success') {
-          var list = res.data.retObj.qxMenus;
-          var terminalUserName = res.data.retObj.terminalUserName;
+          var list = res.data.retObj.qxRole;
+          var terminalUserName = res.data.retObj.sysUserName;
           var departmentName = res.data.retObj.departmentName
-          app.terminalUserId = res.data.retObj.terminalUserId;
-          app.terminalName = res.data.retObj.terminalUserName.split('#')[1];
-          app.departmentId = res.data.retObj.departmentId;
+          app.terminalUserId = res.data.retObj.sysUserId;
+          app.terminalName = res.data.retObj.sysUserName.split('#')[1];
           app.departmentName = departmentName;
           let menuType = 0;
           //此角色只可设置一个  tab-bar最多可配置五个  最少两个
           for(let i=0; i<list.length; i++){
             let menu = list[i]
-            if(menu.code == 'TC-0014'){//整改上报
+            if(menu.name == '责任单位-P'){//整改上报
               menuType = 1
-            }else if(menu.code == 'TC-0015'){//整改上传
+            }else if(menu.name == '创文办-P'){//整改上传
               menuType = 2
             }
           }

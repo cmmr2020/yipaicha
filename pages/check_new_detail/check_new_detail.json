@@ -1,5 +1,5 @@
 {
-  "navigationBarTitleText": "整改审核详情",
+  "navigationBarTitleText": "审核详情",
   "usingComponents": {
     "tui-divider": "../../components/divider/divider"
   }
