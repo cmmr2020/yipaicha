@@ -139,7 +139,7 @@ Component({
     })
   },
   detached() {
-    app.eventBus.off('rightChange')
+    getApp().eventBus.off('rightChange')
   },
   methods: {
     changeList() {

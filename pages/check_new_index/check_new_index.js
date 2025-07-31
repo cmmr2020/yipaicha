@@ -137,7 +137,7 @@ Page({
       }
       that.setData({
         taskList: [],
-        pagenum:1,
+        pagenum:Number(pageNum),
         maxPageNum: 0, //总页数
         isNull: '',
         TabCur:TabCur
@@ -297,6 +297,7 @@ Page({
     var terminalUserId = that.data.terminalUserId; //调查员id
     var pageNum = that.data.pageNum; //当前页
     var TabCur = that.data.TabCur//当前tab
+    console.log('当前页：'+pageNum)
     if (request_dataParam_map.has(that.data.TabCur)) {
       that.setData({
         task_request_dataParam: request_dataParam_map.get(that.data.TabCur),
@@ -314,6 +315,7 @@ Page({
         that.data.task_request_dataParam.pageSize = 5;
       } else {
         that.data.task_request_dataParam.pageSize = pageSize;
+        that.data.task_request_dataParam.pageNum = 1;
       }
       that.data.task_request_dataParam.terminalUserId = terminalUserId;
       if (TabCur == 3) {//初次待审核
@@ -368,15 +370,23 @@ Page({
               pageCount: res.data.retObj.count, //总任务数
               maxPageNum: res.data.retObj.pageCount, //总页数
               taskList: that.data.taskList.concat(arr),
-              modalName: ''
+              modalName: '',
+              cardId:pageScrollto_id==null?"":pageScrollto_id//如果id不为空 则为测评页面返回 定位到跳转之前的位置
             })
-            if(pageScrollto_id){//如果id不为空 则为测评页面返回 定位到跳转之前的位置
-              wx.pageScrollTo({
-                selector:'#'+pageScrollto_id,//选择器
-                offsetTop:-200,//偏移距离，需要和 selector 参数搭配使用，可以滚动到 selector 加偏移距离的位置，单位 px
-                duration: 0,//滚动动画的时长，单位 ms
-              })
-            }
+            //因为 <scroll-view> 中 scroll-into-view 二次设置重复值时 失效引发bug 所以在执行后定时在500毫秒后设置为空字符串
+          setTimeout(() => {
+            that.setData({
+              cardId:''
+            })
+           }, 500)
+            //功能失效
+            // if(pageScrollto_id){//如果id不为空 则为测评页面返回 定位到跳转之前的位置
+            //   wx.pageScrollTo({
+            //     selector:'#'+pageScrollto_id,//选择器
+            //     offsetTop:-200,//偏移距离，需要和 selector 参数搭配使用，可以滚动到 selector 加偏移距离的位置，单位 px
+            //     duration: 0,//滚动动画的时长，单位 ms
+            //   })
+            // }
             //console.log("待审核数据：", that.data.taskList)
           } else {
             that.setData({
@@ -401,14 +411,22 @@ Page({
       }
     )
   },
-  //查询触发方法
-  search_fun() {
-    this.setData({
-      //每次切换问题，清空问题列表
-      taskList: [],
-      //每次切换问题，给pagenum重新赋值为1
-      pagenum: 1
-    })
+  //查询触发方法  type=0时 不设置pageNum
+  search_fun(type) {
+    if(type==0){
+        this.setData({
+          //每次切换问题，清空问题列表
+          taskList: [],
+        })
+      }else{
+        this.setData({
+          //每次切换问题，清空问题列表
+          taskList: [],
+          //每次切换问题，给pagenum重新赋值为1
+          pageNum: 1
+        })
+      }
+    
     if (this.data.TabCur == 4) {
       this.getDissentFieldTaskList()
     } else {
@@ -441,6 +459,7 @@ Page({
       that.data.task_request_dataParam.pageSize = 5;
     } else {
       that.data.task_request_dataParam.pageSize = pageSize;
+      that.data.task_request_dataParam.pageNum = 1
     }
     that.data.task_request_dataParam.terminalUserId = terminalUserId;
     that.data.task_request_dataParam.result = 3
@@ -498,7 +517,7 @@ Page({
   },
 
   //--------上拉函数-----------
-  onReachBottom: function () { //触底开始下一页
+  loadMore: function () { //触底开始下一页
     var that = this;
     var pagenum = that.data.pageNum + 1; //获取当前页数并+1
     var TabCur = that.data.TabCur;
@@ -631,10 +650,12 @@ Page({
       data_param.taskCode = e.detail.value
     } else if (type == 'location') {
       data_param.locationName = e.detail.value
-    } else if (type == 'question') {
-      data_param.question = e.detail.value
-    } else if (type == 'point') {
-      data_param.pointName = e.detail.value
+    } else if (type == 'remarks') {
+      data_param.remarks = e.detail.value
+    } else if (type == 'sort') {
+      data_param.sortName = e.detail.value
+    } else if (type == 'address') {
+      data_param.address = e.detail.value
     } else if (type == 'deptname') {
       data_param.departmentName = e.detail.value
     }
@@ -727,7 +748,7 @@ Page({
             process_auditContent: ''
           })
           //刷新列表
-          that.search_fun()
+          that.search_fun(0)
         } else {
           app.alert("请求失败")
         }

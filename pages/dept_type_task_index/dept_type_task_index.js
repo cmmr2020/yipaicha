@@ -107,14 +107,14 @@ Page({
       var TabCur = task_list_param.tabCur
       var pageNum = task_list_param.pagenum
       //var maxPageNum = task_list_param.maxPageNum
-      //console.log(search_param_str)   
+     // console.log("当前页:"+pageNum)   
       if (search_param_str) {
         var search_param = JSON.parse(search_param_str)
         request_dataParam_map.set(TabCur, search_param)
       }
       that.setData({
         taskList: [],
-        pagenum: 1,
+        pagenum: Number(pageNum),
         maxPageNum: 0, //总页数
         isNull: '',
         TabCur: TabCur
@@ -263,6 +263,7 @@ Page({
         task_request_dataParam: {},
       })
     }
+    console.log(that.data.task_request_dataParam)
     //当前tab
     if (TabCur >= 0) {
       that.data.task_request_dataParam.projectId = projectId;
@@ -271,6 +272,7 @@ Page({
         that.data.task_request_dataParam.pageSize = 5;
       } else {
         that.data.task_request_dataParam.pageSize = pageSize;
+        that.data.task_request_dataParam.pageNum = 1
       }
       that.data.task_request_dataParam.terminalUserId = terminalUserId;
       if (TabCur == 0) {//待整改（未整改/整改不达标继续整改）
@@ -296,7 +298,7 @@ Page({
       app.seesionId,
       (res) => {
         var list = res.data.retObj.list;
-        //console.log(list)
+        console.log(list)
         if (list != 0) {
           that.setData({
             //1、that.data.taskList  获取当前页面存的taskList数组
@@ -304,17 +306,17 @@ Page({
             //3、xxx.concat  把新加载的数组追加到当前页面之后
             taskList: that.data.taskList.concat(res.data.retObj.list),
             maxPageNum: res.data.retObj.pageCount, //总页数
-            isNull: ''
+            isNull: '',
+            cardId:pageScrollto_id==null?"":pageScrollto_id//如果id不为空 则为测评页面返回 定位到跳转之前的位置
           })
-          //console.log(pageScrollto_id)
-          if (pageScrollto_id) {//如果id不为空 则为测评页面返回 定位到跳转之前的位置
-            wx.pageScrollTo({
-              selector: '#' + pageScrollto_id,//选择器
-              offsetTop: -200,//偏移距离，需要和 selector 参数搭配使用，可以滚动到 selector 加偏移距离的位置，单位 px
-              duration: 0,//滚动动画的时长，单位 ms
+          //因为 <scroll-view> 中 scroll-into-view 二次设置重复值时 失效引发bug 所以在执行后定时在500毫秒后设置为空字符串
+          setTimeout(() => {
+            that.setData({
+              cardId:''
             })
-          }
-
+        }, 500)
+          //console.log('最大id:'+(that.data.taskList.length-1))
+          //console.log(pageScrollto_id)
           //console.log("看看这个任务列表：", that.data.taskList)
         } else {
           app.msg('暂无数据')
@@ -341,9 +343,10 @@ Page({
     this.getTaskList()
   },
   //上拉函数
-  onReachBottom: function () { //触底开始下一页
+  loadMore: function () { //触底开始下一页
     var that = this;
     var pagenum = that.data.pagenum + 1; //获取当前页数并+1
+    console.log('当前页:'+pagenum)
     that.setData({
       pagenum: pagenum, //更新当前页数
     })
@@ -422,10 +425,12 @@ Page({
       data_param.taskCode = e.detail.value
     } else if (type == 'location') {
       data_param.locationName = e.detail.value
-    } else if (type == 'question') {
-      data_param.question = e.detail.value
-    } else if (type == 'point') {
-      data_param.pointName = e.detail.value
+    } else if (type == 'remarks') {
+      data_param.remarks = e.detail.value
+    } else if (type == 'sort') {
+      data_param.sortName = e.detail.value
+    } else if (type == 'address') {
+      data_param.address = e.detail.value
     }
     request_dataParam_map = request_dataParam_map.set(that.data.TabCur, data_param)
   },

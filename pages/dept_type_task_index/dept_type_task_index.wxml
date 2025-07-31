@@ -1,4 +1,4 @@
-<scroll-view scroll-y class="DrawerPage {{modalName=='viewModal'?'show':''}}">
+<scroll-view scroll-y ="true" enable-back-to-top="true"  scroll-into-view="{{cardId}}" 	scroll-into-view-offset="-200"	bindscrolltolower="loadMore" class="DrawerPage {{modalName=='viewModal'?'show':''}}">
 <view class="solid">
   <!-- 导航栏-->
   <scroll-view scroll-x class="bg-white nav text-center" scroll-with-animation scroll-left="{{scrollLeft}}">
@@ -16,7 +16,7 @@
   </view>
 
   <!-- 任务列表 -->
-  <checkbox-group bindchange="save_taskIds">
+  <checkbox-group bindchange="save_taskIds" >
     <view class="cu-card article" style="{{TabCur==4?'margin-top: 60rpx;':''}}">
       <!-- 待整改 -->
       <view wx:if="{{TabCur==0}}" wx:for="{{taskList}}" wx:key="index" class="cu-item shadow">
@@ -39,6 +39,9 @@
         <view id="task_index_{{index}}" data-taskid="{{item.id}}" data-projectid="{{item.projectId}}" bindtap="goTaskRectify">
           <!-- <view><text class="td-test" bindlongpress="copyCode" data-key="{{item.code}}">任务编号：{{item.code}}</text></view>
           <view class="divLine"></view> -->
+          <view><text class="td-test" user-select="true">信息类型：{{item.sortListStr || '无'}}</text></view>
+          <!-- 分割线 -->
+          <view class="divLine"></view>
           <view><text class="td-test" user-select="true">具体问题：{{item.remarks || '无'}}</text></view>
           <!-- 分割线 -->
           <view class="divLine"></view>
@@ -66,6 +69,9 @@
         <view id="task_index_{{index}}" data-taskid="{{item.id}}" data-projectid="{{item.projectId}}" bindtap="goTaskRectify">
           <!-- <view><text class="td-test" bindlongpress="copyCode" data-key="{{item.code}}">任务编号：{{item.code}}</text></view>
           <view class="divLine"></view> -->
+          <view><text class="td-test" user-select="true">信息类型：{{item.sortListStr || '无'}}</text></view>
+          <!-- 分割线 -->
+          <view class="divLine"></view>
           <view><text class="td-test" user-select="true">具体问题：{{item.remarks || '无'}}</text></view>
           <!-- 分割线 -->
           <view class="divLine"></view>
@@ -94,6 +100,9 @@
         <view id="task_index_{{index}}" data-taskid="{{item.id}}" data-projectid="{{item.projectId}}" bindtap="goTaskRectify">
           <!-- <view><text class="td-test" bindlongpress="copyCode" data-key="{{item.code}}">任务编号：{{item.code}}</text></view>
           <view class="divLine"></view> -->
+          <view><text class="td-test" user-select="true">信息类型：{{item.sortListStr || '无'}}</text></view>
+          <!-- 分割线 -->
+          <view class="divLine"></view>
           <view><text class="td-test" user-select="true">具体问题：{{item.remarks || '无'}}</text></view>
           <!-- 分割线 -->
           <view class="divLine"></view>
@@ -136,15 +145,22 @@
           <input placeholder="请输入任务编号" data-type="code" bindblur="task_code_input" value="{{task_request_dataParam.taskCode}}"></input>
         </view> -->
         <view class="cu-form-group">
-          <input placeholder="请输入位置描述" data-type="location" bindblur="task_code_input" value="{{task_request_dataParam.locationName}}"></input>
+          <input placeholder="请输入信息类型" data-type="sort" bindblur="task_code_input" value="{{task_request_dataParam.sortName}}"></input>
         </view>
         <view class="cu-form-group">
+          <input placeholder="请输入具体问题" data-type="remarks" bindblur="task_code_input" value="{{task_request_dataParam.remarks}}"></input>
+        </view><view class="cu-form-group">
+          <input placeholder="请输入上报地点(定位)" data-type="address" bindblur="task_code_input" value="{{task_request_dataParam.address}}"></input>
+        </view><view class="cu-form-group">
+          <input placeholder="请输入位置描述(点位)" data-type="location" bindblur="task_code_input" value="{{task_request_dataParam.locationName}}"></input>
+        </view>
+        <!-- <view class="cu-form-group">
           <picker mode="date" value="{{task_request_dataParam.date}}" start="2017-01-01" end="2050-12-30" bindchange="DateChange">
             <view class="picker" style="text-align: left;font-size: 30rpx;">
               上报时间: {{task_request_dataParam.date}}
             </view>
           </picker>
-        </view>
+        </view> -->
         <view class="cu-form-group">
           <button bindtap="search_fun" role="button" class="cu-btn bg-{{bgColor}} margin-tb-sm lg" aria-disabled="false" style="width: 100%;">搜索</button>
         </view>

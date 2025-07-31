@@ -1,4 +1,4 @@
-<scroll-view scroll-y class="DrawerPage {{modalName=='viewModal'?'show':''}}" style="padding-bottom: 15%">
+<scroll-view scroll-y="true" enable-back-to-top="true"  scroll-into-view="{{cardId}}" bindscrolltolower="loadMore" scroll-into-view-offset="-200" class="DrawerPage {{modalName=='viewModal'?'show':''}}" style="padding-bottom: 15%">
 <view class="solid">
   <!-- 导航栏-->
   <scroll-view scroll-x class="bg-white nav text-center" scroll-with-animation scroll-left="{{scrollLeft}}">
@@ -53,6 +53,9 @@
         <view id="task_index_{{index}}" data-taskid="{{item.id}}" data-projectid="{{item.projectId}}" bindtap="goDetailPage">
           <!-- <view><text class="td-test" bindlongpress="copyCode" data-key="{{item.code}}">任务编号：{{item.code}}</text></view>
           <view class="divLine"></view> -->
+          <view><text class="td-test" user-select="true">信息类型：{{item.sortListStr || '无'}}</text></view>
+          <!-- 分割线 -->
+          <view class="divLine"></view>
           <view><text class="td-test" user-select="true">具体问题：{{item.remarks == null?'无':item.remarks}}</text></view>
           <!-- 分割线 -->
           <view class="divLine"></view>
@@ -100,6 +103,9 @@
         <view id="task_index_{{index}}" data-taskid="{{item.id}}" data-projectid="{{item.projectId}}" bindtap="goDetailPage">
           <!-- <view><text class="td-test" bindlongpress="copyCode" data-key="{{item.code}}">任务编号：{{item.code}}</text></view>
           <view class="divLine"></view> -->
+          <view><text class="td-test" user-select="true">信息类型：{{item.sortListStr || '无'}}</text></view>
+          <!-- 分割线 -->
+          <view class="divLine"></view>
           <view><text class="td-test" user-select="true">具体问题：{{item.remarks == null?'无':item.remarks}}</text></view>
           <!-- 分割线 -->
           <view class="divLine"></view>
@@ -146,6 +152,9 @@
         <view id="task_index_{{index}}" data-taskid="{{item.id}}" data-projectid="{{item.projectId}}" bindtap="goDetailPage">
           <!-- <view><text class="td-test" bindlongpress="copyCode" data-key="{{item.code}}">任务编号：{{item.code}}</text></view>
           <view class="divLine"></view> -->
+          <view><text class="td-test" user-select="true">信息类型：{{item.sortListStr || '无'}}</text></view>
+          <!-- 分割线 -->
+          <view class="divLine"></view>
           <view><text class="td-test" user-select="true">具体问题：{{item.remarks == null?'无':item.remarks}}</text></view>
           <!-- 分割线 -->
           <view class="divLine"></view>
@@ -191,6 +200,9 @@
         <view id="task_index_{{index}}" data-taskid="{{item.id}}" data-projectid="{{item.projectId}}" bindtap="goDetailPage">
           <!-- <view><text class="td-test" bindlongpress="copyCode" data-key="{{item.code}}">任务编号：{{item.code}}</text></view>
           <view class="divLine"></view> -->
+          <view><text class="td-test" user-select="true">信息类型：{{item.sortListStr || '无'}}</text></view>
+          <!-- 分割线 -->
+          <view class="divLine"></view>
           <view><text class="td-test" user-select="true">具体问题：{{item.remarks == null?'无':item.remarks}}</text></view>
           <!-- 分割线 -->
           <view class="divLine"></view>
@@ -235,6 +247,9 @@
         <view id="task_index_{{index}}" data-taskid="{{item.id}}" data-projectid="{{item.projectId}}" bindtap="goDetailPage">
           <!-- <view><text class="td-test" bindlongpress="copyCode" data-key="{{item.code}}">任务编号：{{item.code}}</text></view>
           <view class="divLine"></view> -->
+          <view><text class="td-test" user-select="true">信息类型：{{item.sortListStr || '无'}}</text></view>
+          <!-- 分割线 -->
+          <view class="divLine"></view>
           <view><text class="td-test" user-select="true">具体问题：{{item.remarks == null?'无':item.remarks}}</text></view>
           <!-- 分割线 -->
           <view class="divLine"></view>
@@ -280,6 +295,9 @@
         <view id="task_index_{{index}}" data-taskid="{{item.id}}" data-projectid="{{item.projectId}}" data-deptid="{{item.departmentId}}" bindtap="goDetailPage">
           <!-- <view><text class="td-test" bindlongpress="copyCode" data-key="{{item.code}}">任务编号：{{item.code}}</text></view>
           <view class="divLine"></view> -->
+          <view><text class="td-test" user-select="true">信息类型：{{item.sortListStr || '无'}}</text></view>
+          <!-- 分割线 -->
+          <view class="divLine"></view>
           <view><text class="td-test" user-select="true">具体问题：{{item.remarks == null?'无':item.remarks}}</text></view>
           <!-- 分割线 -->
           <view class="divLine"></view>
@@ -337,15 +355,16 @@
         <!-- <view class="cu-form-group margin-top">
           <input placeholder="请输入任务编号" data-type="code" bindblur="task_code_input" value="{{task_request_dataParam.taskCode}}"></input>
         </view> -->
-        <!-- <view class="cu-form-group">
-          <input placeholder="请输入点位类型" data-type="point" bindblur="task_code_input" value="{{task_request_dataParam.pointName}}"></input>
-        </view> -->
         <view class="cu-form-group">
-          <input placeholder="请输入位置描述" data-type="location" bindblur="task_code_input" value="{{task_request_dataParam.locationName}}"></input>
+          <input placeholder="请输入信息类型" data-type="sort" bindblur="task_code_input" value="{{task_request_dataParam.sortName}}"></input>
         </view>
-        <!-- <view class="cu-form-group">
-          <input placeholder="请输入问题" data-type="question" bindblur="task_code_input" value="{{task_request_dataParam.question}}"></input>
-        </view> -->
+        <view class="cu-form-group">
+          <input placeholder="请输入具体问题" data-type="remarks" bindblur="task_code_input" value="{{task_request_dataParam.remarks}}"></input>
+        </view><view class="cu-form-group">
+          <input placeholder="请输入上报地点(定位)" data-type="address" bindblur="task_code_input" value="{{task_request_dataParam.address}}"></input>
+        </view><view class="cu-form-group">
+          <input placeholder="请输入位置描述(点位)" data-type="location" bindblur="task_code_input" value="{{task_request_dataParam.locationName}}"></input>
+        </view>
         <view class="cu-form-group">
           <input placeholder="请输入责任人/单位" data-type="deptname" bindblur="task_code_input" value="{{task_request_dataParam.departmentName}}"></input>
         </view>
