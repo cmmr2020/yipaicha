@@ -33,9 +33,20 @@
     <text class="cuIcon-title text-blue"></text>位置描述
   </view>
 </view>
+<!--点位下拉选-->
 <view class="cu-form-group  bg-white">
-  <input class="weui-input" type="text" placeholder="填写所在位置的详细描述。（选填）"  	bindinput="saveLocationName"	confirm-type="done"/>
+  <view class="search-container">
+    <scroll-view scroll-y class="dropdown-list" hidden="{{!showDropdown}}" style="height: {{dropdownHeight}}px;">
+      <block wx:for="{{storageLocationNameList}}" wx:key="unique">
+        <view class="dropdown-item" bindtap="onItemTap"  data-item="{{item}}">{{item}}</view>
+      </block>
+    </scroll-view>
+    <input class="weui-input" type="text" confirm-type="search" bind:focus="onSearchInput" 	bindblur="closePage" 	 placeholder="填写所在位置的详细描述。（选填）" bind:input="saveLocationName" value="{{inputValue}}" confirm-type="done" />
+  </view>
 </view>
+<!-- <view class="cu-form-group  bg-white">
+  <input class="weui-input" type="text" placeholder="填写所在位置的详细描述。（选填）"  	bindinput="saveLocationName"	confirm-type="done"/>
+</view> -->
 
 
 
@@ -182,12 +193,12 @@
 <view class="cu-bar  solid-bottom">
   <view class="action">
     <text class="cuIcon-title text-blue"></text>信息描述
+    <view class="cu-item" style="position: absolute;right: 3%;font-size: 50rpx;" button-disabled="{{bottomButtonDisabled}}" bind:touchstart="streamRecord" bind:touchend="streamRecordEnd"><text  class="cuIcon-voicefill lg text-blue"></text></view>
   </view>
 </view>
 <!-- !!!!! placeholder 在ios表现有偏移 建议使用 第一种样式 -->
 <view class="cu-form-group" style="position: relative;">
   <textarea  value="{{desc}}"  maxlength="-1"  bindinput="textareaAInput" placeholder="请输入举报内容" ></textarea>
-  <view class="cu-item" style="position: absolute;right: 3%;margin-top: 15%;font-size: 50rpx;" button-disabled="{{bottomButtonDisabled}}" bindtouchstart="streamRecord" bindtouchend="streamRecordEnd"><text class="cuIcon-voicefill lg text-gray"></text></view>
 </view>
 <!-- <button type="primary" class="cu-btn block bg-blue margin-tb-sm lg" button-disabled="{{bottomButtonDisabled}}" bindtouchstart="streamRecord" bindtouchend="streamRecordEnd">按下录音，语音转换</button> -->
 <view class="margin-tb-sm text-center">
@@ -195,18 +206,10 @@
 </view>
 
 
-
-
 <view wx:if="{{canIUse}}" hidden="{{hidden}}" style="padding-bottom: 18%">
     <button class='cu-btn block bg-blue margin-tb-sm lg'  type='primary' open-type='getUserInfo' bindgetuserinfo='bindGetUserInfo'>微信授权</button>
 </view>
 <view wx:else>请升级微信版本</view>  
-
-
-
-
-
-
 
 <view class="cu-modal {{modalName=='Modal'?'show':''}}">
   <view class="cu-dialog">

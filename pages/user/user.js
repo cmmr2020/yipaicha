@@ -269,5 +269,29 @@ bindGetUserInfo: function (res) {
         }
       }
     })
+  },
+  subscribe(){
+    wx.getSetting({
+      withSubscriptions: true,
+      success (res) {
+        console.log(res.authSetting)
+        console.log(res.subscriptionsSetting)
+        // res.subscriptionsSetting = {
+        //   mainSwitch: true, // 订阅消息总开关
+        //   itemSettings: {   // 每一项开关
+        //     SYS_MSG_TYPE_INTERACTIVE: 'accept', // 小游戏系统订阅消息
+        //     SYS_MSG_TYPE_RANK: 'accept'
+        //     zun-LzcQyW-edafCVvzPkK4de2Rllr1fFpw2A_x0oXE: 'reject', // 普通一次性订阅消息
+        //     ke_OZC_66gZxALLcsuI7ilCJSP2OJ2vWo2ooUPpkWrw: 'ban',
+        //   }
+        // }
+      }
+    })
+    wx.requestSubscribeMessage({
+      tmplIds: ['2zQP4xwSmDzVG5tDM6TVjOBz8EuVQg5DgQp7DfcbNc8'],
+      success (res) {
+        console.log(res)
+       }
+    })
   }
 })

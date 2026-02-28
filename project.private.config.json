@@ -1,90 +1,37 @@
 {
-  "setting": {},
+  "setting": {
+    "urlCheck": false,
+    "coverView": true,
+    "lazyloadPlaceholderEnable": false,
+    "skylineRenderEnable": false,
+    "preloadBackgroundData": false,
+    "autoAudits": false,
+    "useApiHook": true,
+    "useApiHostProcess": true,
+    "showShadowRootInWxmlPanel": true,
+    "useStaticServer": false,
+    "useLanDebug": false,
+    "showES6CompileOption": false,
+    "compileHotReLoad": true,
+    "checkInvalidKey": true,
+    "ignoreDevUnusedFiles": true,
+    "bigPackageSizeSupport": false,
+    "useIsolateContext": false
+  },
   "condition": {
     "miniprogram": {
       "list": [
         {
-          "name": "pages/menuBack/menuBack",
+          "name": "带有参数的",
           "pathName": "pages/menuBack/menuBack",
           "query": "c1=0j8l2&c2=4t2h0",
           "launchMode": "default",
-          "scene": null
-        },
-        {
-          "name": "",
-          "pathName": "pages/about/about",
-          "query": "",
-          "launchMode": "default",
-          "scene": null
-        },
-        {
-          "name": "测试",
-          "pathName": "pages/ceshi/ceshi",
-          "query": "",
-          "scene": null
-        },
-        {
-          "name": "举报",
-          "pathName": "pages/jubao/jubao",
-          "query": "",
-          "scene": null
-        },
-        {
-          "name": "个人中心",
-          "pathName": "pages/user/user",
-          "query": "",
-          "scene": null
-        },
-        {
-          "name": "成功",
-          "pathName": "pages/success/success",
-          "query": "",
-          "scene": null
-        },
-        {
-          "name": "任务详情",
-          "pathName": "pages/detailPage/detailPage",
-          "query": "",
-          "scene": null
-        },
-        {
-          "name": "轮播详情",
-          "pathName": "pages/swiper/swiper",
-          "query": "?viewId='40288f126cb7f93f016cb7fd129e000d'",
-          "scene": null
-        },
-        {
-          "name": "举报详情",
-          "pathName": "pages/jubaodetail/jubaodetail",
-          "query": "",
-          "scene": null
-        },
-        {
-          "name": "测试页面",
-          "pathName": "pages/ceshi/ceshi",
-          "query": "url=https://wmccpu.diaochaonline.com/B/^SDHZ",
-          "scene": null
-        },
-        {
-          "name": "提示页",
-          "pathName": "pages/tip/tip",
-          "query": "",
-          "scene": null
-        },
-        {
-          "name": "pages/tip/tip",
-          "pathName": "pages/tip/tip",
-          "query": "",
-          "scene": null
-        },
-        {
-          "name": "pages/error_tip/error_tip",
-          "pathName": "pages/error_tip/error_tip",
-          "query": "",
           "scene": null
         }
       ]
     }
   },
-  "description": "项目私有配置文件。此文件中的内容将覆盖 project.config.json 中的相同字段。项目的改动优先同步到此文件中。详见文档：https://developers.weixin.qq.com/miniprogram/dev/devtools/projectconfig.html"
+  "description": "项目私有配置文件。此文件中的内容将覆盖 project.config.json 中的相同字段。项目的改动优先同步到此文件中。详见文档：https://developers.weixin.qq.com/miniprogram/dev/devtools/projectconfig.html",
+  "libVersion": "3.8.12",
+  "projectname": "wx-yipaicha"
 }

@@ -79,6 +79,10 @@ Page({
     sortTipBymodal: '',
     locationName: '',
     isDisabled: true, //解决文本框 禁用显示空白的bug
+    //点位名称动态下拉选
+    inputValue: '',
+    showDropdown: false,
+    storageLocationNameList:new Array(),//缓存中的点位名称
   },
 
   /**
@@ -247,7 +251,7 @@ Page({
    * 按住按钮开始语音识别
    */
   streamRecord: function (e) {
-    //console.log("streamrecord", e)
+    console.log("streamrecord", e)
     let that = this;
     wx.getSetting({
       success(res) {
@@ -302,7 +306,7 @@ Page({
    */
   streamRecordEnd: function (e) {
 
-    //console.log("streamRecordEnd", e)
+    console.log("streamRecordEnd", e)
     wx.showToast({
       title: '正在转换~',
       icon: 'loading',
@@ -1027,24 +1031,16 @@ Page({
       })
       return
     }
-    // if ((addsImg.length + addsVideo.length) < 1) {
+    //信息描述非必填
+    // if (desc == '') {
     //   wx.showToast({
-    //     title: '请拍摄地点图片/视频',
+    //     title: '请填写信息描述',
     //     icon: 'none',
     //     duration: 1000,
     //     mask: true
     //   })
     //   return
-    // }
-    if (desc == '') {
-      wx.showToast({
-        title: '请填写举报描述',
-        icon: 'none',
-        duration: 1000,
-        mask: true
-      })
-      return
-    };
+    // };
     wx.showLoading({
       title: '上传中',
       mask: true
@@ -1148,6 +1144,20 @@ Page({
       (res) => {
         // console.log("上传答案结束,",res)
         if (res.data.status === 'success') {
+          if(locationName){//将上传的点位名称放到本地缓存中
+            var storageLocationNameList = that.data.storageLocationNameList
+            var index = storageLocationNameList.indexOf(locationName)
+            //如果是新的点位名称,则放到缓存list中
+            if(index == -1){
+              //如果数量大于5,则删除最早的
+              if(storageLocationNameList.length >= 5) {
+                storageLocationNameList.shift()
+              }
+              storageLocationNameList.push(locationName)
+              wx.setStorageSync('storageLocationName',storageLocationNameList)
+            }
+            
+          }
           wx.reLaunch({
             url: "../success/success"
           })
@@ -1419,10 +1429,57 @@ Page({
 
   saveLocationName(e) {
     let that = this
-    that.setData({
-      locationName: e.detail.value
+    if(e.detail.value.length > 0){
+      //用户自定义输入,关闭弹窗
+      that.setData({
+        locationName: e.detail.value,
+        showDropdown:false
+      })
+    }else{
+      that.setData({
+        locationName: e.detail.value
+      })
+    }
+    
+  },
+  closePage(){
+    this.setData({
+      showDropdown:false
     })
-  }
+  },
+  onSearchInput(e) {
+    var storageLocationNameList = wx.getStorageSync('storageLocationName');
+    console.log(storageLocationNameList)
+    if(storageLocationNameList){
+      this.setData({
+        storageLocationNameList : storageLocationNameList,
+        dropdownHeight:storageLocationNameList.length*44,
+        showDropdown:true
+      })
+    }
+    // const inputValue = e.detail.value;
+    // this.setData({ inputValue, showDropdown: true }); // 显示下拉列表
+    // this.filterList(inputValue); // 过滤数据列表
+  },
+  filterList(inputValue) {
+    const that =this;
+    const originalList = that.data.originalList
+    const filtered = [];
+    for(let i=0; i<originalList.length;i++){
+      if(originalList[i].name.includes(inputValue)){
+        filtered.push(originalList[i])
+      }
+    }
+    //手动添加其他选项
+    filtered.push({name:'其他'})
+   that.setData({ filteredList: filtered, dropdownHeight: filtered.length * 44}); // 设置过滤后的数据到页面数据对象中
+  },
+  onItemTap(e) {
+    console.log(e)
+    const selectedItem = e.currentTarget.dataset.item; // 获取选中的项（如果有需要）
+    this.setData({ locationName: selectedItem,inputValue:selectedItem, showDropdown: false }); // 隐藏下拉列表，并更新输入框的值
+    // 可选：执行其他操作，如跳转页面等
+  },
 
 
 })

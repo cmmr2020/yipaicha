@@ -58,6 +58,7 @@ Page({
     })
   },
   login(govCode,projectCode){
+    console.log('登录请求')
     // 获取用户信息
       let that = this;
       var requestUrl = app.globalData.requestUrl;
@@ -80,7 +81,7 @@ Page({
               },
               success(res) {
                 that.closeModal(); //关闭加载动画
-                //console.log("请求用户：",res)
+                console.log("请求用户：",res)
                 if (res.data.status == 'success') {
                   //政府活跃度超一年 拒绝登录
                   if(res.data.retObj.isTimeOut=='1'){

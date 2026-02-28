@@ -2,11 +2,19 @@
 
 <view class="userinfo bg-white">
   <view class="top" style="width: 100%;">
-    <view wx:if="{{isLogin}}" class="flex justify-end" style="margin-right: 5%;" bind:tap="loginOut">
+  <view wx:if="{{isLogin}}" class="flex justify-between" style="margin-right: 5%;">
+    <view class="padding-sm margin-xs radius" bind:tap="subscribe">
+      <tex class="cuIcon-mail lg text-blue" style="font-size: 40rpx;"></tex>
+    </view>
+    <view class="padding-sm margin-xs radius" bind:tap="loginOut">
+      <tex class="cuIcon-exit lg text-blue" style="font-size: 40rpx;"></tex>
+    </view>
+  </view>
+    <!-- <view wx:if="{{isLogin}}" class="flex justify-end" style="margin-right: 5%;" bind:tap="loginOut">
       <view class="margin-xs radius">
         <tex class="cuIcon-exit lg text-blue" style="font-size: 40rpx;"></tex>
       </view>
-    </view>
+    </view> -->
     <view bind:tap="show_edit">
       <view>
         <image class="head_img" src="{{headeSrcPath}}" />
